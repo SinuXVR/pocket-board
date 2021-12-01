@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<input-method
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:settingsActivity="com.sinux.pocketboard.preferences.PreferencesActivity"
+    android:supportsSwitchingToNextInputMethod="true"
+    android:supportsInlineSuggestions="@bool/inline_autofill_support">
+
+    <subtype
+        android:label="@string/input_subtype_en_US"
+        android:subtypeId="0x01"
+        android:imeSubtypeLocale="en_US"
+        android:languageTag="en-US"
+        android:imeSubtypeMode="keyboard"
+        android:isAsciiCapable="true"
+        android:imeSubtypeExtraValue="DisplayTag=en,KeyboardMapping=en_us,AsciiCapable,EmojiCapable" />
+
+    <subtype
+        android:label="@string/input_subtype_ru_RU_BB_Passport"
+        android:subtypeId="0x02"
+        android:imeSubtypeLocale="ru"
+        android:languageTag="ru"
+        android:imeSubtypeMode="keyboard"
+        android:isAsciiCapable="false"
+        android:imeSubtypeExtraValue="DisplayTag=ru,KeyboardMapping=ru_bbp,EmojiCapable" />
+
+    <subtype
+        android:label="@string/input_subtype_ru_RU_Transliterate"
+        android:subtypeId="0x03"
+        android:imeSubtypeLocale="ru"
+        android:languageTag="ru"
+        android:imeSubtypeMode="keyboard"
+        android:isAsciiCapable="false"
+        android:imeSubtypeExtraValue="DisplayTag=ru,KeyboardMapping=ru_t,EmojiCapable" />
+
+</input-method>

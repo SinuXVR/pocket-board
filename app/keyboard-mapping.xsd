@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="KeyboardMapping">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" name="Key">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="Add">
+                <xs:complexType>
+                  <xs:attribute name="value" type="char" use="required" />
+                  <xs:attribute name="shiftValue" type="char" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="Alt">
+                <xs:complexType>
+                  <xs:attribute name="value" type="char" use="required" />
+                  <xs:attribute name="shiftValue" type="char" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="code" type="xs:unsignedInt" use="required" />
+            <xs:attribute name="value" type="char" use="required" />
+            <xs:attribute name="shiftValue" type="char" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="char">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(.|\\\\)"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

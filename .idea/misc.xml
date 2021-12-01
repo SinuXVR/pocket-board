@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/SinuX/.gradle/caches/transforms-3/129e5aec11ca482924b35f53b66ee551/transformed/jetified-appcompat-resources-1.2.0/res/drawable/abc_vector_test.xml" value="0.22239583333333332" />
+        <entry key="..\:/Users/SinuX/.gradle/caches/transforms-3/270ed569058873c5512f6dc373965b1c/transformed/jetified-autofill-1.1.0/res/drawable-v29/autofill_inline_suggestion_chip_background.xml" value="0.22239583333333332" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable-night/emoji_popup_background.xml" value="0.22395833333333334" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/autofill_background.xml" value="0.22239583333333332" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/button_meta_0.xml" value="0.19722222222222222" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/button_settings.xml" value="0.19722222222222222" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/button_subtype_en.xml" value="0.19722222222222222" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/button_subtype_ru_bbp.xml" value="0.19722222222222222" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/button_subtype_ru_tl.xml" value="0.19722222222222222" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/button_subtype_unknown.xml" value="0.19722222222222222" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/button_voice.xml" value="0.19722222222222222" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/emoji.xml" value="0.221875" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/emoji_button.xml" value="0.1796875" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/emoji_emotions.xml" value="0.1796875" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/emoji_food.xml" value="0.1796875" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/emoji_nature.xml" value="0.1796875" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/emoji_objects.xml" value="0.1796875" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/emoji_others.xml" value="0.1796875" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/emoji_popup_background.xml" value="0.22395833333333334" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/emoji_sports.xml" value="0.1796875" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/emoji_symbols.xml" value="0.1796875" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/emoji_transport.xml" value="0.1796875" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/en.xml" value="0.20555555555555555" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/gamepad_mode.xml" value="0.2234375" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/hide_autofill.xml" value="0.22239583333333332" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/hide_autofill_button.xml" value="0.2234375" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.21846153846153846" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/ic_hide_autofill_button.xml" value="0.2234375" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/ic_launcher_background.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/ic_sym_pad_icon.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/ic_voice_button.xml" value="0.2234375" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/meta_0.xml" value="0.20555555555555555" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/meta_alt.xml" value="0.22291666666666668" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/meta_alt_hold.xml" value="0.22291666666666668" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/meta_button.xml" value="0.22239583333333332" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/meta_key_0.xml" value="0.19722222222222222" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/meta_list.xml" value="0.22291666666666668" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/meta_none.xml" value="0.22291666666666668" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/meta_shift.xml" value="0.22291666666666668" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/meta_shift_alt.xml" value="0.22291666666666668" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/meta_shift_alt_hold.xml" value="0.22291666666666668" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/meta_shift_hold.xml" value="0.22291666666666668" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/meta_shift_hold_alt.xml" value="0.22291666666666668" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/meta_shift_hold_alt_hold.xml" value="0.22291666666666668" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/recent.xml" value="0.21846153846153846" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/settings.xml" value="0.21846153846153846" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/subtype_en.xml" value="0.22291666666666668" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/subtype_numeric.xml" value="0.22291666666666668" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/subtype_ru_bbp.xml" value="0.2234375" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/subtype_ru_tl.xml" value="0.2234375" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/subtype_unknown.xml" value="0.2234375" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/touch_color_selector.xml" value="0.221875" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/voice.xml" value="0.21846153846153846" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/drawable/voice_button.xml" value="0.1796875" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/layout/candidates.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/layout/emoji_common_fragment.xml" value="0.16770833333333332" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/layout/emoji_fitzpatrick_popup.xml" value="0.2078125" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/layout/emoji_fitzpatrick_popup_view.xml" value="0.16354166666666667" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/layout/emoji_grid_item_view.xml" value="0.20729166666666668" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/layout/emoji_panel.xml" value="0.6127247579529738" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/layout/emoji_recent_fragment.xml" value="0.16770833333333332" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/layout/emoji_recent_view.xml" value="0.25" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/layout/emoji_view.xml" value="0.16770833333333332" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/layout/input.xml" value="0.1" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/layout/keyboard.xml" value="0.35597826086956524" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/layout/preferences.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/layout/preferencesContainer.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/layout/preferences_activity.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/layout/preferences_container.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/layout/preferences_layout.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/layout/preview.xml" value="0.35597826086956524" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/layout/suggestion_layout.xml" value="0.33605072463768115" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/layout/test.xml" value="0.5" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/xml/preferences.xml" value="0.33559782608695654" />
+        <entry key="..\:/Users/SinuX/AndroidStudioProjects/PocketBoard/app/src/main/res/xml/spellchecker.xml" value="0.3138586956521739" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.5" />
+      </ProjectState>
+    </option>
+  </component>
+</project>

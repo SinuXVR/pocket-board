@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="ime_settings">Настройки PocketBoard</string>
+    <string name="ime_subtypes">Способы ввода</string>
+    <string name="ime_subtypes_select">Выберите способы ввода</string>
+    <string name="ime_auto_correction">Автокоррекция</string>
+    <string name="ime_auto_correction_summary">Автоматическое исправление опечаток при вводе пробела</string>
+    <string name="ime_auto_capitalization">Заглавные автоматически</string>
+    <string name="ime_auto_capitalization_summary">Писать первое слово предложения с прописной буквы</string>
+    <string name="ime_double_space_period">Точки автоматически</string>
+    <string name="ime_double_space_period_summary">Вводить точку с пробелом двойным нажатием пробела</string>
+    <string name="ime_show_layout_toast">Индикация смены раскладки</string>
+    <string name="ime_show_layout_toast_summary">Отображать название раскладки во всплывающем сообщении</string>
+    <string name="ime_voice_input_shortcut">Ярлык голосового ввода</string>
+    <string name="ime_voice_input_shortcut_summary">Нажмите CTRL+ALT для активации голосового ввода</string>
+    <string name="ime_layout_change_shortcut">Ярлык смены раскладки</string>
+    <string name="ime_layout_change_shortcut_summary">Удерживайте пробел для смены раскладки</string>
+    <string name="ime_lock_sympad">Разрешить блокировку SymPad</string>
+    <string name="ime_lock_sympad_summary">Удерживайте SYM для блокировки клавиатуры в режиме SymPad</string>
+    <string name="ime_show_inline_suggestions">Подсказки автозаполнения</string>
+
+    <string name="ime_panel_cat">Экранная панель</string>
+    <string name="ime_show_panel">Отображать панель</string>
+    <string name="ime_show_emoji">Кнопка Emoji</string>
+    <string name="ime_show_suggestions">Подсказки</string>
+    <string name="ime_show_meta_layout">Текущая раскладка</string>
+    <string name="ime_show_voice">Кнопка голосового ввода</string>
+
+    <string name="ime_extra_cat">Дополнительное</string>
+    <string name="ime_extra_phone_control">Управление звонками</string>
+    <string name="ime_extra_phone_control_summary">Используйте SHIFT/ALT для приема/отклонения вызова</string>
+    <string name="ime_extra_phone_control_permission_required">Требуется разрешение</string>
+    <string name="ime_extra_app_version">Версия</string>
+
+    <string name="voice_ime_not_configured">Голосовой ввод не настроен</string>
+    <string name="keyboard_mapping_load_failed">Не удалось загрузить раскладку</string>
+
+    <string name="hide_inline_suggestions_button_description">Скрыть подсказки автозаполнения</string>
+    <string name="emoji_button_description">Открыть панель ввода emoji и дополнительных символов</string>
+    <string name="meta_layout_button_description">Сменить раскладку клавиатуры</string>
+    <string name="voice_button_description">Запустить голосовой ввод</string>
+
+</resources>

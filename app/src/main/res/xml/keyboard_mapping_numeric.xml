@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<KeyboardMapping>
+    <!-- Q -->
+    <Key code="45" value="0" />
+    <!-- W -->
+    <Key code="51" value="1" />
+    <!-- E -->
+    <Key code="33" value="2" />
+    <!-- R -->
+    <Key code="46" value="3" />
+    <!-- T -->
+    <Key code="48" value="(" />
+    <!-- Y -->
+    <Key code="53" value=")" />
+    <!-- U -->
+    <Key code="49" value="-" />
+    <!-- O -->
+    <Key code="43" value="/" />
+    <!-- P -->
+    <Key code="44" value=";" />
+
+    <!-- S -->
+    <Key code="47" value="4" />
+    <!-- D -->
+    <Key code="32" value="5" />
+    <!-- F -->
+    <Key code="34" value="6" />
+    <!-- G -->
+    <Key code="35" value="*" />
+    <!-- H -->
+    <Key code="36" value="#" />
+    <!-- J -->
+    <Key code="38" value="+" />
+
+    <!-- X -->
+    <Key code="52" value="7" />
+    <!-- C -->
+    <Key code="31" value="8" />
+    <!-- V -->
+    <Key code="50" value="9" />
+    <!-- SPACE -->
+    <Key code="62" value=" " />
+    <!-- B -->
+    <Key code="30" value="." />
+    <!-- N -->
+    <Key code="42" value=",">
+        <Add value="N" />
+        <Alt value="N" />
+    </Key>
+</KeyboardMapping>

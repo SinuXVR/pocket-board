@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<com.sinux.pocketboard.ui.InputView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_gravity="bottom"
+    android:theme="@style/Theme.PocketBoard"
+    android:background="?colorOnPrimary"
+    android:gravity="bottom"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/inputViewDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="?android:attr/dividerHorizontal" />
+
+    <HorizontalScrollView
+        android:id="@+id/inlineSuggestionsViewWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/input_view_height"
+        android:layout_below="@id/inputViewDivider"
+        android:background="?colorOnPrimary"
+        android:translationZ="1dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/inlineSuggestionsView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/input_view_horizontal_padding"
+            android:paddingVertical="@dimen/input_view_vertical_padding">
+
+            <ImageButton
+                android:id="@+id/hideInlineSuggestions"
+                android:layout_width="@dimen/button_size"
+                android:layout_height="@dimen/button_size"
+                android:background="@null"
+                android:layout_marginHorizontal="@dimen/button_horizontal_margin"
+                android:contentDescription="@string/hide_inline_suggestions_button_description"
+                android:src="@drawable/hide_autofill_button"
+                android:tint="@drawable/touch_color_selector" />
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+    <LinearLayout
+        android:id="@+id/inputView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/input_view_height"
+        android:layout_below="@id/inputViewDivider"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/input_view_horizontal_padding"
+        android:paddingVertical="@dimen/input_view_vertical_padding">
+
+        <ImageButton
+            android:id="@+id/emojiButton"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
+            android:background="@null"
+            android:layout_marginHorizontal="@dimen/button_horizontal_margin"
+            android:contentDescription="@string/emoji_button_description"
+            android:src="@drawable/emoji_button"
+            android:tint="@drawable/touch_color_selector" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/suggestionsView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/metaLayoutButton"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
+            android:background="@drawable/meta_button"
+            android:textAllCaps="false"
+            android:textColor="@drawable/touch_color_selector"
+            android:textSize="@dimen/button_text_size"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:contentDescription="@string/meta_layout_button_description"
+            android:layout_marginHorizontal="@dimen/button_horizontal_margin"
+            android:backgroundTint="@drawable/touch_color_selector"
+            tools:ignore="SpUsage" />
+
+        <ImageButton
+            android:id="@+id/voiceButton"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
+            android:background="@null"
+            android:contentDescription="@string/voice_button_description"
+            android:src="@drawable/voice_button"
+            android:layout_marginHorizontal="@dimen/button_horizontal_margin"
+            android:tint="@drawable/touch_color_selector" />
+
+    </LinearLayout>
+
+</com.sinux.pocketboard.ui.InputView>

@@ -1,0 +1,20 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.PocketBoard" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">#1E1E1E</item>
+        <item name="colorPrimaryVariant">#171717</item>
+        <item name="colorOnPrimary">#FAFAFA</item>
+        <item name="colorPrimarySurface">#F5F5F5</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">#1E1E1E</item>
+        <item name="colorSecondaryVariant">#171717</item>
+        <item name="colorOnSecondary">#000000</item>
+
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:windowBackground">?attr/colorOnPrimary</item>
+        <item name="colorButtonNormal">#4C4C4C</item>
+
+    </style>
+</resources>

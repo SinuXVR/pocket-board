@@ -1,0 +1,61 @@
+import javax.xml.XMLConstants
+import javax.xml.transform.stream.StreamSource
+import javax.xml.validation.SchemaFactory
+
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    compileSdk 31
+
+    defaultConfig {
+        applicationId "com.sinux.pocketboard"
+        minSdk 28
+        targetSdk 31
+        versionCode 1
+        versionName "1.0.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+}
+
+dependencies {
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.preference:preference:1.1.1'
+    implementation 'androidx.autofill:autofill:1.1.0'
+    implementation 'org.jetbrains:annotations:23.0.0'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'net.sf.kxml:kxml2:2.3.0'
+}
+
+task validateKeyboardMappings {
+    dependsOn 'build'
+
+    def factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
+    def schema = factory.newSchema(new File("${rootProject.projectDir}/app/keyboard-mapping.xsd"))
+    def validator = schema.newValidator()
+
+    File xmlRoot = new File("${rootProject.projectDir}/app/src/main/res/xml/")
+    List<File> keyboardMappings = xmlRoot.listFiles(new FilenameFilter() {
+        @Override
+        boolean accept(File dir, String name) {
+            return name.startsWith("keyboard_mapping_") && name.endsWith(".xml")
+        }
+    })
+
+    for (File mappingFile : keyboardMappings) {
+        validator.validate(new StreamSource(mappingFile))
+    }
+}

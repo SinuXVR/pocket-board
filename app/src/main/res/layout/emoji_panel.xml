@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:theme="@style/Theme.PocketBoard"
+    android:background="?colorOnPrimary">
+
+    <View
+        android:id="@+id/emojiPanelDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="?android:attr/dividerHorizontal" />
+
+    <com.sinux.pocketboard.ui.emoji.EmojiView
+        android:id="@+id/emojiView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/emoji_panel_height"
+        android:layout_below="@id/emojiPanelDivider"
+        android:orientation="vertical">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/emojiViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <View
+            android:id="@+id/emojiTabsDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="?android:attr/dividerHorizontal" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/emojiTabLayout"
+            android:layout_gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?colorOnPrimary" />
+
+    </com.sinux.pocketboard.ui.emoji.EmojiView>
+
+</RelativeLayout>
