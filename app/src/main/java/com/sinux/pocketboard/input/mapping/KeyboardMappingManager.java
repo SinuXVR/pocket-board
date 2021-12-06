@@ -15,6 +15,7 @@ public class KeyboardMappingManager {
 
     private static final int KEYBOARD_MAPPING_CACHE_DEPTH = 2;
     private static final String INPUT_METHOD_KEYBOARD_MAPPING = "KeyboardMapping";
+    private static final String TITAN_MODEL_NAME = "Titan";
 
     private final Context context;
     private final LruCache<String, KeyboardMapping> keyboardMappings;
@@ -62,9 +63,17 @@ public class KeyboardMappingManager {
         ToastMessageUtils.showMessage(context, R.string.keyboard_mapping_load_failed);
     }
 
+    private String getDeviceModelString() {
+        if (TITAN_MODEL_NAME.equalsIgnoreCase(android.os.Build.MODEL)) {
+            return "_titan";
+        }
+
+        return "";
+    }
+
    @NonNull
    private KeyboardMapping loadKeyboardMapping(String keyMappingFile) throws Exception {
-       KeyboardMappingParser parser = new KeyboardMappingParser(context, keyMappingFile);
+       KeyboardMappingParser parser = new KeyboardMappingParser(context, keyMappingFile, getDeviceModelString());
        return parser.parseMapping();
    }
 }

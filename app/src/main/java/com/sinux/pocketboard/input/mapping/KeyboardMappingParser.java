@@ -21,10 +21,10 @@ public class KeyboardMappingParser {
 
     private final XmlPullParser xpp;
 
-    public KeyboardMappingParser(Context context, String keyMappingFile) {
+    public KeyboardMappingParser(Context context, String keyMappingFile, String modelName) {
         this(context.getResources().getXml(
                 context.getResources()
-                        .getIdentifier("keyboard_mapping_" + keyMappingFile, "xml", context.getPackageName())
+                        .getIdentifier("keyboard_mapping_" + keyMappingFile + modelName, "xml", context.getPackageName())
         ));
     }
 

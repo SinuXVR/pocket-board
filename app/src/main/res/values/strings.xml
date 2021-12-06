@@ -65,7 +65,7 @@
 
     <!-- Static keys -->
 
-    <string name="app_version" translatable="false">v1.0.0, Ⓒ SinuX 2021, GPLv3</string>
+    <string name="app_version" translatable="false">v1.1.0, Ⓒ SinuX 2021, GPLv3</string>
 
     <string name="ime_subtypes_prefs_key" translatable="false">ime_prefs_subtypes</string>
     <string name="ime_extra_delete_prefs_key" translatable="false">ime_prefs_extra_delete</string>
