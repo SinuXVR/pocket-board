@@ -70,6 +70,12 @@ public class SuggestionsManager implements SuggestionView.OnClickListener,
                 startSpellCheckerSession(currentInputMethodSubtype);
     }
 
+    public void onStartInputView(InputMethodSubtype currentInputMethodSubtype) {
+        if (suggestionsAllowed && spellCheckerSession == null) {
+            startSpellCheckerSession(currentInputMethodSubtype);
+        }
+    }
+
     public void onFinishInput() {
         closeSpellCheckerSession();
     }

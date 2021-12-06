@@ -155,17 +155,15 @@ public class PocketBoardIME extends InputMethodService {
         keyboardInputHandler.onStartInput(attribute, suggestionsManager.isSuggestionsAllowed(), cursorPosition);
 
         updateMetaState();
-
-        System.out.println(">>> onStartInput");
     }
 
     @Override
     public void onStartInputView(EditorInfo attribute, boolean restarting) {
         super.onStartInput(attribute, restarting);
         InputMethodSubtype currentInputMethodSubtype = inputMethodManager.getCurrentInputMethodSubtype();
+        suggestionsManager.onStartInputView(currentInputMethodSubtype);
         suggestionsManager.update();
         inputView.onStartInputView(attribute, currentInputMethodSubtype, suggestionsManager.isSuggestionsAllowed());
-        System.out.println(">>> onStartInputView");
     }
 
     @Override
