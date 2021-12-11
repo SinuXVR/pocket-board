@@ -38,6 +38,7 @@ import com.sinux.pocketboard.utils.InputUtils;
 import com.sinux.pocketboard.utils.ToastMessageUtils;
 import com.sinux.pocketboard.utils.VoiceInputUtils;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -59,6 +60,8 @@ public class PocketBoardIME extends InputMethodService {
 
     private int sympadFixEventRepeatCount;
 
+    private List<String> directInputEditors;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -72,6 +75,8 @@ public class PocketBoardIME extends InputMethodService {
         suggestionsManager = new SuggestionsManager(this, keyboardInputHandler);
 
         sympadFixEventRepeatCount = getResources().getInteger(R.integer.sympad_fix_event_repeat_count);
+
+        directInputEditors = Arrays.asList(getResources().getStringArray(R.array.direct_input_editors));
     }
 
     @Override
@@ -251,8 +256,12 @@ public class PocketBoardIME extends InputMethodService {
                     return false;
                 }
 
-                // Handle text input in Keyboard mode
                 EditorInfo editorInfo = getCurrentInputEditorInfo();
+                if (editorInfo != null && directInputEditors.contains(editorInfo.packageName)) {
+                    return false;
+                }
+
+                // Handle text input in Keyboard mode
                 if (editorInfo != null && editorInfo.inputType != InputType.TYPE_NULL) {
                     if (keyboardInputHandler.handleKeyDown(keyCode, event, inputConnection,
                             metaKeyManager.isShiftEnabled(), metaKeyManager.isAltEnabled())) {
@@ -283,8 +292,13 @@ public class PocketBoardIME extends InputMethodService {
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         InputConnection inputConnection = getCurrentInputConnection();
+        EditorInfo editorInfo = getCurrentInputEditorInfo();
 
-        if (inputConnection == null) {
+        if (inputConnection == null || editorInfo == null) {
+            return false;
+        }
+
+        if (directInputEditors.contains(editorInfo.packageName)) {
             return false;
         }
 

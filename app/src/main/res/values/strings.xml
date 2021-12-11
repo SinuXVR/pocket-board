@@ -65,7 +65,7 @@
 
     <!-- Static keys -->
 
-    <string name="app_version" translatable="false">v1.1.0, Ⓒ SinuX 2021, GPLv3</string>
+    <string name="app_version" translatable="false">v1.1.1, Ⓒ SinuX 2021, GPLv3</string>
 
     <string name="ime_subtypes_prefs_key" translatable="false">ime_prefs_subtypes</string>
     <string name="ime_extra_delete_prefs_key" translatable="false">ime_prefs_extra_delete</string>
@@ -91,5 +91,10 @@
     <string name="ime_recent_emoji_prefs_key" translatable="false">ime_prefs_recent_emoji</string>
 
     <string name="ime_source_code_link">https://github.com/SinuXVR/pocket-board</string>
+
+    <!-- Package names for editors requiring direct input without keys translation -->
+    <string-array name="direct_input_editors">
+        <item>com.android.calculator2</item>
+    </string-array>
 
 </resources>
