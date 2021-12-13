@@ -65,7 +65,7 @@
 
     <!-- Static keys -->
 
-    <string name="app_version" translatable="false">v1.1.1, Ⓒ SinuX 2021, GPLv3</string>
+    <string name="app_version" translatable="false">v1.1.2, Ⓒ SinuX 2021, GPLv3</string>
 
     <string name="ime_subtypes_prefs_key" translatable="false">ime_prefs_subtypes</string>
     <string name="ime_extra_delete_prefs_key" translatable="false">ime_prefs_extra_delete</string>
@@ -95,6 +95,11 @@
     <!-- Package names for editors requiring direct input without keys translation -->
     <string-array name="direct_input_editors">
         <item>com.android.calculator2</item>
+    </string-array>
+
+    <!-- Package names for editors that can only work correctly with KeyEvents -->
+    <string-array name="raw_input_editors">
+        <item>com.termux</item>
     </string-array>
 
 </resources>

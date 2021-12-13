@@ -29,6 +29,10 @@ public class InputUtils {
     }
 
     public static boolean isSuggestionAllowedEditor(EditorInfo editorInfo) {
+        if (editorInfo.inputType == InputType.TYPE_NULL) {
+            return false;
+        }
+
         switch (editorInfo.inputType & InputType.TYPE_MASK_VARIATION) {
             case InputType.TYPE_TEXT_VARIATION_PASSWORD:
             case InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD:

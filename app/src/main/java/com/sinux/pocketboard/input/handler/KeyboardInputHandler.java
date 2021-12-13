@@ -1,5 +1,6 @@
 package com.sinux.pocketboard.input.handler;
 
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
@@ -14,6 +15,9 @@ import com.sinux.pocketboard.input.mapping.KeyboardMappingManager;
 import com.sinux.pocketboard.preferences.PreferencesHolder;
 import com.sinux.pocketboard.utils.InputUtils;
 import com.sinux.pocketboard.utils.CharacterUtils;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class KeyboardInputHandler implements InputHandler {
 
@@ -42,6 +46,9 @@ public class KeyboardInputHandler implements InputHandler {
     private boolean lastAltEnabled;
     private int lastCursorPosition;
 
+    private final List<String> rawInputEditors;
+    private boolean rawInputMode;
+
     public KeyboardInputHandler(PocketBoardIME pocketBoardIME) {
         this.pocketBoardIME = pocketBoardIME;
         this.inputMethodManager = pocketBoardIME.getInputMethodManager();
@@ -53,10 +60,14 @@ public class KeyboardInputHandler implements InputHandler {
         wordLookupLength = pocketBoardIME.getResources().getInteger(R.integer.word_lookup_length);
         keyLongPressDuration = preferencesHolder.getLongKeyPressDuration();
         layoutChangeShortcutEventRepeatCount = pocketBoardIME.getResources().getInteger(R.integer.layout_change_shortcut_event_repeat_count);
+
+        rawInputEditors = Arrays.asList(pocketBoardIME.getResources().getStringArray(R.array.raw_input_editors));
     }
 
     public void onStartInput(EditorInfo attribute, boolean suggestionsAllowed, int cursorPosition) {
-        composingEnabled = suggestionsAllowed;
+        rawInputMode = rawInputEditors.contains(attribute.packageName);
+
+        composingEnabled = suggestionsAllowed && !rawInputMode;
 
         // Switch to numeric keyboard
         if (InputUtils.isNumericEditor(attribute)) {
@@ -202,6 +213,11 @@ public class KeyboardInputHandler implements InputHandler {
     }
 
     private void deleteLastCharacter(InputConnection inputConnection) {
+        if (rawInputMode) {
+            pocketBoardIME.sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL);
+            return;
+        }
+
         if (TextUtils.isEmpty(inputConnection.getSelectedText(0))) {
             CharSequence str = inputConnection.getTextBeforeCursor(wordLookupLength, 0);
             if (!TextUtils.isEmpty(str)) {
@@ -323,6 +339,11 @@ public class KeyboardInputHandler implements InputHandler {
     }
 
     private void printNextCharacter(InputConnection inputConnection, int keyCharacterCodePoint) {
+        if (rawInputMode) {
+            pocketBoardIME.sendKeyChar((char) keyCharacterCodePoint);
+            return;
+        }
+
         if (CharacterUtils.isPunctuationCharacter(keyCharacterCodePoint)) {
             handlePunctuationCharacter(inputConnection, keyCharacterCodePoint, false);
         } else if (composingEnabled) {
@@ -333,6 +354,13 @@ public class KeyboardInputHandler implements InputHandler {
     }
 
     private void replaceLastCharacter(InputConnection inputConnection, int keyCharacterCodePoint) {
+        if (rawInputMode) {
+            handleBackspace(inputConnection);
+            SystemClock.sleep(10); // Stupid but working trick to prevent events race condition
+            printNextCharacter(inputConnection, keyCharacterCodePoint);
+            return;
+        }
+
         if (CharacterUtils.isPunctuationCharacter(keyCharacterCodePoint)) {
             handlePunctuationCharacter(inputConnection, keyCharacterCodePoint, true);
         } else if (composingEnabled) {
@@ -409,5 +437,9 @@ public class KeyboardInputHandler implements InputHandler {
         InputConnection inputConnection = pocketBoardIME.getCurrentInputConnection();
         commitComposingText(inputConnection);
         applySuggestion(itemValue, pocketBoardIME.getCurrentInputConnection(), false);
+    }
+
+    public boolean isInRawInputMode() {
+        return rawInputMode;
     }
 }

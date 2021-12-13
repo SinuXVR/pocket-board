@@ -262,12 +262,12 @@ public class PocketBoardIME extends InputMethodService {
                 }
 
                 // Handle text input in Keyboard mode
-                if (editorInfo != null && editorInfo.inputType != InputType.TYPE_NULL) {
+                if (editorInfo != null && (editorInfo.inputType != InputType.TYPE_NULL || keyboardInputHandler.isInRawInputMode())) {
                     if (keyboardInputHandler.handleKeyDown(keyCode, event, inputConnection,
                             metaKeyManager.isShiftEnabled(), metaKeyManager.isAltEnabled())) {
                         // Show input view if it's hidden
                         if (!isInputViewShown()) {
-                            requestShowSelf(0);
+                            requestShowSelf(InputMethodManager.SHOW_IMPLICIT);
                         }
                         updateMetaState();
                         suggestionsManager.update();
@@ -388,7 +388,7 @@ public class PocketBoardIME extends InputMethodService {
         // Auto-capitalize
         if (autoCapitalization) {
             EditorInfo editorInfo = getCurrentInputEditorInfo();
-            if (editorInfo != null && editorInfo.inputType != InputType.TYPE_NULL) {
+            if (editorInfo != null && (editorInfo.inputType != InputType.TYPE_NULL || keyboardInputHandler.isInRawInputMode())) {
                 InputConnection inputConnection = getCurrentInputConnection();
                 if (inputConnection != null) {
                     if (inputConnection.getCursorCapsMode(TextUtils.CAP_MODE_SENTENCES) > 0 &&
