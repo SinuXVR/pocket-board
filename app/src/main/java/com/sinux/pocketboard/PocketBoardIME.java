@@ -55,6 +55,7 @@ public class PocketBoardIME extends InputMethodService {
 
     private boolean emojiPanelVisible;
     private boolean autoCapitalization;
+    private boolean symPressed;
     private boolean symPadJustUsed;
     private boolean symPadModeLocked;
 
@@ -221,6 +222,8 @@ public class PocketBoardIME extends InputMethodService {
             case KeyEvent.KEYCODE_VOLUME_DOWN:
                 return false;
             case KeyEvent.KEYCODE_SYM:
+            case KeyEvent.KEYCODE_PICTSYMBOLS:
+                symPressed = true;
                 if (event.getRepeatCount() == 0 && symPadModeLocked) {
                     hideStatusIcon();
                     symPadModeLocked = false;
@@ -255,7 +258,7 @@ public class PocketBoardIME extends InputMethodService {
                 }
 
                 // Emulate D-pad and some media keys
-                if (event.isSymPressed() || symPadModeLocked) {
+                if (symPressed || symPadModeLocked) {
                     symPadInputHandler.handleKeyDown(keyCode, event, inputConnection,
                             metaKeyManager.isShiftEnabled(), metaKeyManager.isAltEnabled());
                     symPadJustUsed = true;
@@ -312,7 +315,8 @@ public class PocketBoardIME extends InputMethodService {
             return false;
         }
 
-        if (keyCode == KeyEvent.KEYCODE_SYM) {
+        if (keyCode == KeyEvent.KEYCODE_SYM || keyCode == KeyEvent.KEYCODE_PICTSYMBOLS) {
+            symPressed = false;
             if (!symPadJustUsed && !symPadModeLocked) {
                 // Toggle emoji panel on SYM release
                 if (isInputViewShown()) {
@@ -325,7 +329,7 @@ public class PocketBoardIME extends InputMethodService {
             return true;
         }
 
-        if (event.isSymPressed() || symPadModeLocked) {
+        if (symPressed || symPadModeLocked) {
             if (symPadInputHandler.handleKeyUp(keyCode, event, inputConnection,
                     metaKeyManager.isShiftEnabled(), metaKeyManager.isAltEnabled())) {
                 return true;
