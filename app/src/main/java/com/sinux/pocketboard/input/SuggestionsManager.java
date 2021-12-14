@@ -63,8 +63,7 @@ public class SuggestionsManager implements SuggestionView.OnClickListener,
     }
 
     public void onStartInput(EditorInfo attribute, InputMethodSubtype currentInputMethodSubtype) {
-        clear();
-        closeSpellCheckerSession();
+        disallowSuggestions();
         suggestionsAllowed = preferencesHolder.isShowSuggestionsEnabled() && preferencesHolder.isShowPanelEnabled() &&
                 InputUtils.isSuggestionAllowedEditor(attribute) && !InputUtils.isNumericEditor(attribute) &&
                 startSpellCheckerSession(currentInputMethodSubtype);
@@ -78,6 +77,12 @@ public class SuggestionsManager implements SuggestionView.OnClickListener,
 
     public void onFinishInput() {
         closeSpellCheckerSession();
+    }
+
+    public void disallowSuggestions() {
+        clear();
+        closeSpellCheckerSession();
+        suggestionsAllowed = false;
     }
 
     public boolean isSuggestionsAllowed() {

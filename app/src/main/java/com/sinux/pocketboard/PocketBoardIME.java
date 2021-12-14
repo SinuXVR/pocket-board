@@ -179,17 +179,27 @@ public class PocketBoardIME extends InputMethodService {
     }
 
     @Override
+    public boolean onEvaluateInputViewShown() {
+        boolean showInputView = super.onEvaluateInputViewShown();
+        if (!showInputView) {
+            suggestionsManager.disallowSuggestions();
+            keyboardInputHandler.disallowSuggestions();
+        }
+        return showInputView;
+    }
+
+    @Override
     protected void onCurrentInputMethodSubtypeChanged(InputMethodSubtype newSubtype) {
         super.onCurrentInputMethodSubtypeChanged(newSubtype);
-        if (isInputViewShown()) {
-            if (preferencesHolder.isLayoutChangeIndicationEnabled()) {
-                ToastMessageUtils.showMessage(this, newSubtype.getNameResId());
-            }
-            suggestionsManager.onInputMethodSubtypeChanged(newSubtype);
-            keyboardInputHandler.onInputMethodSubtypeChanged(newSubtype, suggestionsManager.isSuggestionsAllowed());
-            inputView.onInputMethodSubtypeChanged(newSubtype, suggestionsManager.isSuggestionsAllowed());
-            updateMetaState();
+        if (preferencesHolder.isLayoutChangeIndicationEnabled()) {
+            ToastMessageUtils.showMessage(this, newSubtype.getNameResId());
         }
+        suggestionsManager.onInputMethodSubtypeChanged(newSubtype);
+        keyboardInputHandler.onInputMethodSubtypeChanged(newSubtype, suggestionsManager.isSuggestionsAllowed());
+        if (inputView != null) {
+            inputView.onInputMethodSubtypeChanged(newSubtype, suggestionsManager.isSuggestionsAllowed());
+        }
+        updateMetaState();
     }
 
     @Override
