@@ -53,7 +53,7 @@ public abstract class ProxyInputHandler implements InputHandler {
             handleKeyPress(shortKeyCode, event, inputConnection, shiftEnabled, altEnabled);
         }
 
-        return false;
+        return true;
     }
 
     protected abstract int translateShortPressKeyCode(int keyCode);
