@@ -336,7 +336,13 @@ public class PocketBoardIME extends InputMethodService {
             }
         }
 
-        return metaKeyManager.handleKeyUp(keyCode, event);
+        if (metaKeyManager.handleKeyUp(keyCode, event)) {
+            return true;
+        }
+
+        return (editorInfo.inputType != InputType.TYPE_NULL || keyboardInputHandler.isInRawInputMode()) &&
+                keyboardInputHandler.handleKeyUp(keyCode, event, inputConnection,
+                        metaKeyManager.isShiftEnabled(), metaKeyManager.isAltEnabled());
     }
 
     @Override

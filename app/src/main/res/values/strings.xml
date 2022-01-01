@@ -100,6 +100,7 @@
     <!-- Package names for editors that can only work correctly with KeyEvents -->
     <string-array name="raw_input_editors">
         <item>com.termux</item>
+        <item>com.mill.clock.config</item>
     </string-array>
 
 </resources>

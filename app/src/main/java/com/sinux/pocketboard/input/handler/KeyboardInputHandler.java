@@ -195,6 +195,21 @@ public class KeyboardInputHandler implements InputHandler {
         return false;
     }
 
+    @Override
+    public boolean handleKeyUp(int keyCode, KeyEvent event, InputConnection inputConnection,
+                               boolean shiftEnabled, boolean altEnabled) {
+        if (keyCode == KeyEvent.KEYCODE_DEL || keyCode == KeyEvent.KEYCODE_SPACE) {
+            return true;
+        }
+
+        if (event.getUnicodeChar() == 0) {
+            return false;
+        }
+
+        KeyMapping keyMapping = keyboardMappingManager.getCurrentMapping().getKeyMapping(keyCode);
+        return keyMapping != null;
+    }
+
     private void handleBackspace(InputConnection inputConnection) {
         if (composingEnabled) {
             int composingLength = textComposer.length();

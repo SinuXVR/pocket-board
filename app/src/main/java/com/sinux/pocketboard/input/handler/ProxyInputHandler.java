@@ -42,7 +42,9 @@ public abstract class ProxyInputHandler implements InputHandler {
         return false;
     }
 
-    public boolean handleKeyUp(int keyCode, KeyEvent event, InputConnection inputConnection, boolean shiftEnabled, boolean altEnabled) {
+    @Override
+    public boolean handleKeyUp(int keyCode, KeyEvent event, InputConnection inputConnection,
+                               boolean shiftEnabled, boolean altEnabled) {
         int shortKeyCode = translateShortPressKeyCode(keyCode);
         if (shortKeyCode == 0) {
             return false;

@@ -123,7 +123,9 @@ public class SuggestionsManager implements SuggestionView.OnClickListener,
                     spellCheckerSession.cancel();
                 }
                 for (int i = 0; i < completions.length && i < suggestionsCount; i++) {
-                    suggestions.add(completions[i].getText().toString());
+                    if (!TextUtils.isEmpty(completions[i].getText())) {
+                        suggestions.add(completions[i].getText().toString());
+                    }
                 }
             }
             showSuggestions();
