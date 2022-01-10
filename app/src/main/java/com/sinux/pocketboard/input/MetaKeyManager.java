@@ -21,8 +21,10 @@ public class MetaKeyManager {
     private MetaKeyState shift;
     private boolean shiftPressed;
     private long shiftPressTime;
+    private long lastShiftUpTime;
     private MetaKeyState alt;
     private long altPressTime;
+    private long lastAltUpTime;
     private boolean altPressed;
     private boolean multipleKeyJustPressed;
 
@@ -95,17 +97,27 @@ public class MetaKeyManager {
             case KeyEvent.KEYCODE_SHIFT_RIGHT:
                 setShiftPressed(false);
                 if (!multipleKeyJustPressed && (event.getEventTime() - shiftPressTime < keyLongPressDuration)) {
-                    toggleShiftNextState();
+                    if (event.getEventTime() - lastShiftUpTime < keyLongPressDuration) {
+                        fixShift();
+                    } else {
+                        toggleShiftNextState();
+                    }
                 }
                 multipleKeyJustPressed = altPressed;
+                lastShiftUpTime = event.getEventTime();
                 break;
             case KeyEvent.KEYCODE_ALT_LEFT:
             case KeyEvent.KEYCODE_ALT_RIGHT:
                 setAltPressed(false);
                 if (!multipleKeyJustPressed && (event.getEventTime() - altPressTime < keyLongPressDuration)) {
-                    toggleAltNextState();
+                    if (event.getEventTime() - lastAltUpTime < keyLongPressDuration) {
+                        fixAlt();
+                    } else {
+                        toggleAltNextState();
+                    }
                 }
                 multipleKeyJustPressed = shiftPressed;
+                lastAltUpTime = event.getEventTime();
                 break;
             default:
                 return false;
@@ -124,6 +136,10 @@ public class MetaKeyManager {
         if (shift == MetaKeyState.ENABLED) {
             setShiftState(MetaKeyState.DISABLED);
         }
+    }
+
+    public void fixShift() {
+        setShiftState(MetaKeyState.FIXED);
     }
 
     public void setShiftPressed(boolean shiftPressed) {
@@ -147,6 +163,10 @@ public class MetaKeyManager {
         if (shift == MetaKeyState.ENABLED) {
             setShiftState(MetaKeyState.DISABLED);
         }
+    }
+
+    public void fixAlt() {
+        setAltState(MetaKeyState.FIXED);
     }
 
     public void setAltPressed(boolean altPressed) {

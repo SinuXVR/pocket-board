@@ -6,9 +6,8 @@ public enum MetaKeyState {
     ENABLED,
     FIXED;
 
-    private static final MetaKeyState[] values = values();
-
     public MetaKeyState next() {
-        return values[(this.ordinal() + 1) % values.length];
+        // Toggle between DISABLED and ENABLED excluding FIXED
+        return this == DISABLED ? ENABLED : DISABLED;
     }
 }
