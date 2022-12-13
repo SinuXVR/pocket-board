@@ -41,6 +41,7 @@
     <string name="input_subtype_en_US">English (US)</string>
     <string name="input_subtype_ru_RU_BB_Passport">Русский (BB Passport)</string>
     <string name="input_subtype_ru_RU_Transliterate">Русский (Транслит)</string>
+    <string name="input_subtype_ru_RU_Alt">Русский (Alt)</string>
 
     <string name="voice_ime_not_configured">Voice input not configured</string>
     <string name="keyboard_mapping_load_failed">Couldn\'t load keyboard mapping</string>
