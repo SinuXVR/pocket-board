@@ -40,5 +40,14 @@
         android:imeSubtypeMode="keyboard"
         android:isAsciiCapable="false"
         android:imeSubtypeExtraValue="DisplayTag=ru,KeyboardMapping=ru_alt,EmojiCapable" />
+  
+    <subtype
+        android:label="Español (España)"
+        android:subtypeId="0x04"
+        android:imeSubtypeLocale="es_ES"
+        android:languageTag="es-es"
+        android:imeSubtypeMode="keyboard"
+        android:isAsciiCapable="true"
+        android:imeSubtypeExtraValue="DisplayTag=es,KeyboardMapping=es_es,AsciiCapable,EmojiCapable" />
 
 </input-method>
