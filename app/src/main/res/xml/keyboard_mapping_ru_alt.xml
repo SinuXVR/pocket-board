@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<KeyboardMapping>
+    <Key code="45" shiftValue="Й" value="й">
+        <Alt value="0" />
+    </Key>
+    <Key code="51" shiftValue="Ц" value="ц">
+        <Alt value="1" />
+    </Key>
+    <Key code="33" shiftValue="У" value="у">
+        <Alt value="2" />
+        <Alt value="\@" />
+    </Key>
+    <Key code="46" shiftValue="К" value="к">
+        <Alt value="3" />
+        <Alt value="\#" />
+    </Key>
+    <Key code="48" shiftValue="Е" value="е">
+        <Add shiftValue="Ё" value="ё" />
+        <Alt value="(" />
+        <Alt value="{" />
+        <Alt value="[" />
+        <Alt value="&lt;" />
+    </Key>
+    <Key code="53" shiftValue="Н" value="н">
+        <Alt value=")" />
+        <Alt value="}" />
+        <Alt value="]" />
+        <Alt value=">" />
+    </Key>
+    <Key code="49" shiftValue="Г" value="г">
+        <Alt value="-" />
+        <Alt value="~" />
+    </Key>
+    <Key code="37" shiftValue="Ш" value="ш">
+        <Add shiftValue="Щ" value="щ" />
+        <Alt value="_" />
+    </Key>
+    <Key code="43" shiftValue="З" value="з">
+        <Alt value="/" />
+        <Alt value="\\" />
+        <Alt value="|" />
+    </Key>
+    <Key code="44" shiftValue="Х" value="х">
+        <Add shiftValue="Ь" value="ь" />
+        <Alt value=":" />
+        <Alt value=";" />
+    </Key>
+    <Key code="29" shiftValue="Ф" value="ф">
+        <Alt value="\@" />
+    </Key>
+    <Key code="47" shiftValue="Ы" value="ы">
+        <Add shiftValue="Ъ" value="ъ" />
+        <Alt value="4" />
+        <Alt value="$" />
+        <Alt value="€" />
+        <Alt value="¥" />
+        <Alt value="₽" />
+    </Key>
+    <Key code="32" shiftValue="В" value="в">
+        <Alt value="5" />
+        <Alt value="%" />
+    </Key>
+    <Key code="34" shiftValue="А" value="а">
+        <Alt value="6" />
+        <Alt value="^" />
+    </Key>
+    <Key code="35" shiftValue="П" value="п">
+        <Alt value="*" />
+    </Key>
+    <Key code="36" shiftValue="Р" value="р">
+        <Alt value="\#" />
+        <Alt value="№" />
+    </Key>
+    <Key code="38" shiftValue="О" value="о">
+        <Alt value="+" />
+        <Alt value="=" />
+        <Alt value="≈" />
+        <Alt value="±" />
+    </Key>
+    <Key code="39" shiftValue="Л" value="л">
+        <Alt value="&quot;" />
+        <Alt value="«" />
+        <Alt value="»" />
+    </Key>
+    <Key code="40" shiftValue="Д" value="д">
+        <Add shiftValue="Ж" value="ж" />
+        <Alt value="'" />
+        <Alt value="`" />
+    </Key>
+    <Key code="54" shiftValue="Я" value="я">
+        <Add shiftValue="Э" value="э" />
+        <Alt value="!" />
+    </Key>
+    <Key code="52" shiftValue="Ч" value="ч">
+        <Alt value="7" />
+        <Alt value="&amp;" />
+    </Key>
+    <Key code="31" shiftValue="С" value="с">
+        <Alt value="8" />
+        <Alt value="*" />
+    </Key>
+    <Key code="50" shiftValue="М" value="м">
+        <Alt value="9" />
+    </Key>
+    <Key code="30" shiftValue="И" value="и">
+        <Alt value="." />
+    </Key>
+    <Key code="42" shiftValue="Т" value="т">
+        <Alt value="," />
+    </Key>
+    <Key code="41" shiftValue="Б" value="б">
+        <Add shiftValue="Ю" value="ю" />
+        <Alt value="\?" />
+    </Key>
+</KeyboardMapping>
