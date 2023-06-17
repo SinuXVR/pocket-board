@@ -32,4 +32,13 @@
         android:isAsciiCapable="false"
         android:imeSubtypeExtraValue="DisplayTag=ru,KeyboardMapping=ru_t,EmojiCapable" />
 
+    <subtype
+        android:label="@string/input_subtype_ru_RU_Alt"
+        android:subtypeId="0x04"
+        android:imeSubtypeLocale="ru"
+        android:languageTag="ru"
+        android:imeSubtypeMode="keyboard"
+        android:isAsciiCapable="false"
+        android:imeSubtypeExtraValue="DisplayTag=ru,KeyboardMapping=ru_alt,EmojiCapable" />
+
 </input-method>
