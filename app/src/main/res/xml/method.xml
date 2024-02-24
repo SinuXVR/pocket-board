@@ -50,4 +50,13 @@
         android:isAsciiCapable="true"
         android:imeSubtypeExtraValue="DisplayTag=es,KeyboardMapping=es_es,AsciiCapable,EmojiCapable" />
 
+    <subtype
+        android:label="@string/input_subtype_bg_BG"
+        android:subtypeId="0x06"
+        android:imeSubtypeLocale="bg_BG"
+        android:languageTag="bg"
+        android:imeSubtypeMode="keyboard"
+        android:isAsciiCapable="false"
+        android:imeSubtypeExtraValue="DisplayTag=bg,KeyboardMapping=bg,EmojiCapable" />
+
 </input-method>
