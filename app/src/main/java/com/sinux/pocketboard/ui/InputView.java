@@ -231,6 +231,7 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
 
     private void toggleCapsStyle() {
         isCapsEnabled = !isCapsEnabled;
+        pocketBoardIME.setCapsEnabled(isCapsEnabled);
         updateMetaLayoutButtonText(pocketBoardIME.getMetaKeyManager());
         fontButton.setSelected(isCapsEnabled);
     }
