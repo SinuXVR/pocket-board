@@ -58,6 +58,7 @@ public class PocketBoardIME extends InputMethodService {
     private boolean symPressed;
     private boolean symPadJustUsed;
     private boolean symPadModeLocked;
+    private boolean capsEnabled;
 
     private int sympadFixEventRepeatCount;
 
@@ -444,5 +445,14 @@ public class PocketBoardIME extends InputMethodService {
 
     public KeyboardInputHandler getKeyboardInputHandler() {
         return keyboardInputHandler;
+    }
+
+    public void setCapsEnabled(boolean enabled) {
+        capsEnabled = enabled;
+        keyboardInputHandler.setCapsEnabled(enabled);
+    }
+
+    public boolean isCapsEnabled() {
+        return capsEnabled;
     }
 }
