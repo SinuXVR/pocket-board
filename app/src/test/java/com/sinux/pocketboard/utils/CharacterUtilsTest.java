@@ -36,8 +36,8 @@ public class CharacterUtilsTest {
 
     @Test
     public void getLastWordStartIndexTest() {
-        Assert.assertEquals(0, CharacterUtils.getLastWordStartIndex("word"));
-        Assert.assertEquals(7, CharacterUtils.getLastWordStartIndex("second word"));
-        Assert.assertEquals(7, CharacterUtils.getLastWordStartIndex("emoji\uD83D\uDE03"));
+        Assert.assertEquals(0, CharacterUtils.getLastWordStartIndex("word", ""));
+        Assert.assertEquals(7, CharacterUtils.getLastWordStartIndex("second word", ""));
+        Assert.assertEquals(7, CharacterUtils.getLastWordStartIndex("emoji\uD83D\uDE03", ""));
     }
 }

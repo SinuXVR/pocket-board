@@ -7,6 +7,7 @@ plugins {
 }
 
 android {
+    namespace 'com.sinux.pocketboard'
     compileSdk 35
 
     defaultConfig {
@@ -34,7 +35,7 @@ android {
 dependencies {
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.preference:preference:1.2.1'
-    implementation 'androidx.autofill:autofill:1.2.0'
+    implementation 'androidx.autofill:autofill:1.1.0'
     implementation 'org.jetbrains:annotations:26.0.1'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'net.sf.kxml:kxml2:2.3.0'
