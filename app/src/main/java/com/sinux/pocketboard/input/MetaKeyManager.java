@@ -3,10 +3,13 @@ package com.sinux.pocketboard.input;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.telecom.TelecomManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
+
+import androidx.annotation.RequiresApi;
 
 import com.sinux.pocketboard.PocketBoardIME;
 import com.sinux.pocketboard.preferences.PreferencesHolder;
@@ -16,7 +19,11 @@ public class MetaKeyManager {
     private final PocketBoardIME pocketBoardIME;
     private final PreferencesHolder preferencesHolder;
     private final long keyLongPressDuration;
+
+    // Legacy callback for API < 31
     private final CallStateCallback callStateCallback;
+    // Modern callback for API 31+
+    private final CallStateCallback.Modern modernCallStateCallback;
 
     private MetaKeyState shift;
     private boolean shiftPressed;
@@ -35,19 +42,63 @@ public class MetaKeyManager {
         this.preferencesHolder = pocketBoardIME.getPreferencesHolder();
         keyLongPressDuration = pocketBoardIME.getPreferencesHolder().getLongKeyPressDuration();
 
-        callStateCallback = new CallStateCallback();
         TelephonyManager tm = getTelephonyManager();
-        if (tm != null) {
-            tm.listen(callStateCallback, PhoneStateListener.LISTEN_CALL_STATE);
+
+        // Use the appropriate callback based on Android version
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            // Android 12+ (API 31+): Use TelephonyCallback
+            modernCallStateCallback = new CallStateCallback.Modern();
+            callStateCallback = null;
+            if (tm != null) {
+                registerModernCallback(tm);
+            }
+        } else {
+            // Android 11 and below: Use PhoneStateListener
+            callStateCallback = new CallStateCallback();
+            modernCallStateCallback = null;
+            if (tm != null) {
+                tm.listen(callStateCallback, PhoneStateListener.LISTEN_CALL_STATE);
+            }
         }
 
         reset();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    private void registerModernCallback(TelephonyManager tm) {
+        tm.registerTelephonyCallback(pocketBoardIME.getMainExecutor(), modernCallStateCallback);
+    }
+
     public void destroy() {
         TelephonyManager tm = getTelephonyManager();
         if (tm != null) {
-            tm.listen(callStateCallback, PhoneStateListener.LISTEN_NONE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                // Unregister modern callback
+                if (modernCallStateCallback != null) {
+                    unregisterModernCallback(tm);
+                }
+            } else {
+                // Unregister legacy callback
+                if (callStateCallback != null) {
+                    tm.listen(callStateCallback, PhoneStateListener.LISTEN_NONE);
+                }
+            }
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    private void unregisterModernCallback(TelephonyManager tm) {
+        tm.unregisterTelephonyCallback(modernCallStateCallback);
+    }
+
+    /**
+     * Check if there's currently an active or incoming call
+     */
+    private boolean isCalling() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            return modernCallStateCallback != null && modernCallStateCallback.isCalling();
+        } else {
+            return callStateCallback != null && callStateCallback.isCalling();
         }
     }
 
@@ -224,7 +275,7 @@ public class MetaKeyManager {
 
     private boolean handleShiftOnCalling() {
         // Accept calls using SHIFT key
-        if (callStateCallback.isCalling() && preferencesHolder.isPhoneControlEnabled()) {
+        if (isCalling() && preferencesHolder.isPhoneControlEnabled()) {
             TelecomManager tm = getTelecomManager();
             if (tm != null && pocketBoardIME.checkSelfPermission(Manifest.permission.ANSWER_PHONE_CALLS) == PackageManager.PERMISSION_GRANTED) {
                 tm.acceptRingingCall();
@@ -236,7 +287,7 @@ public class MetaKeyManager {
 
     private boolean handleAltOnCalling() {
         // End calls using ALT key
-        if (callStateCallback.isCalling() && preferencesHolder.isPhoneControlEnabled()) {
+        if (isCalling() && preferencesHolder.isPhoneControlEnabled()) {
             TelecomManager tm = getTelecomManager();
             if (tm != null && pocketBoardIME.checkSelfPermission(Manifest.permission.ANSWER_PHONE_CALLS) == PackageManager.PERMISSION_GRANTED) {
                 tm.endCall();
