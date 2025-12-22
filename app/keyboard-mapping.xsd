@@ -29,7 +29,7 @@
   </xs:element>
   <xs:simpleType name="char">
     <xs:restriction base="xs:string">
-      <xs:pattern value="(.|\\\\)"/>
+      <xs:pattern value="(.{1,2}|\\\\)"/>
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>
