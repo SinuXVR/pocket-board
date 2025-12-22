@@ -24,6 +24,7 @@ import com.sinux.pocketboard.R;
 import com.sinux.pocketboard.input.MetaKeyManager;
 import com.sinux.pocketboard.input.MetaKeyStateChangeListener;
 import com.sinux.pocketboard.preferences.PreferencesHolder;
+import com.sinux.pocketboard.ui.emoji.EmojiView;
 import com.sinux.pocketboard.utils.InputUtils;
 import com.sinux.pocketboard.utils.VoiceInputUtils;
 
@@ -40,6 +41,8 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
     private final PreferencesHolder preferencesHolder;
     private final List<SuggestionView> suggestions;
 
+    private ViewGroup emojiPanelView;
+    private EmojiView emojiView;
     private ViewGroup mainInputView;
     private ViewGroup suggestionsView;
     private ViewGroup inlineSuggestionsViewWrapper;
@@ -67,6 +70,8 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+        emojiPanelView = findViewById(R.id.emojiPanel);
+        emojiView = findViewById(R.id.emojiView);
         mainInputView = findViewById(R.id.inputView);
         suggestionsView = findViewById(R.id.suggestionsView);
         inlineSuggestionsViewWrapper = findViewById(R.id.inlineSuggestionsViewWrapper);
@@ -92,7 +97,7 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
         suggestionsView.addView(suggestions.get(0), suggestionsCount / 2);
 
         emojiButton = findViewById(R.id.emojiButton);
-        emojiButton.setOnClickListener(b -> pocketBoardIME.setCandidatesViewShown(!pocketBoardIME.isEmojiPanelVisible()));
+        emojiButton.setOnClickListener(b -> toggleEmojiPanel());
 
         metaLayoutButton = findViewById(R.id.metaLayoutButton);
         metaLayoutButton.setOnClickListener(b -> {
@@ -116,6 +121,7 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
                                  boolean suggestionsAllowed) {
         inlineSuggestionsCancelled = false;
         inlineSuggestionsViewWrapper.setVisibility(GONE);
+        hideEmojiPanel();
         clearInlineSuggestionsView();
 
         boolean showEmojiButton = preferencesHolder.isShowEmojiEnabled();
@@ -249,5 +255,30 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
     private void clearInlineSuggestionsView() {
         inlineSuggestionsView.removeAllViews();
         inlineSuggestionsView.addView(hideInlineSuggestionsButton);
+    }
+
+    public boolean isEmojiPanelVisible() {
+        return emojiPanelView != null && emojiPanelView.getVisibility() == VISIBLE;
+    }
+
+    public void toggleEmojiPanel() {
+        if (isEmojiPanelVisible()) {
+            hideEmojiPanel();
+        } else {
+            showEmojiPanel();
+        }
+    }
+
+    public void hideEmojiPanel() {
+        if (emojiPanelView != null) {
+            emojiView.hidePopup();
+            emojiPanelView.setVisibility(GONE);
+        }
+    }
+
+    private void showEmojiPanel() {
+        if (emojiPanelView  != null) {
+            emojiPanelView.setVisibility(VISIBLE);
+        }
     }
 }

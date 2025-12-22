@@ -33,7 +33,6 @@ import com.sinux.pocketboard.input.handler.KeyboardInputHandler;
 import com.sinux.pocketboard.input.MetaKeyManager;
 import com.sinux.pocketboard.preferences.PreferencesHolder;
 import com.sinux.pocketboard.ui.InputView;
-import com.sinux.pocketboard.ui.emoji.EmojiView;
 import com.sinux.pocketboard.utils.InputUtils;
 import com.sinux.pocketboard.utils.ToastMessageUtils;
 import com.sinux.pocketboard.utils.VoiceInputUtils;
@@ -49,11 +48,10 @@ public class PocketBoardIME extends InputMethodService {
     private MetaKeyManager metaKeyManager;
     private KeyboardInputHandler keyboardInputHandler;
     private SymPadInputHandler symPadInputHandler;
-    private EmojiView emojiView;
+
     private InputView inputView;
     private SuggestionsManager suggestionsManager;
 
-    private boolean emojiPanelVisible;
     private boolean autoCapitalization;
     private boolean symPressed;
     private boolean symPadJustUsed;
@@ -86,46 +84,12 @@ public class PocketBoardIME extends InputMethodService {
         super.onDestroy();
     }
 
-    /**
-     * Use candidates view to display additional emoji panel on demand
-     */
-    @SuppressLint("InflateParams")
-    @Override
-    public View onCreateCandidatesView() {
-        emojiPanelVisible = false;
-        View candidatesView = getLayoutInflater().inflate(R.layout.emoji_panel, null);
-        emojiView = candidatesView.findViewById(R.id.emojiView);
-        return candidatesView;
-    }
-
-    @Override
-    public void setCandidatesViewShown(boolean shown) {
-        super.setCandidatesViewShown(shown);
-        emojiPanelVisible = shown;
-        if (!shown && emojiView != null) {
-            emojiView.hidePopup();
-        }
-    }
-
-    public boolean isEmojiPanelVisible() {
-        return emojiPanelVisible;
-    }
-
     @Override
     public void onWindowHidden() {
         super.onWindowHidden();
-        if (emojiView != null) {
-            emojiView.hidePopup();
+        if (inputView != null) {
+            inputView.hideEmojiPanel();
         }
-    }
-
-    /**
-     * Workaround to update UI properly on candidates view show/hide
-     */
-    @Override
-    public void onComputeInsets(Insets outInsets) {
-        super.onComputeInsets(outInsets);
-        outInsets.contentTopInsets = outInsets.visibleTopInsets;
     }
 
     @SuppressLint("InflateParams")
@@ -140,7 +104,6 @@ public class PocketBoardIME extends InputMethodService {
     @Override
     public void onStartInput(EditorInfo attribute, boolean restarting) {
         super.onStartInput(attribute, restarting);
-        setCandidatesViewShown(false);
         autoCapitalization = preferencesHolder.isAutoCapitalizationEnabled();
 
         if (!restarting) {
@@ -208,8 +171,8 @@ public class PocketBoardIME extends InputMethodService {
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
                 if (isInputViewShown()) {
-                    if (emojiPanelVisible) {
-                        setCandidatesViewShown(false);
+                    if (inputView.isEmojiPanelVisible()) {
+                        inputView.hideEmojiPanel();
                     } else if (suggestionsManager.isInlineSuggestionsShown()) {
                         suggestionsManager.cancelInlineSuggestions();
                     } else {
@@ -320,7 +283,7 @@ public class PocketBoardIME extends InputMethodService {
             if (!symPadJustUsed && !symPadModeLocked) {
                 // Toggle emoji panel on SYM release
                 if (isInputViewShown()) {
-                    setCandidatesViewShown(!emojiPanelVisible);
+                    inputView.toggleEmojiPanel();
                 }
             } else {
                 symPadJustUsed = false;

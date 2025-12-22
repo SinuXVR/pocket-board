@@ -3,6 +3,7 @@ package com.sinux.pocketboard.input;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.telecom.TelecomManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -16,7 +17,7 @@ public class MetaKeyManager {
     private final PocketBoardIME pocketBoardIME;
     private final PreferencesHolder preferencesHolder;
     private final long keyLongPressDuration;
-    private final CallStateCallback callStateCallback;
+    private final CallStateListener callStateListener;
 
     private MetaKeyState shift;
     private boolean shiftPressed;
@@ -35,10 +36,10 @@ public class MetaKeyManager {
         this.preferencesHolder = pocketBoardIME.getPreferencesHolder();
         keyLongPressDuration = pocketBoardIME.getPreferencesHolder().getLongKeyPressDuration();
 
-        callStateCallback = new CallStateCallback();
+        callStateListener = new CallStateListener();
         TelephonyManager tm = getTelephonyManager();
         if (tm != null) {
-            tm.listen(callStateCallback, PhoneStateListener.LISTEN_CALL_STATE);
+            callStateListener.register(pocketBoardIME, tm);
         }
 
         reset();
@@ -47,7 +48,7 @@ public class MetaKeyManager {
     public void destroy() {
         TelephonyManager tm = getTelephonyManager();
         if (tm != null) {
-            tm.listen(callStateCallback, PhoneStateListener.LISTEN_NONE);
+            callStateListener.unregister(tm);
         }
     }
 
@@ -224,7 +225,7 @@ public class MetaKeyManager {
 
     private boolean handleShiftOnCalling() {
         // Accept calls using SHIFT key
-        if (callStateCallback.isCalling() && preferencesHolder.isPhoneControlEnabled()) {
+        if (callStateListener.isCalling() && preferencesHolder.isPhoneControlEnabled()) {
             TelecomManager tm = getTelecomManager();
             if (tm != null && pocketBoardIME.checkSelfPermission(Manifest.permission.ANSWER_PHONE_CALLS) == PackageManager.PERMISSION_GRANTED) {
                 tm.acceptRingingCall();
@@ -236,7 +237,7 @@ public class MetaKeyManager {
 
     private boolean handleAltOnCalling() {
         // End calls using ALT key
-        if (callStateCallback.isCalling() && preferencesHolder.isPhoneControlEnabled()) {
+        if (callStateListener.isCalling() && preferencesHolder.isPhoneControlEnabled()) {
             TelecomManager tm = getTelecomManager();
             if (tm != null && pocketBoardIME.checkSelfPermission(Manifest.permission.ANSWER_PHONE_CALLS) == PackageManager.PERMISSION_GRANTED) {
                 tm.endCall();

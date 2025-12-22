@@ -9,12 +9,59 @@
     android:theme="@style/Theme.PocketBoard"
     android:background="?colorOnPrimary"
     android:gravity="bottom"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
 
+    <!-- Emoji Panel -->
+    <RelativeLayout
+        android:id="@+id/emojiPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?colorOnPrimary"
+        android:visibility="gone">
+
+        <View
+            android:id="@+id/emojiPanelDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="?android:attr/dividerHorizontal" />
+
+        <com.sinux.pocketboard.ui.emoji.EmojiView
+            android:id="@+id/emojiView"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/emoji_panel_height"
+            android:layout_below="@id/emojiPanelDivider"
+            android:orientation="vertical">
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/emojiViewPager"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <View
+                android:id="@+id/emojiTabsDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="?android:attr/dividerHorizontal" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/emojiTabLayout"
+                android:layout_gravity="bottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?colorOnPrimary" />
+
+        </com.sinux.pocketboard.ui.emoji.EmojiView>
+
+    </RelativeLayout>
+
+    <!-- IME UI -->
     <View
         android:id="@+id/inputViewDivider"
         android:layout_width="match_parent"
         android:layout_height="1px"
+        android:layout_below="@id/emojiPanel"
         android:background="?android:attr/dividerHorizontal" />
 
     <HorizontalScrollView
