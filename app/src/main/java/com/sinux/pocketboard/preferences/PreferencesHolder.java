@@ -13,8 +13,10 @@ import com.sinux.pocketboard.R;
 import com.sinux.pocketboard.utils.InputUtils;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class PreferencesHolder implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -38,6 +40,7 @@ public class PreferencesHolder implements SharedPreferences.OnSharedPreferenceCh
     private final String recentEmojiKey;
 
     private final Map<String, Object> prefValues;
+    private final Map<String, Set<Consumer<Object>>> prefsChangeListeners = new HashMap<>();
 
     public PreferencesHolder(Context context) {
         deviceProtectedStorageContext = context.createDeviceProtectedStorageContext();
@@ -64,11 +67,18 @@ public class PreferencesHolder implements SharedPreferences.OnSharedPreferenceCh
         prefValues = new HashMap<>();
     }
 
+    public void registerPreferenceChangeListener(String key, Consumer<Object> listener) {
+        prefsChangeListeners.computeIfAbsent(key, k -> new HashSet<>()).add(listener);
+    }
+
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Object value = sharedPreferences.getAll().get(key);
         if (value != null) {
             prefValues.put(key, value);
+            if (prefsChangeListeners.containsKey(key) && prefsChangeListeners.get(key) != null) {
+                prefsChangeListeners.get(key).forEach(consumer -> consumer.accept(value));
+            }
         }
     }
 

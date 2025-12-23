@@ -8,7 +8,10 @@ import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.view.inputmethod.InputMethodSubtype;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
@@ -19,13 +22,13 @@ import com.sinux.pocketboard.utils.ToastMessageUtils;
 
 public class PreferencesFragment extends PreferenceFragmentCompat {
 
-    private static final int ANSWER_PHONE_CALLS_CODE = 8124;
-
     private Preference subtypesPreference;
     private SwitchPreference phoneControlPreference;
     private InputMethodManager inputMethodManager;
     private InputMethodInfo inputMethodInfo;
     private Context context;
+
+    private ActivityResultLauncher<String[]> phonePermissionLauncher;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -38,6 +41,13 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodInfo = InputUtils.getInputMethodInfo(context, inputMethodManager);
 
+        phonePermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
+            if (phoneControlPreference != null) {
+                boolean allGranted = result.values().stream().allMatch(granted -> granted);
+                phoneControlPreference.setChecked(allGranted);
+            }
+        });
+
         // Set pref click listener to start subtype selection activity
         if (subtypesPreference != null) {
             subtypesPreference.setOnPreferenceClickListener(preference -> {
@@ -48,9 +58,19 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
 
         // Set pref click listener to request answer phone calls permissions
         if (phoneControlPreference != null) {
-            phoneControlPreference.setOnPreferenceClickListener(preference -> {
-                if (((SwitchPreference) preference).isChecked()) {
-                    requestPermissions(new String[]{Manifest.permission.ANSWER_PHONE_CALLS}, ANSWER_PHONE_CALLS_CODE);
+            phoneControlPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                boolean isCheckingOn = (boolean) newValue;
+                if (isCheckingOn) {
+                    // Check if we already have permissions
+                    boolean hasPermissions = context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED &&
+                            context.checkSelfPermission(Manifest.permission.ANSWER_PHONE_CALLS) == PackageManager.PERMISSION_GRANTED;
+                    if (!hasPermissions) {
+                        phonePermissionLauncher.launch(new String[]{
+                                Manifest.permission.READ_PHONE_STATE,
+                                Manifest.permission.ANSWER_PHONE_CALLS
+                        });
+                        return false;
+                    }
                 }
                 return true;
             });
@@ -85,17 +105,5 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
             sb.append(ims.getDisplayName(context, imi.getPackageName(), imi.getServiceInfo().applicationInfo));
         }
         return sb.toString();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == ANSWER_PHONE_CALLS_CODE) {
-            if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                if (phoneControlPreference != null) {
-                    phoneControlPreference.setChecked(false);
-                    ToastMessageUtils.showMessage(context, R.string.ime_extra_phone_control_permission_required);
-                }
-            }
-        }
     }
 }

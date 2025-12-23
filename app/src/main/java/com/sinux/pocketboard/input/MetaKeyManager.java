@@ -10,7 +10,10 @@ import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 
 import com.sinux.pocketboard.PocketBoardIME;
+import com.sinux.pocketboard.R;
 import com.sinux.pocketboard.preferences.PreferencesHolder;
+
+import java.util.function.Consumer;
 
 public class MetaKeyManager {
 
@@ -41,6 +44,19 @@ public class MetaKeyManager {
         if (tm != null) {
             callStateListener.register(pocketBoardIME, tm);
         }
+
+        preferencesHolder.registerPreferenceChangeListener(
+                pocketBoardIME.getString(R.string.ime_extra_phone_control_prefs_key),
+                value -> {
+                    if (tm != null) {
+                        if (Boolean.TRUE.equals(value)) {
+                            callStateListener.register(pocketBoardIME, tm);
+                        } else {
+                            callStateListener.unregister(tm);
+                        }
+                    }
+                }
+        );
 
         reset();
     }

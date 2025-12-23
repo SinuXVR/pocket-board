@@ -14,7 +14,7 @@ public class InputUtils {
                 return imi;
             }
         }
-        throw new IllegalStateException("InputMethodInfo not found");
+        return null;
     }
 
     public static boolean isNumericEditor(EditorInfo editorInfo) {

@@ -15,6 +15,8 @@ public final class CallStateListener {
 
     private final CallListener listenerDelegate;
 
+    private boolean registered;
+
     public CallStateListener() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             listenerDelegate = new Sdk35CallStateListener();
@@ -24,20 +26,30 @@ public final class CallStateListener {
     }
 
     public void register(PocketBoardIME pocketBoardIME, TelephonyManager telephonyManager) {
+        if (registered)
+            return;
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (pocketBoardIME.checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
                 telephonyManager.registerTelephonyCallback(pocketBoardIME.getMainExecutor(), (Sdk35CallStateListener) listenerDelegate);
+                registered = true;
             }
         } else {
             telephonyManager.listen((LegacyCallStateListener) listenerDelegate, PhoneStateListener.LISTEN_CALL_STATE);
+            registered = true;
         }
     }
 
     public void unregister(TelephonyManager telephonyManager) {
+        if (!registered)
+            return;
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             telephonyManager.unregisterTelephonyCallback((Sdk35CallStateListener) listenerDelegate);
+            registered = false;
         } else {
             telephonyManager.listen((LegacyCallStateListener) listenerDelegate, PhoneStateListener.LISTEN_NONE);
+            registered = false;
         }
     }
 

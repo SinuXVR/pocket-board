@@ -1,18 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="input_view_height">48dp</dimen>
-    <dimen name="emoji_panel_height">212dp</dimen>
-    <dimen name="emoji_view_item_margin">2dp</dimen>
-    <dimen name="emoji_view_item_text_size">30dp</dimen>
-    <dimen name="emoji_view_item_padding">4dp</dimen>
-    <dimen name="button_size">32dp</dimen>
-    <dimen name="button_text_size">14dp</dimen>
-    <dimen name="button_horizontal_margin">4dp</dimen>
-    <dimen name="input_view_vertical_padding">0dp</dimen>
-    <dimen name="input_view_horizontal_padding">4dp</dimen>
-    <dimen name="suggestions_horizontal_padding">4dp</dimen>
-    <dimen name="suggestions_font_size_min">16sp</dimen>
-    <dimen name="suggestions_font_size_max">24sp</dimen>
-    <dimen name="suggestions_divider_height">24dp</dimen>
     <dimen name="inline_suggestions_height">16dp</dimen>
 </resources>
