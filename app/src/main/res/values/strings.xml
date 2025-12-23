@@ -46,6 +46,7 @@
 
     <string name="voice_ime_not_configured">Voice input not configured</string>
     <string name="keyboard_mapping_load_failed">Couldn\'t load keyboard mapping</string>
+    <string name="pocketboard_disabled">PockedBoard disabled</string>
 
     <string name="hide_inline_suggestions_button_description">Hide inline suggestions</string>
     <string name="emoji_button_description">Show emoji and additional symbols panel</string>

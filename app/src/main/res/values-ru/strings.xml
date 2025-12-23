@@ -35,6 +35,7 @@
 
     <string name="voice_ime_not_configured">Голосовой ввод не настроен</string>
     <string name="keyboard_mapping_load_failed">Не удалось загрузить раскладку</string>
+    <string name="pocketboard_disabled">PockedBoard отключена</string>
 
     <string name="hide_inline_suggestions_button_description">Скрыть подсказки автозаполнения</string>
     <string name="emoji_button_description">Открыть панель ввода emoji и дополнительных символов</string>

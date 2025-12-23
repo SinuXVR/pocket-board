@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
+
+    <!-- Multilingual string resources -->
+
+    <string name="ime_name">PocketBoard</string>
+    <string name="ime_settings">PocketBoard Settings</string>
+    <string name="ime_subtypes">Input types</string>
+    <string name="ime_subtypes_select">Select input types</string>
+    <string name="ime_auto_correction">Auto-correction</string>
+    <string name="ime_auto_correction_summary">Spacebar automatically corrects mistyped words</string>
+    <string name="ime_auto_capitalization">Auto-capitalization</string>
+    <string name="ime_auto_capitalization_summary">Capitalize the first word of each sentence</string>
+    <string name="ime_double_space_period">Double-space period</string>
+    <string name="ime_double_space_period_summary">Double tap on spacebar inserts a period followed by a space</string>
+    <string name="ime_show_layout_toast">Layout change indication</string>
+    <string name="ime_show_layout_toast_summary">Display selected layout name in popup message</string>
+    <string name="ime_voice_input_shortcut">Voice input shortcut</string>
+    <string name="ime_voice_input_shortcut_summary">Press CTRL+ALT to activate voice input</string>
+    <string name="ime_layout_change_shortcut">Layout change shortcut</string>
+    <string name="ime_layout_change_shortcut_summary">Long press spacebar to switch current layout</string>
+    <string name="ime_lock_sympad">Allow SymPad lock</string>
+    <string name="ime_lock_sympad_summary">Long press SYM to lock keyboard in SymPad mode</string>
+    <string name="ime_show_inline_suggestions">Autofill suggestions</string>
+
+    <string name="ime_panel_cat">Onscreen panel</string>
+    <string name="ime_show_panel">Display onscreen panel</string>
+    <string name="ime_show_emoji">Emoji key</string>
+    <string name="ime_show_suggestions">Suggestions</string>
+    <string name="ime_show_meta_layout">Current layout</string>
+    <string name="ime_show_voice">Voice input key</string>
+
+    <string name="ime_extra_cat">Extra</string>
+    <string name="ime_extra_phone_control">Phone control</string>
+    <string name="ime_extra_phone_control_summary">Use SHIFT/ALT to answer/cancel calls</string>
+    <string name="ime_extra_phone_control_permission_required">Permission required</string>
+    <string name="ime_extra_app_version">Version</string>
+
+    <string name="input_subtype_en_US">English (US)</string>
+    <string name="input_subtype_ru_RU_BB_Passport">Русский (BB Passport)</string>
+    <string name="input_subtype_ru_RU_Transliterate">Русский (Транслит)</string>
+    <string name="input_subtype_ru_RU_Alt">Русский (Alt)</string>
+    <string name="input_subtype_es_ES">Español (España)</string>
+
+    <string name="voice_ime_not_configured">Voice input not configured</string>
+    <string name="keyboard_mapping_load_failed">Couldn\'t load keyboard mapping</string>
+    <string name="pocketboard_disabled">PockedBoard disabled</string>
+
+    <string name="hide_inline_suggestions_button_description">Hide inline suggestions</string>
+    <string name="emoji_button_description">Show emoji and additional symbols panel</string>
+    <string name="meta_layout_button_description">Change keyboard layout</string>
+    <string name="voice_button_description">Launch voice input</string>
+
+    <!-- Non-letter and non-digit symbols which, however, can be part of a word -->
+    <string name="non_letter_or_digit_exclusions">-</string>
+
+    <!-- Additional symbols and emoji -->
+    <string name="emoji_symbols">+0123*/-=456%#$@789:;&amp;?!\\|_—"(){}[]'&lt;&gt;«»‹›`“”„‘’•°÷×^±≠≈~€£₽¥¢©®™¿¡←↑↓→μ♪✓℅Π¶∞∆π‰√§ⁿ∅†Ω∑♀♂⚥⚧</string>
+    <string name="emoji_emotions">😀😃😄😁😆😅🤣😂🙂🙃🫠😉😊😇🥰😍🤩😘😗☺😚😙🥲😋😛😜🤪😝🤑🤗🤭🫢🫣🤫🤔🫡🤐🤨😐😑😶🫥😶‍🌫️😏😒🙄😬😮‍💨🤥🫨🙂‍↔️🙂‍↕️😌😔😪🤤😴🫩😷🤒🤕🤢🤮🤧🥵🥶🥴😵😵‍💫🤯🤠🥳🥸😎🤓🧐😕🫤😟🙁☹️😮😯😲😳🥺🥹😦😧😨😰😥😢😭😱😖😣😞😓😩😫🥱😤😡😠🤬😈👿💀☠️💩🤡👹👺👻👽👾🤖😺😸😹😻😼😽🙀😿😾💌💘💝💖💗💓💞💕💟❣️💔❤️‍🔥❤️‍🩹❤🩷🧡💛💚💙🩵💜🤎🖤🩶🤍💋💯💢💥💫💦💨🕳💬👁️‍🗨️🗨🗯💭💤👋🤚🖐✋🖖🫱🫲🫳🫴🫷🫸👌🤌🤏✌🤞🫰🤟🤘🤙👈👉👆🖕👇☝🫵👍👎✊👊🤛🤜👏🙌🫶👐🤲🤝🙏✍️💅🤳💪🦾🦿🦵🦶👂🦻👃🧠🫀🫁🦷🦴👀👁👅👄🫦👶🧒👦👧🧑👱👨🧔🧔‍♂️🧔‍♀️👨‍🦰👨‍🦱👨‍🦳👨‍🦲👩👩‍🦰🧑‍🦰👩‍🦱🧑‍🦱👩‍🦳🧑‍🦳👩‍🦲🧑‍🦲👱‍♀️👱‍♂️🧓👴👵🙍🙍‍♂️🙍‍♀️🙎🙎‍♂️🙎‍♀️🙅🙅‍♂️🙅‍♀️🙆🙆‍♂️🙆‍♀️💁💁‍♂️💁‍♀️🙋🙋‍♂️🙋‍♀️🧏🧏‍♂️🧏‍♀️🙇🙇‍♂️🙇‍♀️🤦🤦‍♂️🤦‍♀️🤷🤷‍♂️🤷‍♀️🧑‍⚕️👨‍⚕️👩‍⚕️🧑‍🎓👨‍🎓👩‍🎓🧑‍🏫👨‍🏫👩‍🏫🧑‍⚖️👨‍⚖️👩‍⚖️🧑‍🌾👨‍🌾👩‍🌾🧑‍🍳👨‍🍳👩‍🍳🧑‍🔧👨‍🔧👩‍🔧🧑‍🏭👨‍🏭👩‍🏭🧑‍💼👨‍💼👩‍💼🧑‍🔬👨‍🔬👩‍🔬🧑‍💻👨‍💻👩‍💻🧑‍🎤👨‍🎤👩‍🎤🧑‍🎨👨‍🎨👩‍🎨🧑‍✈️👨‍✈️👩‍✈️🧑‍🚀👨‍🚀👩‍🚀🧑‍🚒👨‍🚒👩‍🚒👮👮‍♂️👮‍♀️🕵🕵️‍♂️🕵️‍♀️💂💂‍♂️💂‍♀️🥷👷👷‍♂️👷‍♀️🫅🤴👸👳👳‍♂️👳‍♀️👲🧕🤵🤵‍♂️🤵‍♀️👰👰‍♂️👰‍♀️🤰🫃🫄🤱👩‍🍼👨‍🍼🧑‍🍼👼🎅🤶🧑‍🎄🦸🦸‍♂️🦸‍♀️🦹🦹‍♂️🦹‍♀️🧙🧙‍♂️🧙‍♀️🧚🧚‍♂️🧚‍♀️🧛🧛‍♂️🧛‍♀️🧜🧜‍♂️🧜‍♀️🧝🧝‍♂️🧝‍♀️🧞🧞‍♂️🧞‍♀️🧟🧟‍♂️🧟‍♀️🧌💆💆‍♂️💆‍♀️💇💇‍♂️💇‍♀️🚶🚶‍♂️🚶‍♀️🚶‍➡️🚶‍♀️‍➡️🚶‍♂️‍➡️🧍🧍‍♂️🧍‍♀️🧎🧎‍♂️🧎‍♀️🧎‍➡️🧎‍♀️‍➡️🧎‍♂️‍➡️🧑‍🦯🧑‍🦯‍➡️👨‍🦯👨‍🦯‍➡️👩‍🦯👩‍🦯‍➡️🧑‍🦼🧑‍🦼‍➡️👨‍🦼👨‍🦼‍➡️👩‍🦼👩‍🦼‍➡️🧑‍🦽🧑‍🦽‍➡️👨‍🦽👨‍🦽‍➡️👩‍🦽👩‍🦽‍➡️🛀🛌🧑‍🤝‍🧑👭👫👬💏👩‍❤️‍💋‍👨👨‍❤️‍💋‍👨👩‍❤️‍💋‍👩💑👩‍❤️‍👨👨‍❤️‍👨👩‍❤️‍👩👪👨‍👩‍👦👨‍👩‍👧👨‍👩‍👧‍👦👨‍👩‍👦‍👦👨‍👩‍👧‍👧👨‍👨‍👦👨‍👨‍👧👨‍👨‍👧‍👦👨‍👨‍👦‍👦👨‍👨‍👧‍👧👩‍👩‍👦👩‍👩‍👧👩‍👩‍👧‍👦👩‍👩‍👦‍👦👩‍👩‍👧‍👧👨‍👦👨‍👦‍👦👨‍👧👨‍👧‍👦👨‍👧‍👧👩‍👦👩‍👦‍👦👩‍👧👩‍👧‍👦👩‍👧‍👧🗣👤👥👣🫆</string>
+    <string name="emoji_nature">🙈🙉🙊🐵🐒🦍🦧🐶🐕🦮🐕‍🦺🐩🐺🦊🦝🐱🐈🐈‍⬛🦁🐯🐅🐆🐴🫎🫏🐎🦄🦓🦌🦬🐮🐂🐃🐄🐷🐖🐗🐽🐏🐑🐐🐪🐫🦙🦒🐘🦣🦏🦛🐭🐁🐀🐹🐰🐇🐿🦫🦔🦇🐻🐻‍❄️🐨🐼🦥🦦🦨🦘🦡🐾🦃🐔🐓🐣🐤🐥🐦🐧🕊🦅🦆🦢🦉🦤🪶🦩🦚🦜🪽🐦‍⬛🪿🐦‍🔥🐸🐊🐢🦎🐍🐲🐉🦕🦖🐳🐋🐬🦭🐟🐠🐡🦈🐙🐚🪸🪼🦀🦞🦐🦑🦪🐌🦋🐛🐜🐝🪲🐞🦗🪳🕷🕸🦂🦟🪰🪱🦠💐🌸💮🪷🏵🌹🥀🌺🌻🌼🌷🪻🌱🪴🌲🌳🌴🌵🌾🌿☘🍀🍁🍂🍃🪹🪺🍄🪾🌑🌒🌓🌔🌕🌖🌗🌘🌙🌚🌛🌜🌡☀🌝🌞🪐⭐🌟🌠🌌☁⛅⛈️🌤🌥🌦🌧🌨🌩🌪🌫🌬🌀🌈🌂☂️☔⛱️⚡❄☃️⛄☄️🔥💧🌊</string>
+    <string name="emoji_food">🍇🍈🍉🍊🍋🍋‍🟩🍌🍍🥭🍎🍏🍐🍑🍒🍓🫐🥝🍅🫒🥥🥑🍆🥔🥕🌽🌶🫑🥒🥬🥦🧄🧅🥜🫘🌰🫚🫛🍄‍🟫🫜🍞🥐🥖🫓🥨🥯🥞🧇🧀🍖🍗🥩🥓🍔🍟🍕🌭🥪🌮🌯🫔🥙🧆🥚🍳🥘🍲🫕🥣🥗🍿🧈🧂🥫🍱🍘🍙🍚🍛🍜🍝🍠🍢🍣🍤🍥🥮🍡🥟🥠🥡🍦🍧🍨🍩🍪🎂🍰🧁🥧🍫🍬🍭🍮🍯🍼🥛☕🫖🍵🍶🍾🍷🍸🍹🍺🍻🥂🥃🫗🥤🧋🧃🧉🧊🥢🍽🍴🥄🔪🫙🏺</string>
+    <string name="emoji_sports">🎃🎄🎆🎇🧨✨🎈🎉🎊🎋🎍🎎🎏🎐🎑🧧🎀🎁🎗🎟🎫🎖🏆🏅🥇🥈🥉⚽⚾🥎🏀🏐🏈🏉🎾🥏🎳🏏🏑🏒🥍🏓🏸🥊🥋🥅⛳⛸️🎣🤿🎽🎿🛷🥌🎯🪀🪁🔫🎱🔮🪄🎮🕹🎰🎲🧩🧸🪅🪩🪆♠♥♦♣♟🃏🀄🎴🎭🖼🎨🧵🪡🧶🪢🏃🏃‍♂️🏃‍♀️🏃‍➡️🏃‍♀️‍➡️🏃‍♂️‍➡️💃🕺🕴👯👯‍♂️👯‍♀️🧖🧖‍♂️🧖‍♀️🧗🧗‍♂️🧗‍♀️🤺🏇⛷️🏂🏌🏌️‍♂️🏌️‍♀️🏄🏄‍♂️🏄‍♀️🚣🚣‍♂️🚣‍♀️🏊🏊‍♂️🏊‍♀️⛹️⛹️‍♂️⛹️‍♀️🏋🏋️‍♂️🏋️‍♀️🚴🚴‍♂️🚴‍♀️🚵🚵‍♂️🚵‍♀️🤸🤸‍♂️🤸‍♀️🤼🤼‍♂️🤼‍♀️🤽🤽‍♂️🤽‍♀️🤾🤾‍♂️🤾‍♀️🤹🤹‍♂️🤹‍♀️🧘🧘‍♂️🧘‍♀️</string>
+    <string name="emoji_transport">🌍🌎🌏🌐🗺🗾🧭🏔⛰️🌋🗻🏕🏖🏜🏝🏞🏟🏛🏗🧱🪨🪵🛖🏘🏚🏠🏡🏢🏣🏤🏥🏦🏨🏩🏪🏫🏬🏭🏯🏰💒🗼🗽⛪🕌🛕🕍⛩️🕋⛲⛺🌁🌃🏙🌄🌅🌆🌇🌉♨🎠🛝🎡🎢💈🎪🚂🚃🚄🚅🚆🚇🚈🚉🚊🚝🚞🚋🚌🚍🚎🚐🚑🚒🚓🚔🚕🚖🚗🚘🚙🛻🚚🚛🚜🏎🏍🛵🦽🦼🛺🚲🛴🛹🛼🚏🛣🛤🛢⛽🛞🚨🚥🚦🛑🚧⚓🛟⛵🛶🚤🛳⛴️🛥🚢✈️🛩🛫🛬🪂💺🚁🚟🚠🚡🛰🚀🛸🛎🧳⌛⏳⌚⏰⏱️⏲️🕰🕛🕧🕐🕜🕑🕝🕒🕞🕓🕟🕔🕠🕕🕡🕖🕢🕗🕣🕘🕤🕙🕥🕚🕦</string>
+    <string name="emoji_objects">👓🕶🥽🥼🦺👔👕👖🧣🧤🧥🧦👗👘🥻🩱🩲🩳👙👚🪭👛👜👝🛍🎒🩴👞👟🥾🥿👠👡🩰👢🪮👑👒🎩🎓🧢🪖⛑📿💄💍💎🔇🔈🔉🔊📢📣📯🔔🔕🎼🎵🎶🎙🎚🎛🎤🎧📻🎷🪗🎸🎹🎺🎻🪕🥁🪘🪇🪈🪉📱📲☎📞📟📠🔋🪫🔌💻🖥🖨⌨🖱🖲💽💾💿📀🧮🎥🎞📽🎬📺📷📸📹📼🔍🔎🕯💡🔦🏮🪔📔📕📖📗📘📙📚📓📒📃📜📄📰🗞📑🔖🏷💰🪙💴💵💶💷💸💳🧾💹✉️📧📨📩📤📥📦📫📪📬📭📮🗳✏️✒️🖋🖊🖌🖍📝💼📁📂🗂📅📆🗒🗓📇📈📉📊📋📌📍📎🖇📏📐✂️🗃🗄🗑🔒🔓🔏🔐🔑🗝🔨🪓⛏️⚒️🛠🗡⚔️💣🪃🏹🛡🪚🔧🪛🔩⚙️🗜⚖️🦯🔗⛓️‍💥⛓️🪝🧰🧲🪜🪏⚗️🧪🧫🧬🔬🔭📡💉🩸💊🩹🩼🩺🩻🚪🛗🪞🪟🛏🛋🪑🚽🪠🚿🛁🪤🪒🧴🧷🧹🧺🧻🪣🧼🫧🪥🧽🧯🛒🚬⚰️🪦⚱️🧿🪬🗿🪧🪪</string>
+    <string name="emoji_others">🏧🚮🚰♿🚹🚺🚻🚼🚾🛂🛃🛄🛅⚠️🚸⛔🚫🚳🚭🚯🚱🚷📵🔞☢️☣️⬆️↗️➡️↘️⬇️↙️⬅️↖️↕️↔️↩️↪️⤴️⤵️🔃🔄🔙🔚🔛🔜🔝🛐⚛️🕉✡️☸️☯️✝️☦️☪️☮️🕎🔯🪯♈♉♊♋♌♍♎♏♐♑♒♓⛎🔀🔁🔂▶️⏩⏭️⏯️◀️⏪⏮️🔼⏫🔽⏬⏸⏹⏺⏏️🎦🔅🔆📶📳📴♀️♂️⚧️✖️➕➖➗♾️‼️⁉️❓❔❕❗〰️💱💲⚕️♻️⚜️🔱📛🔰⭕✅☑️✔️❌❎➰➿〽️✳️✴️❇️©️®️️️™️🫟#️⃣*️⃣0️⃣1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣8️⃣9️⃣🔟🔠🔡🔢🔣🔤🅰🆎🅱🆑🆒🆓ℹ️🆔Ⓜ️🆕🆖🅾️🆗🅿️🆘🆙🆚🈁🈂️🈷️🈶🈯🉐🈹🈚🈲🉑🈸🈴🈳㊗️㊙️🈺🈵🔴🟠🟡🟢🔵🟣🟤⚫⚪🟥🟧🟨🟩🟦🟪🟫⬛⬜◼️◻️◾️◽️▪️▫️🔶🔷🔸🔹🔺🔻💠🔘🔳🔲🏁🚩🎌🏴🏳🏳️‍🌈🏳️‍⚧️🏴‍☠️🇦🇨🇦🇩🇦🇪🇦🇫🇦🇬🇦🇮🇦🇱🇦🇲🇦🇴🇦🇶🇦🇷🇦🇸🇦🇹🇦🇺🇦🇼🇦🇽🇦🇿🇧🇦🇧🇧🇧🇩🇧🇪🇧🇫🇧🇬🇧🇭🇧🇮🇧🇯🇧🇱🇧🇲🇧🇳🇧🇴🇧🇶🇧🇷🇧🇸🇧🇹🇧🇻🇧🇼🇧🇾🇧🇿🇨🇦🇨🇨🇨🇩🇨🇫🇨🇬🇨🇭🇨🇮🇨🇰🇨🇱🇨🇲🇨🇳🇨🇴🇨🇵🇨🇶🇨🇷🇨🇺🇨🇻🇨🇼🇨🇽🇨🇾🇨🇿🇩🇪🇩🇬🇩🇯🇩🇰🇩🇲🇩🇴🇩🇿🇪🇦🇪🇨🇪🇪🇪🇬🇪🇭🇪🇷🇪🇸🇪🇹🇪🇺🇫🇮🇫🇯🇫🇰🇫🇲🇫🇴🇫🇷🇬🇦🇬🇧🇬🇩🇬🇪🇬🇫🇬🇬🇬🇭🇬🇮🇬🇱🇬🇲🇬🇳🇬🇵🇬🇶🇬🇷🇬🇸🇬🇹🇬🇺🇬🇼🇬🇾🇭🇰🇭🇲🇭🇳🇭🇷🇭🇹🇭🇺🇮🇨🇮🇩🇮🇪🇮🇱🇮🇲🇮🇳🇮🇴🇮🇶🇮🇷🇮🇸🇮🇹🇯🇪🇯🇲🇯🇴🇯🇵🇰🇪🇰🇬🇰🇭🇰🇮🇰🇲🇰🇳🇰🇵🇰🇷🇰🇼🇰🇾🇰🇿🇱🇦🇱🇧🇱🇨🇱🇮🇱🇰🇱🇷🇱🇸🇱🇹🇱🇺🇱🇻🇱🇾🇲🇦🇲🇨🇲🇩🇲🇪🇲🇫🇲🇬🇲🇭🇲🇰🇲🇱🇲🇲🇲🇳🇲🇴🇲🇵🇲🇶🇲🇷🇲🇸🇲🇹🇲🇺🇲🇻🇲🇼🇲🇽🇲🇾🇲🇿🇳🇦🇳🇨🇳🇪🇳🇫🇳🇬🇳🇮🇳🇱🇳🇴🇳🇵🇳🇷🇳🇺🇳🇿🇴🇲🇵🇦🇵🇪🇵🇫🇵🇬🇵🇭🇵🇰🇵🇱🇵🇲🇵🇳🇵🇷🇵🇸🇵🇹🇵🇼🇵🇾🇶🇦🇷🇪🇷🇴🇷🇸🇷🇺🇷🇼🇸🇦🇸🇧🇸🇨🇸🇩🇸🇪🇸🇬🇸🇭🇸🇮🇸🇯🇸🇰🇸🇱🇸🇲🇸🇳🇸🇴🇸🇷🇸🇸🇸🇹🇸🇻🇸🇽🇸🇾🇸🇿🇹🇦🇹🇨🇹🇩🇹🇫🇹🇬🇹🇭🇹🇯🇹🇰🇹🇱🇹🇲🇹🇳🇹🇴🇹🇷🇹🇹🇹🇻🇹🇼🇹🇿🇺🇦🇺🇬🇺🇲🇺🇳🇺🇸🇺🇾🇺🇿🇻🇦🇻🇨🇻🇪🇻🇬🇻🇮🇻🇳🇻🇺🇼🇫🇼🇸🇽🇰🇾🇪🇾🇹🇿🇦🇿🇲🇿🇼🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁳󠁣󠁴󠁿🏴󠁧󠁢󠁷󠁬󠁳󠁿</string>
+
+    <!-- Static keys -->
+
+    <string name="app_version" translatable="false">v1.1.4, Ⓒ SinuX 2025, GPLv3</string>
+
+    <string name="ime_subtypes_prefs_key" translatable="false">ime_prefs_subtypes</string>
+    <string name="ime_extra_delete_prefs_key" translatable="false">ime_prefs_extra_delete</string>
+    <string name="ime_gestures_suggestion_prefs_key" translatable="false">ime_prefs_gestures_suggestion</string>
+    <string name="ime_auto_correction_prefs_key" translatable="false">ime_prefs_auto_correction</string>
+    <string name="ime_auto_capitalization_prefs_key" translatable="false">ime_prefs_auto_capitalization</string>
+    <string name="ime_double_space_period_prefs_key" translatable="false">ime_prefs_double_space_period</string>
+    <string name="ime_show_layout_toast_prefs_key" translatable="false">ime_prefs_show_layout_toast</string>
+    <string name="ime_voice_input_shortcut_prefs_key" translatable="false">ime_voice_input_shortcut</string>
+    <string name="ime_layout_change_shortcut_prefs_key" translatable="false">ime_layout_change_shortcut</string>
+    <string name="ime_lock_sympad_prefs_key" translatable="false">ime_lock_sympad</string>
+    <string name="ime_show_inline_suggestions_prefs_key" translatable="false">ime_prefs_show_inline_suggestions</string>
+
+    <string name="ime_show_panel_prefs_key" translatable="false">ime_prefs_show_panel</string>
+    <string name="ime_show_emoji_prefs_key" translatable="false">ime_prefs_show_emoji</string>
+    <string name="ime_show_suggestions_prefs_key" translatable="false">ime_prefs_show_suggestions</string>
+    <string name="ime_show_meta_layout_prefs_key" translatable="false">ime_prefs_show_meta_layout</string>
+    <string name="ime_show_voice_prefs_key" translatable="false">ime_prefs_show_voice</string>
+
+    <string name="ime_extra_phone_control_prefs_key" translatable="false">ime_prefs_extra_phone_control</string>
+    <string name="ime_extra_version_prefs_key" translatable="false">ime_prefs_version</string>
+
+    <string name="ime_recent_emoji_prefs_key" translatable="false">ime_prefs_recent_emoji</string>
+
+    <string name="ime_source_code_link">https://github.com/SinuXVR/pocket-board</string>
+
+    <!-- Package names for editors requiring direct input without keys translation -->
+    <string-array name="direct_input_editors">
+        <item>com.android.calculator2</item>
+    </string-array>
+
+    <!-- Package names for editors that can only work correctly with KeyEvents -->
+    <string-array name="raw_input_editors">
+        <item>com.termux</item>
+        <item>com.mill.clock.config</item>
+    </string-array>
+
+</resources>
