@@ -9,7 +9,7 @@ import android.view.inputmethod.InputMethodManager;
 public class InputUtils {
 
     public static InputMethodInfo getInputMethodInfo(Context context, InputMethodManager inputMethodManager) {
-        for (InputMethodInfo imi : inputMethodManager.getEnabledInputMethodList()) {
+        for (InputMethodInfo imi : inputMethodManager.getInputMethodList()) {
             if (imi.getPackageName().equals(context.getPackageName())) {
                 return imi;
             }

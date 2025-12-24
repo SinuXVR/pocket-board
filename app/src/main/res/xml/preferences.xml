@@ -31,7 +31,7 @@
 
     <SwitchPreference
         android:key="@string/ime_show_layout_toast_prefs_key"
-        android:defaultValue="true"
+        android:defaultValue="@bool/layout_toast_messages_enabled"
         android:title="@string/ime_show_layout_toast"
         android:summary="@string/ime_show_layout_toast_summary" />
 

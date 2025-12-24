@@ -18,6 +18,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.sinux.pocketboard.PocketBoardIME;
 import com.sinux.pocketboard.R;
@@ -115,6 +118,22 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
 
         voiceButton = findViewById(R.id.voiceButton);
         voiceButton.setOnClickListener(b -> VoiceInputUtils.launchVoiceIME(pocketBoardIME));
+
+        // Insets handling
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            ViewCompat.setOnApplyWindowInsetsListener(this, (v, insets) -> {
+                Insets imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime());
+                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPadding(
+                        systemBars.left,
+                        systemBars.top,
+                        systemBars.right,
+                        imeInsets.bottom + systemBars.bottom
+                );
+
+                return insets;
+            });
+        }
     }
 
     public void onStartInputView(EditorInfo attribute, InputMethodSubtype currentInputMethodSubtype,
@@ -147,6 +166,14 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
             mainInputView.setVisibility(VISIBLE);
         } else {
             mainInputView.setVisibility(GONE);
+        }
+
+        // Invalidate view to prevent glitches
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            post(() -> {
+                requestLayout();
+                invalidate();
+            });
         }
     }
 

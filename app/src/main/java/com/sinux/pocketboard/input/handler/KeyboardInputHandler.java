@@ -141,7 +141,7 @@ public class KeyboardInputHandler implements InputHandler {
                 }
                 commitComposingText(inputConnection);
             } else {
-                inputConnection.commitText(text, 0);
+                inputConnection.commitText(text, 1);
             }
         }
     }

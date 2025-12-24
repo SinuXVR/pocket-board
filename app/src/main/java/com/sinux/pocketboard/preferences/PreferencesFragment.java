@@ -3,32 +3,26 @@ package com.sinux.pocketboard.preferences;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.view.inputmethod.InputMethodSubtype;
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
 import com.sinux.pocketboard.R;
 import com.sinux.pocketboard.utils.InputUtils;
-import com.sinux.pocketboard.utils.ToastMessageUtils;
 
 public class PreferencesFragment extends PreferenceFragmentCompat {
 
     private Preference subtypesPreference;
-    private SwitchPreference phoneControlPreference;
     private InputMethodManager inputMethodManager;
     private InputMethodInfo inputMethodInfo;
     private Context context;
-
-    private ActivityResultLauncher<String[]> phonePermissionLauncher;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -36,29 +30,67 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.preferences, rootKey);
 
         context = getContext();
-        subtypesPreference = findPreference(getString(R.string.ime_subtypes_prefs_key));
-        phoneControlPreference = findPreference(getString(R.string.ime_extra_phone_control_prefs_key));
         inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodInfo = InputUtils.getInputMethodInfo(context, inputMethodManager);
 
-        phonePermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
-            if (phoneControlPreference != null) {
-                boolean allGranted = result.values().stream().allMatch(granted -> granted);
-                phoneControlPreference.setChecked(allGranted);
-            }
-        });
+        subtypesPreference = initInputSubtypesPref(context, inputMethodInfo);
+        initToastNotificationPref(context);
+        initPhoneControlPref(context, inputMethodInfo);
 
-        // Set pref click listener to start subtype selection activity
-        if (subtypesPreference != null) {
-            subtypesPreference.setOnPreferenceClickListener(preference -> {
+        updateInputSubtypesPrefSummary();
+    }
+
+    private Preference initInputSubtypesPref(Context context, InputMethodInfo inputMethodInfo) {
+        var pref = findPreference(getString(R.string.ime_subtypes_prefs_key));
+
+        if (pref != null) {
+            pref.setOnPreferenceClickListener(preference -> {
                 PreferencesHolder.launchInputMethodSubtypeSettings(context, inputMethodInfo);
                 return true;
             });
         }
 
+        return pref;
+    }
+
+    private void initToastNotificationPref(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            SwitchPreference pref = findPreference(getString(R.string.ime_show_layout_toast_prefs_key));
+
+            var toastPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), result -> {
+                if (pref != null) {
+                    pref.setChecked(result);
+                }
+            });
+
+            if (pref != null) {
+                pref.setOnPreferenceChangeListener((preference, newValue) -> {
+                    boolean isCheckingOn = (boolean) newValue;
+                    if (isCheckingOn) {
+                        if (context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                            toastPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+                            return false;
+                        }
+                    }
+                    return true;
+                });
+            }
+        }
+    }
+
+    private void initPhoneControlPref(Context context, InputMethodInfo inputMethodInfo) {
+        SwitchPreference pref = findPreference(getString(R.string.ime_extra_phone_control_prefs_key));
+
+        var phonePermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
+            if (pref != null) {
+                boolean allGranted = result.values().stream().allMatch(granted -> granted);
+                pref.setChecked(allGranted);
+            }
+        });
+
         // Set pref click listener to request answer phone calls permissions
-        if (phoneControlPreference != null) {
-            phoneControlPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+        if (pref != null) {
+            pref.setOnPreferenceChangeListener((preference, newValue) -> {
                 boolean isCheckingOn = (boolean) newValue;
                 if (isCheckingOn) {
                     // Check if we already have permissions
@@ -75,8 +107,6 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 return true;
             });
         }
-
-        updateInputSubtypesPrefSummary();
     }
 
     @Override
