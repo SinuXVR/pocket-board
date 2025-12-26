@@ -97,13 +97,6 @@ public class KeyboardInputHandler implements InputHandler {
         }
     }
 
-    public void disallowSuggestions() {
-        composingEnabled = false;
-        dictShortcuts = false;
-        autocorrection = false;
-        textComposer.setLength(0);
-    }
-
     public void onUpdateSelection(InputConnection inputConnection, int newSelStart, int newSelEnd, int candidatesEnd) {
         if (composingEnabled) {
             currentSelectedText = "";

@@ -143,16 +143,6 @@ public class PocketBoardIME extends InputMethodService {
     }
 
     @Override
-    public boolean onEvaluateInputViewShown() {
-        boolean showInputView = super.onEvaluateInputViewShown();
-        if (!showInputView) {
-            suggestionsManager.disallowSuggestions();
-            keyboardInputHandler.disallowSuggestions();
-        }
-        return showInputView;
-    }
-
-    @Override
     protected void onCurrentInputMethodSubtypeChanged(InputMethodSubtype newSubtype) {
         super.onCurrentInputMethodSubtypeChanged(newSubtype);
         if (preferencesHolder.isLayoutChangeIndicationEnabled()) {
@@ -310,11 +300,9 @@ public class PocketBoardIME extends InputMethodService {
     @Override
     public void onUpdateSelection(int oldSelStart, int oldSelEnd, int newSelStart, int newSelEnd, int candidatesStart, int candidatesEnd) {
         super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd);
-        if (isInputViewShown()) {
-            keyboardInputHandler.onUpdateSelection(getCurrentInputConnection(), newSelStart, newSelEnd, candidatesEnd);
-            updateMetaState();
-            suggestionsManager.update();
-        }
+        keyboardInputHandler.onUpdateSelection(getCurrentInputConnection(), newSelStart, newSelEnd, candidatesEnd);
+        updateMetaState();
+        suggestionsManager.update();
     }
 
     @Override
