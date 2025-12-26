@@ -24,6 +24,7 @@ public class PreferencesHolder implements SharedPreferences.OnSharedPreferenceCh
     private final SharedPreferences sharedPreferences;
 
     private final String autoCorrectionKey;
+    private final String dictShortcutsKey;
     private final String autoCapitalizationKey;
     private final String doubleSpacePeriodKey;
     private final String layoutChangeIndicationKey;
@@ -49,6 +50,7 @@ public class PreferencesHolder implements SharedPreferences.OnSharedPreferenceCh
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
         autoCorrectionKey = context.getString(R.string.ime_auto_correction_prefs_key);
+        dictShortcutsKey = context.getString(R.string.ime_dict_shortcuts_prefs_key);
         autoCapitalizationKey = context.getString(R.string.ime_auto_capitalization_prefs_key);
         doubleSpacePeriodKey = context.getString(R.string.ime_double_space_period_prefs_key);
         layoutChangeIndicationKey = context.getString(R.string.ime_show_layout_toast_prefs_key);
@@ -84,6 +86,10 @@ public class PreferencesHolder implements SharedPreferences.OnSharedPreferenceCh
 
     public boolean isAutoCorrectionEnabled() {
         return (boolean) prefValues.computeIfAbsent(autoCorrectionKey, key -> getValue(key, Boolean.class, true));
+    }
+
+    public boolean isDictShortcutsEnabled() {
+        return (boolean) prefValues.computeIfAbsent(dictShortcutsKey, key -> getValue(key, Boolean.class, true));
     }
 
     public boolean isAutoCapitalizationEnabled() {

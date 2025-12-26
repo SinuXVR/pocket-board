@@ -246,7 +246,6 @@ public class PocketBoardIME extends InputMethodService {
                             requestShowSelf(InputMethodManager.SHOW_IMPLICIT);
                         }
                         updateMetaState();
-                        suggestionsManager.update();
                     }
                 } else {
                     /*

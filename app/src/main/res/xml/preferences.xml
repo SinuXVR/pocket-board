@@ -11,11 +11,16 @@
         android:title="@string/ime_subtypes"/>
 
     <SwitchPreference
-        android:dependency="@string/ime_show_suggestions_prefs_key"
         android:key="@string/ime_auto_correction_prefs_key"
         android:defaultValue="true"
         android:title="@string/ime_auto_correction"
         android:summary="@string/ime_auto_correction_summary" />
+
+    <SwitchPreference
+        android:key="@string/ime_dict_shortcuts_prefs_key"
+        android:defaultValue="true"
+        android:title="@string/ime_dict_shortcuts"
+        android:summary="@string/ime_dict_shortcuts_summary" />
 
     <SwitchPreference
         android:key="@string/ime_auto_capitalization_prefs_key"

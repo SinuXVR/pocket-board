@@ -36,6 +36,7 @@ public class KeyboardInputHandler implements InputHandler {
     private boolean numericInputMode;
     private boolean layoutChangeShortcut;
     private boolean doubleSpacePeriod;
+    private boolean dictShortcuts;
     private boolean autocorrection;
 
     private CharSequence currentSelectedText;
@@ -80,6 +81,7 @@ public class KeyboardInputHandler implements InputHandler {
 
         layoutChangeShortcut = preferencesHolder.isLayoutChangeShortcutEnabled();
         doubleSpacePeriod = preferencesHolder.isDoubleSpacePeriodEnabled();
+        dictShortcuts = composingEnabled & preferencesHolder.isDictShortcutsEnabled();
         autocorrection = composingEnabled && preferencesHolder.isAutoCorrectionEnabled();
 
         if (composingEnabled) {
@@ -97,6 +99,7 @@ public class KeyboardInputHandler implements InputHandler {
 
     public void disallowSuggestions() {
         composingEnabled = false;
+        dictShortcuts = false;
         autocorrection = false;
         textComposer.setLength(0);
     }
@@ -281,7 +284,7 @@ public class KeyboardInputHandler implements InputHandler {
         // Double-space period
         if (doubleSpacePeriod && eventTime - lastKeyDownTime <= keyLongPressDuration) {
             if (composingEnabled) {
-                if (!handleAutocorrection()) {
+                if (!handleDictAndAutocorrection()) {
                     commitComposingText(inputConnection);
                 }
             }
@@ -296,7 +299,7 @@ public class KeyboardInputHandler implements InputHandler {
             }
         } else {
             if (composingEnabled) {
-                if (!handleAutocorrection()) {
+                if (!handleDictAndAutocorrection()) {
                     commitComposingText(inputConnection);
                 }
             }
@@ -435,9 +438,17 @@ public class KeyboardInputHandler implements InputHandler {
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private boolean handleAutocorrection() {
+    private boolean handleDictAndAutocorrection() {
+        if (dictShortcuts) {
+            CharSequence dictSuggestion = pocketBoardIME.getSuggestionsManager().getCurrentDictSuggestion();
+            if (dictSuggestion != null) {
+                applySuggestion(dictSuggestion, pocketBoardIME.getCurrentInputConnection(), false);
+                return true;
+            }
+        }
+
         if (autocorrection) {
-            CharSequence recommendedSuggestion = pocketBoardIME.getSuggestionsManager().getCurrentRecommendedSuggestion();
+            CharSequence recommendedSuggestion = pocketBoardIME.getSuggestionsManager().getCurrentSpellcheckerRecommendedSuggestion();
             if (recommendedSuggestion != null) {
                 applySuggestion(recommendedSuggestion, pocketBoardIME.getCurrentInputConnection(), false);
                 return true;

@@ -166,4 +166,40 @@ public class CharacterUtils {
 
         return false;
     }
+
+    public static String capitalizeFirstLetter(CharSequence str) {
+        if (str == null || str.length() == 0) {
+            return null;
+        }
+
+        int firstCodePoint = Character.codePointAt(str, 0);
+        int firstCharCount = Character.charCount(firstCodePoint);
+
+        StringBuilder sb = new StringBuilder();
+        sb.appendCodePoint(Character.toUpperCase(firstCodePoint));
+        sb.append(str.subSequence(firstCharCount, str.length()));
+
+        return sb.toString();
+    }
+
+    public static CapitalizationType getCapitalizationType(CharSequence str) {
+        if (str == null || str.length() == 0) {
+            return CapitalizationType.NONE;
+        }
+
+        int firstCp = Character.codePointAt(str, 0);
+        if (!Character.isUpperCase(firstCp)) {
+            return CapitalizationType.NONE;
+        }
+
+        if (str.codePoints().allMatch(Character::isUpperCase)) {
+            return CapitalizationType.ALL_UPPER;
+        } else {
+            return CapitalizationType.FIRST_UPPER;
+        }
+    }
+
+    public enum CapitalizationType {
+        ALL_UPPER, FIRST_UPPER, NONE
+    }
 }

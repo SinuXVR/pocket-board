@@ -6,6 +6,8 @@
     <string name="ime_subtypes_select">Выберите способы ввода</string>
     <string name="ime_auto_correction">Автокоррекция</string>
     <string name="ime_auto_correction_summary">Автоматическое исправление опечаток при вводе пробела</string>
+    <string name="ime_dict_shortcuts">Сокращения из словаря</string>
+    <string name="ime_dict_shortcuts_summary">Автоматическая подстановка из словаря при вводе пробела</string>
     <string name="ime_auto_capitalization">Заглавные автоматически</string>
     <string name="ime_auto_capitalization_summary">Писать первое слово предложения с прописной буквы</string>
     <string name="ime_double_space_period">Точки автоматически</string>

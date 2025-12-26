@@ -11,6 +11,8 @@
     <string name="ime_subtypes_select">Select input types</string>
     <string name="ime_auto_correction">Auto-correction</string>
     <string name="ime_auto_correction_summary">Spacebar automatically corrects mistyped words</string>
+    <string name="ime_dict_shortcuts">Dictionary shortcuts</string>
+    <string name="ime_dict_shortcuts_summary">Spacebar automatically inserts words from user\'s dict</string>
     <string name="ime_auto_capitalization">Auto-capitalization</string>
     <string name="ime_auto_capitalization_summary">Capitalize the first word of each sentence</string>
     <string name="ime_double_space_period">Double-space period</string>
@@ -74,6 +76,7 @@
     <string name="ime_extra_delete_prefs_key" translatable="false">ime_prefs_extra_delete</string>
     <string name="ime_gestures_suggestion_prefs_key" translatable="false">ime_prefs_gestures_suggestion</string>
     <string name="ime_auto_correction_prefs_key" translatable="false">ime_prefs_auto_correction</string>
+    <string name="ime_dict_shortcuts_prefs_key" translatable="false">ime_prefs_dict_shortcuts</string>
     <string name="ime_auto_capitalization_prefs_key" translatable="false">ime_prefs_auto_capitalization</string>
     <string name="ime_double_space_period_prefs_key" translatable="false">ime_prefs_double_space_period</string>
     <string name="ime_show_layout_toast_prefs_key" translatable="false">ime_prefs_show_layout_toast</string>

@@ -28,6 +28,7 @@ import com.sinux.pocketboard.input.MetaKeyManager;
 import com.sinux.pocketboard.input.MetaKeyStateChangeListener;
 import com.sinux.pocketboard.preferences.PreferencesHolder;
 import com.sinux.pocketboard.ui.emoji.EmojiView;
+import com.sinux.pocketboard.utils.CharacterUtils;
 import com.sinux.pocketboard.utils.InputUtils;
 import com.sinux.pocketboard.utils.VoiceInputUtils;
 
@@ -144,10 +145,10 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
         clearInlineSuggestionsView();
 
         boolean showEmojiButton = preferencesHolder.isShowEmojiEnabled();
+        boolean showSuggestions = preferencesHolder.isShowSuggestionsEnabled();
         boolean showMetaLayoutButton = preferencesHolder.isShowMetaLayoutEnabled();
         boolean showVoiceButton = preferencesHolder.isShowVoiceEnabled();
-        boolean showMainInputView = (showEmojiButton || suggestionsAllowed || showMetaLayoutButton || showVoiceButton) &&
-                preferencesHolder.isShowPanelEnabled();
+        boolean showMainInputView = preferencesHolder.isShowPanelEnabled();
 
         // Display current layout tag
         if (InputUtils.isNumericEditor(attribute)) {
@@ -160,7 +161,7 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
         // Update controls visibility
         if (showMainInputView) {
             emojiButton.setVisibility(showEmojiButton ? VISIBLE : GONE);
-            suggestionsView.setVisibility(suggestionsAllowed ? VISIBLE : GONE);
+            updateSuggestionsViewVisibility(suggestionsAllowed);
             metaLayoutButton.setVisibility(showMetaLayoutButton ? VISIBLE : GONE);
             voiceButton.setVisibility(showVoiceButton ? VISIBLE : GONE);
             mainInputView.setVisibility(VISIBLE);
@@ -183,7 +184,7 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
     }
 
     public void onInputMethodSubtypeChanged(InputMethodSubtype inputMethodSubtype, boolean suggestionsAllowed) {
-        suggestionsView.setVisibility(suggestionsAllowed ? VISIBLE : GONE);
+        updateSuggestionsViewVisibility(suggestionsAllowed);
         String displayTag = inputMethodSubtype.getExtraValueOf(INPUT_METHOD_DISPLAY_TAG);
         if (TextUtils.isEmpty(displayTag)) {
             displayTag = inputMethodSubtype.getLanguageTag();
@@ -267,7 +268,7 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
         if (metaKeyManager.isShiftFixed()) {
             displayTag = displayTag.toUpperCase();
         } else if (metaKeyManager.isShiftEnabled()) {
-            displayTag = displayTag.substring(0, 1).toUpperCase() + displayTag.substring(1).toLowerCase();
+            displayTag = CharacterUtils.capitalizeFirstLetter(displayTag);
         }
 
         if (metaKeyManager.isAltFixed()) {
@@ -282,6 +283,12 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
     private void clearInlineSuggestionsView() {
         inlineSuggestionsView.removeAllViews();
         inlineSuggestionsView.addView(hideInlineSuggestionsButton);
+    }
+
+    private void updateSuggestionsViewVisibility(boolean suggestionsAllowed) {
+        suggestionsView.setVisibility(
+                preferencesHolder.isShowSuggestionsEnabled() && suggestionsAllowed ? VISIBLE : GONE
+        );
     }
 
     public boolean isEmojiPanelVisible() {
