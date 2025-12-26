@@ -143,6 +143,13 @@ public class PocketBoardIME extends InputMethodService {
     }
 
     @Override
+    public boolean onEvaluateInputViewShown() {
+        super.onEvaluateInputViewShown();
+        // Force keyboard show to allow user toggle emoji panel even in hidden mode
+        return true;
+    }
+
+    @Override
     protected void onCurrentInputMethodSubtypeChanged(InputMethodSubtype newSubtype) {
         super.onCurrentInputMethodSubtypeChanged(newSubtype);
         if (preferencesHolder.isLayoutChangeIndicationEnabled()) {
@@ -233,7 +240,7 @@ public class PocketBoardIME extends InputMethodService {
                             metaKeyManager.isShiftEnabled(), metaKeyManager.isAltEnabled())) {
                         // Show input view if it's hidden
                         if (!isInputViewShown()) {
-                            requestShowSelf(InputMethodManager.SHOW_IMPLICIT);
+                            requestShowSelf(InputMethodManager.SHOW_FORCED);
                         }
                         updateMetaState();
                     }

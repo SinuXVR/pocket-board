@@ -47,7 +47,7 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
 
     private ViewGroup emojiPanelView;
     private EmojiView emojiView;
-    private ViewGroup mainInputView;
+    private ViewGroup mainInputViewWrapper;
     private ViewGroup suggestionsView;
     private ViewGroup inlineSuggestionsViewWrapper;
     private ViewGroup inlineSuggestionsView;
@@ -76,7 +76,7 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
         super.onFinishInflate();
         emojiPanelView = findViewById(R.id.emojiPanel);
         emojiView = findViewById(R.id.emojiView);
-        mainInputView = findViewById(R.id.inputView);
+        mainInputViewWrapper = findViewById(R.id.inputViewWrapper);
         suggestionsView = findViewById(R.id.suggestionsView);
         inlineSuggestionsViewWrapper = findViewById(R.id.inlineSuggestionsViewWrapper);
         inlineSuggestionsView = findViewById(R.id.inlineSuggestionsView);
@@ -145,7 +145,6 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
         clearInlineSuggestionsView();
 
         boolean showEmojiButton = preferencesHolder.isShowEmojiEnabled();
-        boolean showSuggestions = preferencesHolder.isShowSuggestionsEnabled();
         boolean showMetaLayoutButton = preferencesHolder.isShowMetaLayoutEnabled();
         boolean showVoiceButton = preferencesHolder.isShowVoiceEnabled();
         boolean showMainInputView = preferencesHolder.isShowPanelEnabled();
@@ -164,9 +163,9 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
             updateSuggestionsViewVisibility(suggestionsAllowed);
             metaLayoutButton.setVisibility(showMetaLayoutButton ? VISIBLE : GONE);
             voiceButton.setVisibility(showVoiceButton ? VISIBLE : GONE);
-            mainInputView.setVisibility(VISIBLE);
+            mainInputViewWrapper.setVisibility(VISIBLE);
         } else {
-            mainInputView.setVisibility(GONE);
+            mainInputViewWrapper.setVisibility(GONE);
         }
 
         // Invalidate view to prevent glitches
