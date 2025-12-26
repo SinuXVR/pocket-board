@@ -53,11 +53,13 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
 
     private ImageButton hideInlineSuggestionsButton;
     private ImageButton emojiButton;
+    private ImageButton fontButton;
     private Button metaLayoutButton;
     private ImageButton voiceButton;
 
     private boolean inlineSuggestionsCancelled;
     private String currentInputMethodTag = "?";
+    private boolean isCapsEnabled = false;
 
     public InputView(Context context, AttributeSet attrs) {
         super(context, attrs, 0);
@@ -101,6 +103,9 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
 
         emojiButton = findViewById(R.id.emojiButton);
         emojiButton.setOnClickListener(b -> toggleEmojiPanel());
+
+        fontButton = findViewById(R.id.fontButton);
+        fontButton.setOnClickListener(b -> toggleCapsStyle());
 
         metaLayoutButton = findViewById(R.id.metaLayoutButton);
         metaLayoutButton.setOnClickListener(b -> {
@@ -257,6 +262,13 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
         }
     }
 
+    private void toggleCapsStyle() {
+        isCapsEnabled = !isCapsEnabled;
+        pocketBoardIME.setCapsEnabled(isCapsEnabled);
+        updateMetaLayoutButtonText(pocketBoardIME.getMetaKeyManager());
+        fontButton.setSelected(isCapsEnabled);
+    }
+
     private void updateMetaLayoutButtonText(MetaKeyManager metaKeyManager) {
         String displayTag = currentInputMethodTag;
 
@@ -264,7 +276,7 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
             displayTag = META_BUTTON_ALT_TAG;
         }
 
-        if (metaKeyManager.isShiftFixed()) {
+        if (isCapsEnabled || metaKeyManager.isShiftFixed()) {
             displayTag = displayTag.toUpperCase();
         } else if (metaKeyManager.isShiftEnabled()) {
             displayTag = displayTag.substring(0, 1).toUpperCase() + displayTag.substring(1).toLowerCase();

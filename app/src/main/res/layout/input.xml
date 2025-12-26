@@ -133,6 +133,16 @@
 
         </LinearLayout>
 
+        <ImageButton
+            android:id="@+id/fontButton"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
+            android:background="@null"
+            android:layout_marginHorizontal="@dimen/button_horizontal_margin"
+            android:contentDescription="@string/font_button_description"
+            android:src="@drawable/font_button"
+            android:tint="@drawable/touch_color_selector" />
+
         <Button
             android:id="@+id/metaLayoutButton"
             android:layout_width="@dimen/button_size"

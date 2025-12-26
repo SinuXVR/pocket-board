@@ -37,6 +37,7 @@ public class KeyboardInputHandler implements InputHandler {
     private boolean layoutChangeShortcut;
     private boolean doubleSpacePeriod;
     private boolean autocorrection;
+    private boolean capsEnabled;
 
     private CharSequence currentSelectedText;
     private byte keyIterationCounter;
@@ -306,57 +307,38 @@ public class KeyboardInputHandler implements InputHandler {
 
     private boolean handleCharacter(int keyCode, KeyEvent event, InputConnection inputConnection,
                                     boolean shiftEnabled, boolean altEnabled, long eventTime) {
-        // Handle first key press
-        if (event.getRepeatCount() == 0) {
-            // Get current key mapping
-            KeyMapping keyMapping = keyboardMappingManager.getCurrentMapping().getKeyMapping(keyCode);
-
-            // Skip unknown keys
-            if (keyMapping == null) {
-                return false;
-            }
-
-            // Check if user has entered into additional key values iteration mode by fast clicking on same key
-            boolean isNewKey = lastKeyCode != keyCode;
-            boolean isShortPress = eventTime - lastKeyDownTime <= keyLongPressDuration;
-            boolean keyIterationModeEnabled;
-            if (keyMapping.hasAdditionalValues(lastAltEnabled) && !isNewKey && isShortPress) {
-                keyIterationModeEnabled = true;
-                keyIterationCounter++;
-            } else {
-                keyIterationModeEnabled = false;
-                keyIterationCounter = 0;
-                lastShiftEnabled = shiftEnabled;
-                lastAltEnabled = altEnabled;
-            }
-
-            // Print next character
-            if (!keyIterationModeEnabled || numericInputMode) {
-                printNextCharacter(inputConnection, keyMapping.getValue(lastShiftEnabled, lastAltEnabled, keyIterationCounter));
-            } else {
-                // Or replace last (in additional key values iteration mode)
-                replaceLastCharacter(inputConnection, keyMapping.getValue(lastShiftEnabled, lastAltEnabled, keyIterationCounter));
-            }
-
-            return true;
-        } else {
-            // Handle long key press - replace current char with first alt value
-            if (!numericInputMode && !lastAltEnabled && (eventTime - lastKeyDownTime > keyLongPressDuration)) {
-                lastAltEnabled = true;
-                keyIterationCounter = 0;
-
-                KeyMapping keyMapping = keyboardMappingManager.getCurrentMapping().getKeyMapping(keyCode);
-                if (keyMapping == null) {
-                    return false;
-                }
-                replaceLastCharacter(inputConnection, keyMapping.getValue(lastShiftEnabled, lastAltEnabled, keyIterationCounter));
-                lastKeyDownTime = eventTime;
-
-                return true;
-            }
+        KeyMapping keyMapping = keyboardMappingManager.getCurrentMapping().getKeyMapping(keyCode);
+        if (keyMapping == null) {
+            return false;
         }
 
-        return false;
+        // Get character value based on current meta state
+        int value;
+        if (altEnabled) {
+            value = keyMapping.getAltValue(keyIterationCounter);
+        } else {
+            value = keyMapping.getValue(keyIterationCounter);
+        }
+
+        // Apply shift state
+        if (capsEnabled || shiftEnabled) {
+            value = Character.toUpperCase(value);
+        }
+
+        // Reset key iteration counter if different key pressed
+        if (keyCode != lastKeyCode || eventTime - lastKeyDownTime > keyLongPressDuration) {
+            keyIterationCounter = 0;
+        }
+
+        // Commit character
+        if (composingEnabled) {
+            textComposer.append((char) value);
+            inputConnection.setComposingText(textComposer, 1);
+        } else {
+            inputConnection.commitText(String.valueOf((char) value), 1);
+        }
+
+        return true;
     }
 
     private void printNextCharacter(InputConnection inputConnection, int keyCharacterCodePoint) {
@@ -462,5 +444,9 @@ public class KeyboardInputHandler implements InputHandler {
 
     public boolean isInRawInputMode() {
         return rawInputMode;
+    }
+
+    public void setCapsEnabled(boolean enabled) {
+        capsEnabled = enabled;
     }
 }
