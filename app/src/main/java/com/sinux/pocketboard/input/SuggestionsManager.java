@@ -75,10 +75,10 @@ public class SuggestionsManager implements SuggestionView.OnClickListener,
     public void onStartInput(EditorInfo attribute, InputMethodSubtype currentInputMethodSubtype) {
         disallowSuggestions();
         var suggestionAllowedEditor = InputUtils.isSuggestionAllowedEditor(attribute) && !InputUtils.isNumericEditor(attribute);
-        dictionarySuggestionsAllowed = (preferencesHolder.isShowSuggestionsEnabled() || preferencesHolder.isDictShortcutsEnabled()) &&
-                suggestionAllowedEditor;
-        spellcheckerSuggestionsAllowed = (preferencesHolder.isShowSuggestionsEnabled() || preferencesHolder.isAutoCorrectionEnabled()) &&
-                suggestionAllowedEditor && startSpellCheckerSession(currentInputMethodSubtype);
+        var suggestionsPanelVisible = preferencesHolder.isShowPanelEnabled() && preferencesHolder.isShowSuggestionsEnabled();
+        dictionarySuggestionsAllowed = suggestionAllowedEditor && suggestionsPanelVisible || preferencesHolder.isDictShortcutsEnabled();
+        spellcheckerSuggestionsAllowed = (suggestionAllowedEditor && suggestionsPanelVisible || preferencesHolder.isAutoCorrectionEnabled()) &&
+                startSpellCheckerSession(currentInputMethodSubtype);
     }
 
     public void onStartInputView(InputMethodSubtype currentInputMethodSubtype) {

@@ -35,7 +35,8 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
 
         subtypesPreference = initInputSubtypesPref(context, inputMethodInfo);
         initToastNotificationPref(context);
-        initPhoneControlPref(context, inputMethodInfo);
+        initPhoneControlPref(context);
+        initShowPanelPref();
 
         updateInputSubtypesPrefSummary();
     }
@@ -78,7 +79,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         }
     }
 
-    private void initPhoneControlPref(Context context, InputMethodInfo inputMethodInfo) {
+    private void initPhoneControlPref(Context context) {
         SwitchPreference pref = findPreference(getString(R.string.ime_extra_phone_control_prefs_key));
 
         var phonePermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
@@ -104,6 +105,39 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                         return false;
                     }
                 }
+                return true;
+            });
+        }
+    }
+
+    private void initShowPanelPref() {
+        SwitchPreference pref = findPreference(getString(R.string.ime_show_panel_prefs_key));
+
+        if (pref != null) {
+            pref.setOnPreferenceChangeListener((preference, newValue) -> {
+                boolean isEnabled = (boolean) newValue;
+
+                // Toggle emoji button visibility value
+                SwitchPreference emojiBtnPref = findPreference(getString(R.string.ime_show_emoji_prefs_key));
+                if (emojiBtnPref != null) {
+                    emojiBtnPref.setChecked(isEnabled);
+                }
+                // Toggle suggestions panel visibility value
+                SwitchPreference suggestionsPref = findPreference(getString(R.string.ime_show_suggestions_prefs_key));
+                if (suggestionsPref != null) {
+                    suggestionsPref.setChecked(isEnabled);
+                }
+                // Toggle meta layout panel visibility value
+                SwitchPreference metaLayoutPref = findPreference(getString(R.string.ime_show_meta_layout_prefs_key));
+                if (metaLayoutPref != null) {
+                    metaLayoutPref.setChecked(isEnabled);
+                }
+                // Toggle voice input button visibility value
+                SwitchPreference voiceBtnPref = findPreference(getString(R.string.ime_show_voice_prefs_key));
+                if (voiceBtnPref != null) {
+                    voiceBtnPref.setChecked(isEnabled);
+                }
+
                 return true;
             });
         }
