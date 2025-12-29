@@ -76,8 +76,8 @@ public class SuggestionsManager implements SuggestionView.OnClickListener,
         disallowSuggestions();
         var suggestionAllowedEditor = InputUtils.isSuggestionAllowedEditor(attribute) && !InputUtils.isNumericEditor(attribute);
         var suggestionsPanelVisible = preferencesHolder.isShowPanelEnabled() && preferencesHolder.isShowSuggestionsEnabled();
-        dictionarySuggestionsAllowed = suggestionAllowedEditor && suggestionsPanelVisible || preferencesHolder.isDictShortcutsEnabled();
-        spellcheckerSuggestionsAllowed = (suggestionAllowedEditor && suggestionsPanelVisible || preferencesHolder.isAutoCorrectionEnabled()) &&
+        dictionarySuggestionsAllowed = suggestionAllowedEditor && (suggestionsPanelVisible || preferencesHolder.isDictShortcutsEnabled());
+        spellcheckerSuggestionsAllowed = suggestionAllowedEditor && (suggestionsPanelVisible || preferencesHolder.isAutoCorrectionEnabled()) &&
                 startSpellCheckerSession(currentInputMethodSubtype);
     }
 
