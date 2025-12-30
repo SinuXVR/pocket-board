@@ -53,11 +53,7 @@ public class PocketBoardIME extends InputMethodService {
     private SuggestionsManager suggestionsManager;
 
     private boolean autoCapitalization;
-    private boolean symPressed;
     private boolean symPadJustUsed;
-    private boolean symPadModeLocked;
-
-    private int sympadFixEventRepeatCount;
 
     private List<String> directInputEditors;
 
@@ -72,8 +68,6 @@ public class PocketBoardIME extends InputMethodService {
         keyboardInputHandler = new KeyboardInputHandler(this);
         symPadInputHandler = new SymPadInputHandler(this);
         suggestionsManager = new SuggestionsManager(this, keyboardInputHandler);
-
-        sympadFixEventRepeatCount = getResources().getInteger(R.integer.sympad_fix_event_repeat_count);
 
         directInputEditors = Arrays.asList(getResources().getStringArray(R.array.direct_input_editors));
     }
@@ -181,18 +175,6 @@ public class PocketBoardIME extends InputMethodService {
             case KeyEvent.KEYCODE_VOLUME_UP:
             case KeyEvent.KEYCODE_VOLUME_DOWN:
                 return false;
-            case KeyEvent.KEYCODE_SYM:
-            case KeyEvent.KEYCODE_PICTSYMBOLS:
-                symPressed = true;
-                if (event.getRepeatCount() == 0 && symPadModeLocked) {
-                    hideStatusIcon();
-                    symPadModeLocked = false;
-                    symPadJustUsed = true;
-                } else if (event.getRepeatCount() == sympadFixEventRepeatCount && preferencesHolder.isLockSymPadEnabled()) {
-                    symPadModeLocked = true;
-                    showStatusIcon(R.drawable.ic_sym_pad_icon);
-                }
-                return true;
             default:
                 // Voice input shortcut
                 if (preferencesHolder.isVoiceInputShortcutEnabled() &&
@@ -218,7 +200,7 @@ public class PocketBoardIME extends InputMethodService {
                 }
 
                 // Emulate D-pad and some media keys
-                if (symPressed || symPadModeLocked) {
+                if (metaKeyManager.isSymFixed()) {
                     symPadInputHandler.handleKeyDown(keyCode, event, inputConnection,
                             metaKeyManager.isShiftEnabled(), metaKeyManager.isAltEnabled());
                     symPadJustUsed = true;
@@ -274,21 +256,7 @@ public class PocketBoardIME extends InputMethodService {
             return false;
         }
 
-        if (keyCode == KeyEvent.KEYCODE_SYM || keyCode == KeyEvent.KEYCODE_PICTSYMBOLS) {
-            symPressed = false;
-            if (!symPadJustUsed && !symPadModeLocked) {
-                // Toggle emoji panel on SYM release
-                if (isInputViewShown()) {
-                    inputView.toggleEmojiPanel();
-                }
-            } else {
-                symPadJustUsed = false;
-            }
-
-            return true;
-        }
-
-        if (symPressed || symPadModeLocked) {
+        if (metaKeyManager.isSymFixed()) {
             if (symPadInputHandler.handleKeyUp(keyCode, event, inputConnection,
                     metaKeyManager.isShiftEnabled(), metaKeyManager.isAltEnabled())) {
                 return true;
@@ -296,6 +264,17 @@ public class PocketBoardIME extends InputMethodService {
         }
 
         if (metaKeyManager.handleKeyUp(keyCode, event)) {
+            if (keyCode == KeyEvent.KEYCODE_SYM || keyCode == KeyEvent.KEYCODE_PICTSYMBOLS) {
+                if (!symPadJustUsed && !metaKeyManager.isSymFixed()) {
+                    // Toggle emoji panel on SYM release
+                    if (isInputViewShown()) {
+                        inputView.toggleEmojiPanel();
+                    }
+                } else {
+                    symPadJustUsed = false;
+                }
+            }
+
             return true;
         }
 
@@ -359,6 +338,12 @@ public class PocketBoardIME extends InputMethodService {
         }
 
         return false;
+    }
+
+    @Override
+    public void hideStatusIcon() {
+        super.hideStatusIcon();
+        symPadJustUsed = true;
     }
 
     private void updateMetaState() {

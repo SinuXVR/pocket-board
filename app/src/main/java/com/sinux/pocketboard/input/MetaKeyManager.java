@@ -20,8 +20,11 @@ public class MetaKeyManager {
     private final PocketBoardIME pocketBoardIME;
     private final PreferencesHolder preferencesHolder;
     private final long keyLongPressDuration;
+    private final int sympadFixEventRepeatCount;
     private final CallStateListener callStateListener;
 
+    private MetaKeyState sym;
+    private boolean symPressed;
     private MetaKeyState shift;
     private boolean shiftPressed;
     private long shiftPressTime;
@@ -38,6 +41,7 @@ public class MetaKeyManager {
         this.pocketBoardIME = pocketBoardIME;
         this.preferencesHolder = pocketBoardIME.getPreferencesHolder();
         keyLongPressDuration = pocketBoardIME.getPreferencesHolder().getLongKeyPressDuration();
+        sympadFixEventRepeatCount = pocketBoardIME.getResources().getInteger(R.integer.sympad_fix_event_repeat_count);
 
         callStateListener = new CallStateListener();
         TelephonyManager tm = getTelephonyManager();
@@ -70,6 +74,17 @@ public class MetaKeyManager {
 
     public boolean handleKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
+            case KeyEvent.KEYCODE_SYM:
+            case KeyEvent.KEYCODE_PICTSYMBOLS:
+                setSymPressed(true);
+                if (event.getRepeatCount() == 0 && sym == MetaKeyState.FIXED) {
+                    pocketBoardIME.hideStatusIcon();
+                    sym = MetaKeyState.ENABLED;
+                } else if (event.getRepeatCount() == sympadFixEventRepeatCount && preferencesHolder.isLockSymPadEnabled()) {
+                    sym = MetaKeyState.FIXED;
+                    pocketBoardIME.showStatusIcon(R.drawable.ic_sym_pad_icon);
+                }
+                break;
             case KeyEvent.KEYCODE_SHIFT_LEFT:
             case KeyEvent.KEYCODE_SHIFT_RIGHT:
                 if (event.getRepeatCount() == 0) {
@@ -110,6 +125,13 @@ public class MetaKeyManager {
 
     public boolean handleKeyUp(int keyCode, KeyEvent event) {
         switch (keyCode) {
+            case KeyEvent.KEYCODE_SYM:
+            case KeyEvent.KEYCODE_PICTSYMBOLS:
+                setSymPressed(false);
+                if (sym != MetaKeyState.FIXED) {
+                    sym = MetaKeyState.DISABLED;
+                }
+                break;
             case KeyEvent.KEYCODE_SHIFT_LEFT:
             case KeyEvent.KEYCODE_SHIFT_RIGHT:
                 setShiftPressed(false);
@@ -141,6 +163,15 @@ public class MetaKeyManager {
         }
 
         return true;
+    }
+
+    public boolean isSymFixed() {
+        return symPressed || sym == MetaKeyState.FIXED;
+    }
+
+    public void setSymPressed(boolean symPressed) {
+        this.symPressed = symPressed;
+        notifyMetaKeyStateChangeListener();
     }
 
     public void enableShift() {
