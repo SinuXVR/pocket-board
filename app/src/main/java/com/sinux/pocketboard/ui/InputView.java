@@ -148,7 +148,7 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
         boolean showEmojiButton = preferencesHolder.isShowEmojiEnabled();
         boolean showMetaLayoutButton = preferencesHolder.isShowMetaLayoutEnabled();
         boolean showVoiceButton = preferencesHolder.isShowVoiceEnabled();
-        boolean showMainInputView = preferencesHolder.isShowPanelEnabled();
+        boolean showMainInputView = pocketBoardIME.isShouldShowIme();
 
         // Display current layout tag
         if (InputUtils.isNumericEditor(attribute)) {

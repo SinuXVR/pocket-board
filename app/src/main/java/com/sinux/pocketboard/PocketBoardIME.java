@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.inputmethodservice.InputMethodService;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Size;
@@ -224,7 +225,6 @@ public class PocketBoardIME extends InputMethodService {
                         if (!isInputViewShown()) {
                             requestShowSelf(InputMethodManager.SHOW_FORCED);
                         }
-                        updateMetaState();
                     }
                 } else {
                     /*
@@ -386,5 +386,17 @@ public class PocketBoardIME extends InputMethodService {
 
     public KeyboardInputHandler getKeyboardInputHandler() {
         return keyboardInputHandler;
+    }
+
+    public boolean isShouldShowIme() {
+        if (preferencesHolder.isShowPanelEnabled()) {
+            return Settings.Secure.getInt(
+                    getContentResolver(),
+                    "show_ime_with_hard_keyboard",
+                    0
+            ) == 1;
+        }
+
+        return false;
     }
 }
