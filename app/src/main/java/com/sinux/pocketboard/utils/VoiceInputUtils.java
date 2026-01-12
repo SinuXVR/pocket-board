@@ -7,15 +7,21 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.sinux.pocketboard.R;
 
+import java.util.Collection;
+import java.util.Set;
+
 public class VoiceInputUtils {
 
-    private static final String VOICE_IME_PACKAGE = "com.google.android.googlequicksearchbox";
+    private static final Collection<String> VOICE_IME_PACKAGES = Set.of(
+            "com.google.android.tts",
+            "com.google.android.googlequicksearchbox"
+    );
 
     public static void launchVoiceIME(InputMethodService inputMethodService) {
         InputMethodManager imm = (InputMethodManager) inputMethodService.getSystemService(Context.INPUT_METHOD_SERVICE);
 
         for (InputMethodInfo imi : imm.getInputMethodList()) {
-            if (VOICE_IME_PACKAGE.equals(imi.getPackageName())) {
+            if (VOICE_IME_PACKAGES.contains(imi.getPackageName())) {
                 inputMethodService.switchInputMethod(imi.getId());
                 return;
             }

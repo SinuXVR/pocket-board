@@ -42,7 +42,6 @@ public class KeyboardMappingManager {
 
     private void setCurrentKeyboardMapping(String keyMappingFile) {
         if (TextUtils.isEmpty(keyMappingFile)) {
-            toastError();
             return;
         }
 
