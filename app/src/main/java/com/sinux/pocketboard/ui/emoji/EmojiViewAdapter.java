@@ -42,8 +42,8 @@ public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.Emoj
 
     private final PocketBoardIME pocketBoardIME;
     private final List<CharSequence> recentEmojiList;
+    private final Map<Integer, Integer> recentEmojiShortcutKeys;
     private final PopupWindow popupWindow;
-    private final Map<Integer, Integer> emojiRecentShortcutKeys;
 
     public EmojiViewAdapter(PocketBoardIME pocketBoardIME, ViewGroup parent) {
         this.pocketBoardIME = pocketBoardIME;
@@ -69,10 +69,10 @@ public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.Emoj
         popupWindow.setOverlapAnchor(true);
 
         // Prepare recent emoji shortcut key codes
-        int[] shortcutKeys = pocketBoardIME.getResources().getIntArray(R.array.emoji_recent_shortcut_key_codes);
-        emojiRecentShortcutKeys = new HashMap<>(recentEmojiList.size());
+        int[] shortcutKeys = pocketBoardIME.getResources().getIntArray(R.array.recent_emoji_shortcut_key_codes);
+        recentEmojiShortcutKeys = new HashMap<>(recentEmojiList.size());
         for (int i = 0; i < shortcutKeys.length; i++) {
-            emojiRecentShortcutKeys.put(shortcutKeys[i], i);
+            recentEmojiShortcutKeys.put(shortcutKeys[i], i);
         }
     }
 
@@ -88,7 +88,7 @@ public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.Emoj
         AbstractEmojiContentViewAdapter<?> adapter = null;
 
         if (position == EMOJI_RECENT_TAB_POSITION) {
-            var recentEmojiShortcutLabels = pocketBoardIME.getResources().getStringArray(R.array.emoji_recent_shortcut_labels);
+            var recentEmojiShortcutLabels = pocketBoardIME.getResources().getStringArray(R.array.recent_emoji_shortcut_labels);
             adapter = new RecentEmojiContentViewAdapter(recentEmojiList, recentEmojiShortcutLabels);
         } else if (EMOJI_CATEGORIES[position][1] > 0) {
             String emojiStr = pocketBoardIME.getString(EMOJI_CATEGORIES[position][1]);
@@ -158,10 +158,10 @@ public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.Emoj
     }
 
     public boolean handleKeyDown(int keyCode) {
-        var recentPosition = emojiRecentShortcutKeys.get(keyCode);
+        var recentEmojiPosition = recentEmojiShortcutKeys.get(keyCode);
 
-        if (recentPosition != null && recentPosition < recentEmojiList.size()) {
-            pocketBoardIME.getKeyboardInputHandler().commitEmoji(recentEmojiList.get(recentPosition));
+        if (recentEmojiPosition != null && recentEmojiPosition < recentEmojiList.size()) {
+            pocketBoardIME.getKeyboardInputHandler().commitEmoji(recentEmojiList.get(recentEmojiPosition));
             return true;
         }
 

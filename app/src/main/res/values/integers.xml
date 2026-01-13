@@ -8,7 +8,7 @@
     <integer name="sympad_fix_event_repeat_count">3</integer>
     <integer name="layout_change_shortcut_event_repeat_count">3</integer>
 
-    <integer-array name="emoji_recent_shortcut_key_codes">
+    <integer-array name="recent_emoji_shortcut_key_codes">
         <item>45</item><!-- Q -->
         <item>51</item><!-- W -->
         <item>33</item><!-- E -->
