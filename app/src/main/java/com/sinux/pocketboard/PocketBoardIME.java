@@ -219,6 +219,11 @@ public class PocketBoardIME extends InputMethodService {
 
                 // Handle text input in Keyboard mode
                 if (editorInfo != null && (editorInfo.inputType != InputType.TYPE_NULL || keyboardInputHandler.isInRawInputMode())) {
+                    // Handle emoji shortcuts
+                    if (inputView.isEmojiPanelVisible() && inputView.handleEmojiShortcut(keyCode)) {
+                        return true;
+                    }
+                    // Handle input
                     if (keyboardInputHandler.handleKeyDown(keyCode, event, inputConnection,
                             metaKeyManager.isShiftEnabled(), metaKeyManager.isAltEnabled())) {
                         // Show input view if it's hidden

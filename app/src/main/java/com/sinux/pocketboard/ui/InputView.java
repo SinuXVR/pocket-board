@@ -297,6 +297,10 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
         );
     }
 
+    public boolean handleEmojiShortcut(int keyCode) {
+        return emojiView.handleKeyDown(keyCode);
+    }
+
     public boolean isEmojiPanelVisible() {
         return emojiPanelView != null && emojiPanelView.getVisibility() == VISIBLE;
     }

@@ -3,7 +3,9 @@
     <dimen name="input_view_height">48dp</dimen>
     <dimen name="emoji_panel_height">212dp</dimen>
     <dimen name="emoji_view_item_margin">2dp</dimen>
+    <dimen name="emoji_view_item_key_size">8dp</dimen>
     <dimen name="emoji_view_item_text_size">30dp</dimen>
+    <dimen name="emoji_view_item_key_padding">2dp</dimen>
     <dimen name="emoji_view_item_padding">4dp</dimen>
     <dimen name="button_size">32dp</dimen>
     <dimen name="button_text_size">14dp</dimen>

@@ -40,7 +40,10 @@ public class EmojiView extends LinearLayout {
         // Create tabs
         for (int i = 0; i < emojiViewAdapter.getItemCount(); i++) {
             int drawableId = emojiViewAdapter.getItemTabDrawableId(i);
-            tabLayout.addTab(tabLayout.newTab().setIcon(drawableId));
+            var tab = tabLayout.newTab();
+            tab.setIcon(drawableId);
+            tab.view.setClipToPadding(false);
+            tabLayout.addTab(tab);
         }
 
         // Wire tabLayout with viewPager
@@ -48,9 +51,6 @@ public class EmojiView extends LinearLayout {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
-                if (tab.getPosition() == EmojiViewAdapter.EMOJI_RECENT_TAB_POSITION) {
-                    viewPager.post(() -> emojiViewAdapter.notifyItemChanged(EmojiViewAdapter.EMOJI_RECENT_TAB_POSITION));
-                }
             }
 
             @Override
@@ -67,9 +67,6 @@ public class EmojiView extends LinearLayout {
             @Override
             public void onPageSelected(int position) {
                 tabLayout.selectTab(tabLayout.getTabAt(position));
-                if (position == EmojiViewAdapter.EMOJI_RECENT_TAB_POSITION) {
-                    viewPager.post(() -> emojiViewAdapter.notifyItemChanged(EmojiViewAdapter.EMOJI_RECENT_TAB_POSITION));
-                }
             }
         });
     }
@@ -78,5 +75,10 @@ public class EmojiView extends LinearLayout {
         if (emojiViewAdapter != null) {
             emojiViewAdapter.hidePopup();
         }
+    }
+
+    public boolean handleKeyDown(int keyCode) {
+        return viewPager != null && viewPager.getCurrentItem() == EmojiViewAdapter.EMOJI_RECENT_TAB_POSITION &&
+                emojiViewAdapter != null && emojiViewAdapter.handleKeyDown(keyCode);
     }
 }

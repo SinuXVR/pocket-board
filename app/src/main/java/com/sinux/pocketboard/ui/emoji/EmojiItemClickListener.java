@@ -8,4 +8,8 @@ public interface EmojiItemClickListener {
 
     void onEmojiItemLongClick(View emojiItemView, CharSequence itemValue);
 
+    default boolean removeRecentEmojiItem(int position) {
+        return false;
+    }
+
 }

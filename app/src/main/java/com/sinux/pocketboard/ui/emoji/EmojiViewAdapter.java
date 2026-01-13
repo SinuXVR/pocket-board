@@ -18,7 +18,9 @@ import com.sinux.pocketboard.R;
 import com.sinux.pocketboard.utils.LruList;
 import com.sinux.pocketboard.utils.CharacterUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.EmojiViewHolder>
         implements EmojiItemClickListener {
@@ -41,6 +43,7 @@ public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.Emoj
     private final PocketBoardIME pocketBoardIME;
     private final List<CharSequence> recentEmojiList;
     private final PopupWindow popupWindow;
+    private final Map<Integer, Integer> emojiRecentShortcutKeys;
 
     public EmojiViewAdapter(PocketBoardIME pocketBoardIME, ViewGroup parent) {
         this.pocketBoardIME = pocketBoardIME;
@@ -64,6 +67,13 @@ public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.Emoj
         popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(pocketBoardIME, R.drawable.emoji_popup_background));
         popupWindow.setElevation(10);
         popupWindow.setOverlapAnchor(true);
+
+        // Prepare recent emoji shortcut key codes
+        int[] shortcutKeys = pocketBoardIME.getResources().getIntArray(R.array.emoji_recent_shortcut_key_codes);
+        emojiRecentShortcutKeys = new HashMap<>(recentEmojiList.size());
+        for (int i = 0; i < shortcutKeys.length; i++) {
+            emojiRecentShortcutKeys.put(shortcutKeys[i], i);
+        }
     }
 
     @NonNull
@@ -75,10 +85,11 @@ public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.Emoj
     @Override
     public void onBindViewHolder(@NonNull EmojiViewHolder holder, int position) {
         View itemView = holder.itemView;
-        EmojiContentViewAdapter adapter = null;
+        AbstractEmojiContentViewAdapter<?> adapter = null;
 
         if (position == EMOJI_RECENT_TAB_POSITION) {
-            adapter = new EmojiContentViewAdapter(recentEmojiList);
+            var recentEmojiShortcutLabels = pocketBoardIME.getResources().getStringArray(R.array.emoji_recent_shortcut_labels);
+            adapter = new RecentEmojiContentViewAdapter(recentEmojiList, recentEmojiShortcutLabels);
         } else if (EMOJI_CATEGORIES[position][1] > 0) {
             String emojiStr = pocketBoardIME.getString(EMOJI_CATEGORIES[position][1]);
             adapter = new EmojiContentViewAdapter(CharacterUtils.splitToCharacters(emojiStr));
@@ -106,8 +117,12 @@ public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.Emoj
     public void onEmojiItemClick(CharSequence itemValue) {
         pocketBoardIME.getKeyboardInputHandler().commitEmoji(itemValue);
         // Save recent emoji
-        recentEmojiList.add(itemValue);
-        pocketBoardIME.getPreferencesHolder().saveRecentEmojiString(String.join("", recentEmojiList));
+        if (!recentEmojiList.contains(itemValue)) {
+            recentEmojiList.add(itemValue);
+            saveRecentEmojiList();
+            // Refresh recent tab
+            notifyItemChanged(EMOJI_RECENT_TAB_POSITION);
+        }
         hidePopup();
     }
 
@@ -127,8 +142,34 @@ public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.Emoj
         }
     }
 
+    @Override
+    public boolean removeRecentEmojiItem(int position) {
+        if (position >= 0 && position < recentEmojiList.size()) {
+            recentEmojiList.remove(position);
+            saveRecentEmojiList();
+            return true;
+        }
+
+        return false;
+    }
+
     public void hidePopup() {
         popupWindow.dismiss();
+    }
+
+    public boolean handleKeyDown(int keyCode) {
+        var recentPosition = emojiRecentShortcutKeys.get(keyCode);
+
+        if (recentPosition != null && recentPosition < recentEmojiList.size()) {
+            pocketBoardIME.getKeyboardInputHandler().commitEmoji(recentEmojiList.get(recentPosition));
+            return true;
+        }
+
+        return false;
+    }
+
+    private void saveRecentEmojiList() {
+        pocketBoardIME.getPreferencesHolder().saveRecentEmojiString(String.join("", recentEmojiList));
     }
 
     public static class EmojiViewHolder extends RecyclerView.ViewHolder {

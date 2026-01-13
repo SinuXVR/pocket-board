@@ -8,6 +8,30 @@
     <integer name="sympad_fix_event_repeat_count">3</integer>
     <integer name="layout_change_shortcut_event_repeat_count">3</integer>
 
+    <integer-array name="emoji_recent_shortcut_key_codes">
+        <item>45</item><!-- Q -->
+        <item>51</item><!-- W -->
+        <item>33</item><!-- E -->
+        <item>46</item><!-- R -->
+        <item>48</item><!-- T -->
+        <item>53</item><!-- Y -->
+        <item>49</item><!-- U -->
+        <item>29</item><!-- A -->
+        <item>47</item><!-- S -->
+        <item>32</item><!-- D -->
+        <item>34</item><!-- F -->
+        <item>35</item><!-- G -->
+        <item>36</item><!-- H -->
+        <item>38</item><!-- J -->
+        <item>54</item><!-- Z -->
+        <item>52</item><!-- X -->
+        <item>31</item><!-- C -->
+        <item>50</item><!-- V -->
+        <item>62</item><!-- Space -->
+        <item>30</item><!-- B -->
+        <item>42</item><!-- N -->
+    </integer-array>
+
     <!-- List of basic emojis that can be combined with skin tone modifiers -->
     <integer-array name="fitzpatrick_aware_emojis">
         <item>0x1F385</item>
