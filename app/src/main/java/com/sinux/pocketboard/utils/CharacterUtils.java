@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CharacterUtils {
@@ -15,6 +15,7 @@ public class CharacterUtils {
     public static final List<Integer> EMOJI_FITZPATRICK_MODIFIERS = Arrays.asList(0x1F3FB, 0x1F3FC, 0x1F3FD, 0x1F3FE, 0x1F3FF);
     public static final List<Integer> EMOJI_VARIANT_SELECTORS = Arrays.asList(0xFE0E, 0xFE0F);
     private static final List<Integer> SUBDIVISION_FLAG_PARTS = Arrays.asList(0xE0062, 0xE0063, 0xE0065, 0xE0067, 0xE006C, 0xE006E, 0xE0073, 0xE0074, 0xE0077, 0xE007F);
+    private static final int HANDS_EMOJI = 0x1F91D;
 
     /**
      * Split string to separate Unicode characters (helps to extract emoji and UTF-16 surrogate symbols)
@@ -65,18 +66,14 @@ public class CharacterUtils {
      * @param fitzpatrickAwareEmojis an array of emoji codePoints which skin tone modifiers can be applied to
      * @return collection containing emojis string with skin tone modifiers applied or empty collection (if there is no emoji that can be used with modifiers)
      */
-    public static List<CharSequence> getAllFitzpatrickVariants(CharSequence str, int[] fitzpatrickAwareEmojis) {
-        List<Integer> fitzpatrickAwareEmojisList = Arrays.stream(fitzpatrickAwareEmojis).boxed().collect(Collectors.toList());
+    public static List<CharSequence> getAllFitzpatrickVariants(CharSequence str, Set<Integer> fitzpatrickAwareEmojis) {
         List<CharSequence> result = new ArrayList<>(EMOJI_FITZPATRICK_MODIFIERS.size());
 
         // Put default variant without modifiers
-        StringBuilder cleanVariantBuilder = new StringBuilder();
-        str.codePoints().forEach(codePoint -> {
-            if (!EMOJI_FITZPATRICK_MODIFIERS.contains(codePoint)) {
-                cleanVariantBuilder.appendCodePoint(codePoint);
-            }
-        });
-        result.add(cleanVariantBuilder);
+        int[] cleanCodePoints = str.codePoints()
+                .filter(codePoint -> !EMOJI_FITZPATRICK_MODIFIERS.contains(codePoint))
+                .toArray();
+        result.add(new String(cleanCodePoints, 0, cleanCodePoints.length));
 
         // Put modified versions
         AtomicInteger fitzpatrickModifiersInserted = new AtomicInteger(0);
@@ -84,17 +81,23 @@ public class CharacterUtils {
                 .generate(StringBuilder::new)
                 .limit(EMOJI_FITZPATRICK_MODIFIERS.size())
                 .toArray(StringBuilder[]::new);
-        cleanVariantBuilder.codePoints().forEach(codePoint -> {
-            for (int i = 0; i < fitzpatrickVariants.length; i++) {
-                fitzpatrickVariants[i].appendCodePoint(codePoint);
-                if (fitzpatrickAwareEmojisList.contains(codePoint)) {
+
+        for (int i = 0; i < cleanCodePoints.length; i++) {
+            int codePoint = cleanCodePoints[i];
+            for (int j = 0; j < fitzpatrickVariants.length; j++) {
+                fitzpatrickVariants[j].appendCodePoint(codePoint);
+                // Skip hands if not first codePoint (workaround for "People Holding Hands" emoji)
+                if (codePoint == HANDS_EMOJI && i > 0) {
+                    continue;
+                }
+                if (fitzpatrickAwareEmojis.contains(codePoint)) {
                     fitzpatrickModifiersInserted.incrementAndGet();
-                    fitzpatrickVariants[i].appendCodePoint(EMOJI_FITZPATRICK_MODIFIERS.get(i));
+                    fitzpatrickVariants[j].appendCodePoint(EMOJI_FITZPATRICK_MODIFIERS.get(j));
                 }
             }
-        });
+        }
 
-        if (fitzpatrickModifiersInserted.get() == fitzpatrickVariants.length) {
+        if (fitzpatrickModifiersInserted.get() > 0) {
             result.addAll(Arrays.asList(fitzpatrickVariants));
             return result;
         }

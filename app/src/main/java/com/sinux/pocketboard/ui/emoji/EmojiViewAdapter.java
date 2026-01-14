@@ -18,9 +18,12 @@ import com.sinux.pocketboard.R;
 import com.sinux.pocketboard.utils.LruList;
 import com.sinux.pocketboard.utils.CharacterUtils;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.EmojiViewHolder>
         implements EmojiItemClickListener {
@@ -41,12 +44,17 @@ public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.Emoj
     };
 
     private final PocketBoardIME pocketBoardIME;
+    private final HashSet<Integer> fitzpatrickAwareEmojis;
     private final List<CharSequence> recentEmojiList;
     private final Map<Integer, Integer> recentEmojiShortcutKeys;
     private final PopupWindow popupWindow;
 
     public EmojiViewAdapter(PocketBoardIME pocketBoardIME, ViewGroup parent) {
         this.pocketBoardIME = pocketBoardIME;
+
+        fitzpatrickAwareEmojis = Arrays.stream(pocketBoardIME.getResources().getIntArray(R.array.fitzpatrick_aware_emojis))
+                .boxed()
+                .collect(Collectors.toCollection(HashSet::new));
 
         // Load recent emoji
         recentEmojiList = new LruList<>(pocketBoardIME.getResources().getInteger(R.integer.recent_emoji_max_count));
@@ -129,7 +137,6 @@ public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.Emoj
     @Override
     public void onEmojiItemLongClick(View emojiItemView, CharSequence itemValue) {
         if (!TextUtils.isEmpty(itemValue)) {
-            int[] fitzpatrickAwareEmojis = pocketBoardIME.getResources().getIntArray(R.array.fitzpatrick_aware_emojis);
             List<CharSequence> fitzpatrickVariants = CharacterUtils.getAllFitzpatrickVariants(itemValue, fitzpatrickAwareEmojis);
             if (!fitzpatrickVariants.isEmpty()) {
                 EmojiContentViewAdapter adapter = new EmojiContentViewAdapter(fitzpatrickVariants);

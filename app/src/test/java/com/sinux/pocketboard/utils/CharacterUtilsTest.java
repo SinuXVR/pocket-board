@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Set;
 
 public class CharacterUtilsTest {
 
@@ -17,7 +18,7 @@ public class CharacterUtilsTest {
 
     @Test
     public void getAllFitzpatrickVariantsTest() {
-        int[] fitzpatrickAware = {0x1F3C3, 0x1F468};
+        var fitzpatrickAware = Set.of(0x1F3C3, 0x1F468);
         Assert.assertEquals(CharacterUtils.EMOJI_FITZPATRICK_MODIFIERS.size() + 1,
                 CharacterUtils.getAllFitzpatrickVariants("\uD83C\uDFC3", fitzpatrickAware).size());
         Assert.assertEquals(CharacterUtils.EMOJI_FITZPATRICK_MODIFIERS.size() + 1,
