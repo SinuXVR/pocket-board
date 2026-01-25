@@ -66,10 +66,6 @@ public class RecentEmojiContentViewAdapter extends AbstractEmojiContentViewAdapt
                 // Swap recent emojis
                 if (emojiViewAdapter.swapRecentEmojiItem(from, to)) {
                     RecentEmojiContentViewAdapter.this.notifyItemMoved(from, to);
-                    RecentEmojiContentViewAdapter.this.notifyItemRangeChanged(
-                            Math.min(from, to),
-                            Math.abs(from - to) + 1
-                    );
                     return true;
                 }
 
@@ -104,14 +100,14 @@ public class RecentEmojiContentViewAdapter extends AbstractEmojiContentViewAdapt
                     draggingViewHolder = viewHolder;
                     removeArea.setVisibility(View.VISIBLE);
                 } else if (actionState == ItemTouchHelper.ACTION_STATE_IDLE && draggingViewHolder != null) {
+                    int position = draggingViewHolder.getBindingAdapterPosition();
                     // Remove recent emoji item if user released it above the top of recyclerView
-                    if (isViewOutside(draggingViewHolder.itemView)) {
-                        int position = draggingViewHolder.getBindingAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION && emojiViewAdapter.removeRecentEmojiItem(position)) {
+                    if (position != RecyclerView.NO_POSITION) {
+                        if (isViewOutside(draggingViewHolder.itemView) && emojiViewAdapter.removeRecentEmojiItem(position)) {
                             draggingViewHolder.itemView.setVisibility(View.GONE);
                             notifyItemRemoved(position);
-                            notifyItemRangeChanged(position, getItemCount() - position);
                         }
+                        notifyItemRangeChanged(0, getItemCount());
                     }
                     removeArea.setVisibility(View.GONE);
                     draggingViewHolder = null;
@@ -119,7 +115,7 @@ public class RecentEmojiContentViewAdapter extends AbstractEmojiContentViewAdapt
             }
 
             private boolean isViewOutside(View view) {
-                return view.getY() + (view.getHeight() / 2f) <= 0;
+                return view.getY() + (view.getHeight() / 2f) >= recyclerView.getHeight();
             }
         };
 

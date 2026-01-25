@@ -51,6 +51,8 @@ public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.Emoj
     private final PopupWindow popupWindow;
     private final ImageView recentEmojiRemoveArea;
 
+    private RecentEmojiContentViewAdapter recentEmojiContentViewAdapter;
+
     public EmojiViewAdapter(PocketBoardIME pocketBoardIME, ViewGroup parent) {
         this.pocketBoardIME = pocketBoardIME;
 
@@ -102,9 +104,12 @@ public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.Emoj
 
         if (position == EMOJI_RECENT_TAB_POSITION) {
             var recentEmojiShortcutLabels = pocketBoardIME.getResources().getStringArray(R.array.recent_emoji_shortcut_labels);
-            adapter = new RecentEmojiContentViewAdapter(
+            recentEmojiContentViewAdapter = new RecentEmojiContentViewAdapter(
                     recentEmojiList, recentEmojiShortcutLabels, contentView, recentEmojiRemoveArea, this
             );
+            adapter = recentEmojiContentViewAdapter;
+            ((ViewGroup) holder.itemView).setClipChildren(false);
+            ((ViewGroup) holder.itemView).setClipToPadding(false);
         } else if (EMOJI_CATEGORIES[position][1] > 0) {
             String emojiStr = pocketBoardIME.getString(EMOJI_CATEGORIES[position][1]);
             adapter = new EmojiContentViewAdapter(CharacterUtils.splitToCharacters(emojiStr), this);
@@ -135,7 +140,12 @@ public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.Emoj
             recentEmojiList.add(itemValue);
             saveRecentEmojiList();
             // Refresh recent tab
-            notifyItemChanged(EMOJI_RECENT_TAB_POSITION);
+            if (recentEmojiContentViewAdapter != null) {
+                recentEmojiContentViewAdapter.notifyItemRangeChanged(
+                        0,
+                        recentEmojiContentViewAdapter.getItemCount()
+                );
+            }
         }
         hidePopup();
     }

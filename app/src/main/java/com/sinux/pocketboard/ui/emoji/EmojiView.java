@@ -37,6 +37,7 @@ public class EmojiView extends LinearLayout {
 
         emojiViewAdapter = new EmojiViewAdapter(pocketBoardIME, this);
         viewPager.setAdapter(emojiViewAdapter);
+        viewPager.setOffscreenPageLimit(emojiViewAdapter.getItemCount() - 1);
 
         // Workaround to prevent removing recent emoji item clipping
         if (viewPager.getChildAt(0) instanceof RecyclerView rv) {
