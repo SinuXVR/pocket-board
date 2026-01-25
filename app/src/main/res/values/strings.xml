@@ -51,6 +51,7 @@
     <string name="pocketboard_disabled">PockedBoard disabled</string>
 
     <string name="hide_inline_suggestions_button_description">Hide inline suggestions</string>
+    <string name="emoji_remove_area_description">Remove recent emoji</string>
     <string name="emoji_button_description">Show emoji and additional symbols panel</string>
     <string name="meta_layout_button_description">Change keyboard layout</string>
     <string name="voice_button_description">Launch voice input</string>

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="input_view_height">48dp</dimen>
-    <dimen name="emoji_panel_height">212dp</dimen>
+    <dimen name="emoji_panel_height">160dp</dimen>
+    <dimen name="emoji_remove_area_height">24dp</dimen>
     <dimen name="emoji_view_item_margin">2dp</dimen>
     <dimen name="emoji_view_item_key_size">8dp</dimen>
     <dimen name="emoji_view_item_text_size">30dp</dimen>

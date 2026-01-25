@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
@@ -19,14 +20,14 @@ import com.sinux.pocketboard.utils.LruList;
 import com.sinux.pocketboard.utils.CharacterUtils;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.EmojiViewHolder>
-        implements EmojiItemClickListener {
+public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.EmojiViewHolder> {
 
     public static final int EMOJI_RECENT_TAB_POSITION = 0;
 
@@ -48,6 +49,7 @@ public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.Emoj
     private final List<CharSequence> recentEmojiList;
     private final Map<Integer, Integer> recentEmojiShortcutKeys;
     private final PopupWindow popupWindow;
+    private final ImageView recentEmojiRemoveArea;
 
     public EmojiViewAdapter(PocketBoardIME pocketBoardIME, ViewGroup parent) {
         this.pocketBoardIME = pocketBoardIME;
@@ -82,6 +84,8 @@ public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.Emoj
         for (int i = 0; i < shortcutKeys.length; i++) {
             recentEmojiShortcutKeys.put(shortcutKeys[i], i);
         }
+
+        recentEmojiRemoveArea = parent.findViewById(R.id.emojiRemoveArea);
     }
 
     @NonNull
@@ -93,22 +97,25 @@ public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.Emoj
     @Override
     public void onBindViewHolder(@NonNull EmojiViewHolder holder, int position) {
         View itemView = holder.itemView;
-        AbstractEmojiContentViewAdapter<?> adapter = null;
+        RecyclerView contentView = itemView.findViewById(R.id.contentView);
+        AbstractEmojiContentViewAdapter<?> adapter;
 
         if (position == EMOJI_RECENT_TAB_POSITION) {
             var recentEmojiShortcutLabels = pocketBoardIME.getResources().getStringArray(R.array.recent_emoji_shortcut_labels);
-            adapter = new RecentEmojiContentViewAdapter(recentEmojiList, recentEmojiShortcutLabels);
+            adapter = new RecentEmojiContentViewAdapter(
+                    recentEmojiList, recentEmojiShortcutLabels, contentView, recentEmojiRemoveArea, this
+            );
         } else if (EMOJI_CATEGORIES[position][1] > 0) {
             String emojiStr = pocketBoardIME.getString(EMOJI_CATEGORIES[position][1]);
-            adapter = new EmojiContentViewAdapter(CharacterUtils.splitToCharacters(emojiStr));
+            adapter = new EmojiContentViewAdapter(CharacterUtils.splitToCharacters(emojiStr), this);
+        } else {
+            adapter = null;
         }
 
         if (adapter != null) {
-            RecyclerView contentView = itemView.findViewById(R.id.contentView);
             contentView.setLayoutManager(new GridLayoutManager(pocketBoardIME,
                     pocketBoardIME.getResources().getInteger(R.integer.emoji_view_column_count)));
             contentView.setAdapter(adapter);
-            adapter.setItemClickListener(this);
         }
     }
 
@@ -121,7 +128,6 @@ public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.Emoj
         return EMOJI_CATEGORIES[position][0];
     }
 
-    @Override
     public void onEmojiItemClick(CharSequence itemValue) {
         pocketBoardIME.getKeyboardInputHandler().commitEmoji(itemValue);
         // Save recent emoji
@@ -134,22 +140,30 @@ public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.Emoj
         hidePopup();
     }
 
-    @Override
     public void onEmojiItemLongClick(View emojiItemView, CharSequence itemValue) {
         if (!TextUtils.isEmpty(itemValue)) {
             List<CharSequence> fitzpatrickVariants = CharacterUtils.getAllFitzpatrickVariants(itemValue, fitzpatrickAwareEmojis);
             if (!fitzpatrickVariants.isEmpty()) {
-                EmojiContentViewAdapter adapter = new EmojiContentViewAdapter(fitzpatrickVariants);
+                EmojiContentViewAdapter adapter = new EmojiContentViewAdapter(fitzpatrickVariants, this);
                 RecyclerView contentView = popupWindow.getContentView().findViewById(R.id.contentView);
                 contentView.setLayoutManager(new GridLayoutManager(pocketBoardIME, fitzpatrickVariants.size()));
                 contentView.setAdapter(adapter);
-                adapter.setItemClickListener(this);
                 popupWindow.showAsDropDown(emojiItemView);
             }
         }
     }
 
-    @Override
+    public boolean swapRecentEmojiItem(int from, int to) {
+        if (from >= 0 && from < recentEmojiList.size() && to >= 0 && to <= recentEmojiList.size()) {
+            CharSequence item = recentEmojiList.remove(from);
+            recentEmojiList.add(to, item);
+            saveRecentEmojiList();
+            return true;
+        }
+
+        return false;
+    }
+
     public boolean removeRecentEmojiItem(int position) {
         if (position >= 0 && position < recentEmojiList.size()) {
             recentEmojiList.remove(position);

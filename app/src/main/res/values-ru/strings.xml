@@ -40,6 +40,7 @@
     <string name="pocketboard_disabled">PockedBoard отключена</string>
 
     <string name="hide_inline_suggestions_button_description">Скрыть подсказки автозаполнения</string>
+    <string name="emoji_remove_area_description">Удалить недавнее emoji</string>
     <string name="emoji_button_description">Открыть панель ввода emoji и дополнительных символов</string>
     <string name="meta_layout_button_description">Сменить раскладку клавиатуры</string>
     <string name="voice_button_description">Запустить голосовой ввод</string>

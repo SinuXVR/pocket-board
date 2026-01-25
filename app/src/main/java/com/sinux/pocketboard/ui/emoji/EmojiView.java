@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.view.ContextThemeWrapper;
 import android.widget.LinearLayout;
 
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
@@ -36,6 +37,12 @@ public class EmojiView extends LinearLayout {
 
         emojiViewAdapter = new EmojiViewAdapter(pocketBoardIME, this);
         viewPager.setAdapter(emojiViewAdapter);
+
+        // Workaround to prevent removing recent emoji item clipping
+        if (viewPager.getChildAt(0) instanceof RecyclerView rv) {
+            rv.setClipChildren(false);
+            rv.setClipToPadding(false);
+        }
 
         // Create tabs
         for (int i = 0; i < emojiViewAdapter.getItemCount(); i++) {

@@ -15,7 +15,7 @@
         android:padding="@dimen/emoji_view_item_key_padding"
         android:gravity="center"
         android:textSize="@dimen/emoji_view_item_key_size"
-        android:textColor="@drawable/touch_color_selector"
+        android:textColor="?colorButtonNormal"
         tools:ignore="SpUsage" />
 
     <TextView
@@ -25,7 +25,7 @@
         android:padding="@dimen/emoji_view_item_padding"
         android:gravity="center"
         android:textSize="@dimen/emoji_view_item_text_size"
-        android:textColor="@drawable/touch_color_selector"
+        android:textColor="?colorButtonNormal"
         tools:ignore="SpUsage" />
 
 </FrameLayout>

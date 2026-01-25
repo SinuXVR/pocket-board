@@ -12,8 +12,8 @@ import java.util.List;
 
 public class EmojiContentViewAdapter extends AbstractEmojiContentViewAdapter<EmojiContentViewAdapter.EmojiItemViewHolder> {
 
-    public EmojiContentViewAdapter(List<CharSequence> data) {
-        super(data);
+    public EmojiContentViewAdapter(List<CharSequence> data, EmojiViewAdapter emojiViewAdapter) {
+        super(data, emojiViewAdapter);
     }
 
     @NonNull

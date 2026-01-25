@@ -29,15 +29,29 @@
         <com.sinux.pocketboard.ui.emoji.EmojiView
             android:id="@+id/emojiView"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/emoji_panel_height"
+            android:layout_height="wrap_content"
             android:layout_below="@id/emojiPanelDivider"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:clipChildren="false"
+            android:clipToPadding="false">
+
+            <ImageView
+                android:id="@+id/emojiRemoveArea"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/emoji_remove_area_height"
+                android:contentDescription="@string/emoji_remove_area_description"
+                android:src="@drawable/emoji_remove"
+                android:layout_marginVertical="8dp"
+                android:tint="?colorButtonNormal"
+                android:visibility="gone" />
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/emojiViewPager"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
+                android:layout_height="@dimen/emoji_panel_height"
+                android:layout_weight="1"
+                android:clipChildren="false"
+                android:clipToPadding="false" />
 
             <View
                 android:id="@+id/emojiTabsDivider"

@@ -14,10 +14,11 @@ public abstract class AbstractEmojiContentViewAdapter<V extends AbstractEmojiCon
         extends RecyclerView.Adapter<V> {
 
     private final List<CharSequence> data;
-    protected EmojiItemClickListener itemClickListener;
+    protected final EmojiViewAdapter emojiViewAdapter;
 
-    public AbstractEmojiContentViewAdapter(List<CharSequence> data) {
+    public AbstractEmojiContentViewAdapter(List<CharSequence> data, EmojiViewAdapter emojiViewAdapter) {
         this.data = data;
+        this.emojiViewAdapter = emojiViewAdapter;
     }
 
     @Override
@@ -28,10 +29,6 @@ public abstract class AbstractEmojiContentViewAdapter<V extends AbstractEmojiCon
     @Override
     public int getItemCount() {
         return data.size();
-    }
-
-    public void setItemClickListener(EmojiItemClickListener itemClickListener) {
-        this.itemClickListener = itemClickListener;
     }
 
     public class AbstractEmojiItemViewHolder extends RecyclerView.ViewHolder
@@ -48,19 +45,13 @@ public abstract class AbstractEmojiContentViewAdapter<V extends AbstractEmojiCon
 
         @Override
         public void onClick(View v) {
-            if (itemClickListener != null) {
-                itemClickListener.onEmojiItemClick(textView.getText());
-            }
+            emojiViewAdapter.onEmojiItemClick(textView.getText());
         }
 
         @Override
         public boolean onLongClick(View v) {
-            if (itemClickListener != null) {
-                itemClickListener.onEmojiItemLongClick(itemView, textView.getText());
-                return true;
-            }
-
-            return false;
+            emojiViewAdapter.onEmojiItemLongClick(itemView, textView.getText());
+            return true;
         }
     }
 }
