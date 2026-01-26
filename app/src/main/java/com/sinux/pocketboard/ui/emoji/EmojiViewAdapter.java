@@ -163,7 +163,7 @@ public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.Emoj
     }
 
     public void showAddToRecentEmojiPopup(View emojiItemView, CharSequence itemValue) {
-        if (preferencesHolder.isManualRecentEmojiEnabled()) {
+        if (preferencesHolder.isManualRecentEmojiEnabled() && !recentEmojiList.contains(itemValue)) {
             var adapter = new AddToRecentEmojiContentViewAdapter(List.of(itemValue), this);
             RecyclerView contentView = popupWindow.getContentView().findViewById(R.id.contentView);
             contentView.setLayoutManager(new GridLayoutManager(pocketBoardIME, 1));
