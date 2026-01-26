@@ -21,6 +21,7 @@
     <string name="ime_lock_sympad">Разрешить блокировку SymPad</string>
     <string name="ime_lock_sympad_summary">Удерживайте SYM для блокировки клавиатуры в режиме SymPad</string>
     <string name="ime_show_inline_suggestions">Подсказки автозаполнения</string>
+    <string name="ime_manual_recent_emoji_management">Ручное управление недавними Emoji</string>
 
     <string name="ime_panel_cat">Экранная панель</string>
     <string name="ime_show_panel">Отображать панель</string>
@@ -44,5 +45,6 @@
     <string name="emoji_button_description">Открыть панель ввода emoji и дополнительных символов</string>
     <string name="meta_layout_button_description">Сменить раскладку клавиатуры</string>
     <string name="voice_button_description">Запустить голосовой ввод</string>
+    <string name="add_to_recent_emoji_button_text">Добавить в Недавние</string>
 
 </resources>

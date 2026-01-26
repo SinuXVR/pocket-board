@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?colorPrimarySurface"
+    android:layout_gravity="center"
+    android:orientation="horizontal"
+    android:layout_margin="@dimen/emoji_view_item_margin">
+
+    <TextView
+        android:id="@+id/contentItemValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/emoji_view_item_padding"
+        android:gravity="center"
+        android:textSize="@dimen/emoji_view_item_text_size"
+        android:textColor="?colorButtonNormal"
+        tools:ignore="SpUsage" />
+
+    <Button
+        android:id="@+id/contentItemButton"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@null"
+        android:text="@string/add_to_recent_emoji_button_text"
+        android:textAllCaps="false"
+        android:drawableEnd="@drawable/emoji_recent"
+        android:drawablePadding="@dimen/emoji_view_item_padding"
+        android:padding="@dimen/emoji_view_item_padding"
+        android:gravity="center"
+        android:tint="?colorButtonNormal" />
+
+</LinearLayout>

@@ -26,6 +26,7 @@
     <string name="ime_lock_sympad">Allow SymPad lock</string>
     <string name="ime_lock_sympad_summary">Long press SYM to lock keyboard in SymPad mode</string>
     <string name="ime_show_inline_suggestions">Autofill suggestions</string>
+    <string name="ime_manual_recent_emoji_management">Manual Recent Emoji management</string>
 
     <string name="ime_panel_cat">Onscreen panel</string>
     <string name="ime_show_panel">Display onscreen panel</string>
@@ -55,6 +56,7 @@
     <string name="emoji_button_description">Show emoji and additional symbols panel</string>
     <string name="meta_layout_button_description">Change keyboard layout</string>
     <string name="voice_button_description">Launch voice input</string>
+    <string name="add_to_recent_emoji_button_text">Add to Recent</string>
 
     <!-- Non-letter and non-digit symbols which, however, can be part of a word -->
     <string name="non_letter_or_digit_exclusions">-</string>
@@ -109,6 +111,7 @@
     <string name="ime_layout_change_shortcut_prefs_key" translatable="false">ime_layout_change_shortcut</string>
     <string name="ime_lock_sympad_prefs_key" translatable="false">ime_lock_sympad</string>
     <string name="ime_show_inline_suggestions_prefs_key" translatable="false">ime_prefs_show_inline_suggestions</string>
+    <string name="ime_manual_recent_emoji_management_prefs_key" translatable="false">ime_manual_recent_emoji_management</string>
 
     <string name="ime_show_panel_prefs_key" translatable="false">ime_prefs_show_panel</string>
     <string name="ime_show_emoji_prefs_key" translatable="false">ime_prefs_show_emoji</string>

@@ -101,7 +101,7 @@ public class RecentEmojiContentViewAdapter extends AbstractEmojiContentViewAdapt
                     removeArea.setVisibility(View.VISIBLE);
                 } else if (actionState == ItemTouchHelper.ACTION_STATE_IDLE && draggingViewHolder != null) {
                     int position = draggingViewHolder.getBindingAdapterPosition();
-                    // Remove recent emoji item if user released it above the top of recyclerView
+                    // Remove recent emoji item if user released it beyond the bottom of recyclerView
                     if (position != RecyclerView.NO_POSITION) {
                         if (isViewOutside(draggingViewHolder.itemView) && emojiViewAdapter.removeRecentEmojiItem(position)) {
                             draggingViewHolder.itemView.setVisibility(View.GONE);
@@ -129,6 +129,11 @@ public class RecentEmojiContentViewAdapter extends AbstractEmojiContentViewAdapt
         public RecentEmojiItemViewHolder(@NonNull View itemView) {
             super(itemView);
             shortcutKeyLabelView = itemView.findViewById(R.id.contentItemShortcutKeyLabel);
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            return false;
         }
     }
 }

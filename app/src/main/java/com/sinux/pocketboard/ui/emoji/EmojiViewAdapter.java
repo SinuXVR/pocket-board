@@ -1,5 +1,6 @@
 package com.sinux.pocketboard.ui.emoji;
 
+import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sinux.pocketboard.PocketBoardIME;
 import com.sinux.pocketboard.R;
+import com.sinux.pocketboard.preferences.PreferencesHolder;
 import com.sinux.pocketboard.utils.LruList;
 import com.sinux.pocketboard.utils.CharacterUtils;
 
@@ -45,6 +47,7 @@ public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.Emoj
     };
 
     private final PocketBoardIME pocketBoardIME;
+    private final PreferencesHolder preferencesHolder;
     private final HashSet<Integer> fitzpatrickAwareEmojis;
     private final List<CharSequence> recentEmojiList;
     private final Map<Integer, Integer> recentEmojiShortcutKeys;
@@ -55,6 +58,7 @@ public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.Emoj
 
     public EmojiViewAdapter(PocketBoardIME pocketBoardIME, ViewGroup parent) {
         this.pocketBoardIME = pocketBoardIME;
+        this.preferencesHolder = pocketBoardIME.getPreferencesHolder();
 
         fitzpatrickAwareEmojis = Arrays.stream(pocketBoardIME.getResources().getIntArray(R.array.fitzpatrick_aware_emojis))
                 .boxed()
@@ -136,6 +140,39 @@ public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.Emoj
     public void onEmojiItemClick(CharSequence itemValue) {
         pocketBoardIME.getKeyboardInputHandler().commitEmoji(itemValue);
         // Save recent emoji
+        if (!preferencesHolder.isManualRecentEmojiEnabled()) {
+            addToRecentEmoji(itemValue);
+        }
+    }
+
+    public void onEmojiItemLongClick(View emojiItemView, CharSequence itemValue) {
+        if (!TextUtils.isEmpty(itemValue)) {
+            List<CharSequence> fitzpatrickVariants = CharacterUtils.getAllFitzpatrickVariants(itemValue, fitzpatrickAwareEmojis);
+            if (!fitzpatrickVariants.isEmpty()) {
+                // Display skin color variants
+                var adapter = new FitzpatrickEmojiContentViewAdapter(fitzpatrickVariants, this);
+                RecyclerView contentView = popupWindow.getContentView().findViewById(R.id.contentView);
+                contentView.setLayoutManager(new GridLayoutManager(pocketBoardIME, fitzpatrickVariants.size()));
+                contentView.setAdapter(adapter);
+                popupWindow.showAsDropDown(emojiItemView);
+            } else {
+                // Display add to Recent tab popup
+                showAddToRecentEmojiPopup(emojiItemView, itemValue);
+            }
+        }
+    }
+
+    public void showAddToRecentEmojiPopup(View emojiItemView, CharSequence itemValue) {
+        if (preferencesHolder.isManualRecentEmojiEnabled()) {
+            var adapter = new AddToRecentEmojiContentViewAdapter(List.of(itemValue), this);
+            RecyclerView contentView = popupWindow.getContentView().findViewById(R.id.contentView);
+            contentView.setLayoutManager(new GridLayoutManager(pocketBoardIME, 1));
+            contentView.setAdapter(adapter);
+            popupWindow.showAsDropDown(emojiItemView);
+        }
+    }
+
+    public void addToRecentEmoji(CharSequence itemValue) {
         if (!recentEmojiList.contains(itemValue)) {
             recentEmojiList.add(itemValue);
             saveRecentEmojiList();
@@ -148,19 +185,6 @@ public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.Emoj
             }
         }
         hidePopup();
-    }
-
-    public void onEmojiItemLongClick(View emojiItemView, CharSequence itemValue) {
-        if (!TextUtils.isEmpty(itemValue)) {
-            List<CharSequence> fitzpatrickVariants = CharacterUtils.getAllFitzpatrickVariants(itemValue, fitzpatrickAwareEmojis);
-            if (!fitzpatrickVariants.isEmpty()) {
-                EmojiContentViewAdapter adapter = new EmojiContentViewAdapter(fitzpatrickVariants, this);
-                RecyclerView contentView = popupWindow.getContentView().findViewById(R.id.contentView);
-                contentView.setLayoutManager(new GridLayoutManager(pocketBoardIME, fitzpatrickVariants.size()));
-                contentView.setAdapter(adapter);
-                popupWindow.showAsDropDown(emojiItemView);
-            }
-        }
     }
 
     public boolean swapRecentEmojiItem(int from, int to) {

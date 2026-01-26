@@ -59,6 +59,11 @@
         app:isPreferenceVisible="@bool/inline_autofill_support"
         android:title="@string/ime_show_inline_suggestions" />
 
+    <SwitchPreference
+        android:key="@string/ime_manual_recent_emoji_management_prefs_key"
+        android:defaultValue="false"
+        android:title="@string/ime_manual_recent_emoji_management" />
+
     <PreferenceCategory
         android:title="@string/ime_panel_cat">
 

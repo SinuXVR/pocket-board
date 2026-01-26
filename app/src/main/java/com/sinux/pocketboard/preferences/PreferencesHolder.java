@@ -32,6 +32,7 @@ public class PreferencesHolder implements SharedPreferences.OnSharedPreferenceCh
     private final String layoutChangeShortcutKey;
     private final String lockSymPadKey;
     private final String inlineSuggestionsKey;
+    private final String manualRecentEmojiKey;
     private final String showPanelKey;
     private final String showEmojiKey;
     private final String showSuggestionsKey;
@@ -58,6 +59,7 @@ public class PreferencesHolder implements SharedPreferences.OnSharedPreferenceCh
         layoutChangeShortcutKey = context.getString(R.string.ime_layout_change_shortcut_prefs_key);
         lockSymPadKey = context.getString(R.string.ime_lock_sympad_prefs_key);
         inlineSuggestionsKey = context.getString(R.string.ime_show_inline_suggestions_prefs_key);
+        manualRecentEmojiKey = context.getString(R.string.ime_manual_recent_emoji_management_prefs_key);
         showPanelKey = context.getString(R.string.ime_show_panel_prefs_key);
         showEmojiKey = context.getString(R.string.ime_show_emoji_prefs_key);
         showSuggestionsKey = context.getString(R.string.ime_show_suggestions_prefs_key);
@@ -118,6 +120,10 @@ public class PreferencesHolder implements SharedPreferences.OnSharedPreferenceCh
 
     public boolean isInlineSuggestionsEnabled() {
         return (boolean) prefValues.computeIfAbsent(inlineSuggestionsKey, key -> getValue(key, Boolean.class, true));
+    }
+
+    public boolean isManualRecentEmojiEnabled() {
+        return (boolean) prefValues.computeIfAbsent(manualRecentEmojiKey, key -> getValue(key, Boolean.class, false));
     }
 
     public boolean isShowPanelEnabled() {
