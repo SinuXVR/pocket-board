@@ -29,6 +29,9 @@
     <string name="ime_show_suggestions">Подсказки</string>
     <string name="ime_show_meta_layout">Текущая раскладка</string>
     <string name="ime_show_voice">Кнопка голосового ввода</string>
+    <string name="ime_virtual_touchpad">Виртуальный тачпад</string>
+    <string name="ime_virtual_touchpad_summary">Перемещение курсора свайпами</string>
+    <string name="ime_virtual_touchpad_speed">Чувствительность тачпада</string>
 
     <string name="ime_extra_cat">Дополнительное</string>
     <string name="ime_extra_phone_control">Управление звонками</string>

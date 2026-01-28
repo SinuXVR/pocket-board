@@ -96,6 +96,23 @@
             android:defaultValue="true"
             android:title="@string/ime_show_voice" />
 
+        <SwitchPreference
+            android:dependency="@string/ime_show_panel_prefs_key"
+            android:key="@string/ime_virtual_touchpad_prefs_key"
+            android:defaultValue="true"
+            android:title="@string/ime_virtual_touchpad"
+            android:summary="@string/ime_virtual_touchpad_summary" />
+
+        <SeekBarPreference
+            android:dependency="@string/ime_virtual_touchpad_prefs_key"
+            android:key="@string/ime_virtual_touchpad_speed_prefs_key"
+            android:title="@string/ime_virtual_touchpad_speed"
+            android:defaultValue="@integer/virtual_touchpad_speed_default_value"
+            app:min="@integer/virtual_touchpad_speed_min_value"
+            android:max="@integer/virtual_touchpad_speed_max_value"
+            app:showSeekBarValue="true"
+            app:updatesContinuously="true" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

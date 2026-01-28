@@ -136,7 +136,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_below="@id/spacer">
+        android:layout_below="@id/spacer"
+        android:clickable="true">
 
         <View
             android:layout_width="match_parent"

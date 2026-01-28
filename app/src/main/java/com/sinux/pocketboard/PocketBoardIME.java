@@ -55,6 +55,8 @@ public class PocketBoardIME extends InputMethodService {
 
     private boolean autoCapitalization;
     private boolean symPadJustUsed;
+    private int currentCursorPos = 0;
+    private int selectionAnchor = -1;
 
     private List<String> directInputEditors;
 
@@ -108,15 +110,16 @@ public class PocketBoardIME extends InputMethodService {
         InputMethodSubtype currentInputMethodSubtype = inputMethodManager.getCurrentInputMethodSubtype();
         suggestionsManager.onStartInput(attribute, currentInputMethodSubtype);
 
-        int cursorPosition = -1;
+        selectionAnchor = -1;
+        currentCursorPos = 0;
         InputConnection inputConnection = getCurrentInputConnection();
         if (inputConnection != null) {
             ExtractedText extractedText = inputConnection.getExtractedText(new ExtractedTextRequest(), 0);
             if (extractedText != null) {
-                cursorPosition = Math.min(extractedText.selectionStart, extractedText.selectionEnd);
+                currentCursorPos = Math.min(extractedText.selectionStart, extractedText.selectionEnd);
             }
         }
-        keyboardInputHandler.onStartInput(attribute, suggestionsManager.isSuggestionsAllowed(), cursorPosition);
+        keyboardInputHandler.onStartInput(attribute, suggestionsManager.isSuggestionsAllowed(), currentCursorPos);
 
         updateMetaState();
     }
@@ -294,6 +297,34 @@ public class PocketBoardIME extends InputMethodService {
         keyboardInputHandler.onUpdateSelection(getCurrentInputConnection(), newSelStart, newSelEnd, candidatesEnd);
         updateMetaState();
         suggestionsManager.update();
+
+        // Remember current cursor and selection start position
+        currentCursorPos = newSelEnd;
+        if (newSelStart == newSelEnd) {
+            selectionAnchor = -1;
+        } else {
+            selectionAnchor = newSelStart;
+        }
+    }
+
+    public void moveCursor(int offset) {
+        InputConnection ic = getCurrentInputConnection();
+        if (ic == null) return;
+
+        int newPos = currentCursorPos + offset;
+        if (newPos < 0) newPos = 0;
+
+        if (metaKeyManager.isShiftPressed()) {
+            if (selectionAnchor == -1) {
+                selectionAnchor = currentCursorPos;
+            }
+            // Set selection if shift is pressed
+            ic.setSelection(selectionAnchor, newPos);
+        } else {
+            // Otherwise just move cursor
+            selectionAnchor = -1;
+            ic.setSelection(newPos, newPos);
+        }
     }
 
     @Override

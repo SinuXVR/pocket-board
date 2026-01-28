@@ -7,6 +7,9 @@
     <integer name="recent_emoji_max_count">21</integer>
     <integer name="sympad_fix_event_repeat_count">3</integer>
     <integer name="layout_change_shortcut_event_repeat_count">3</integer>
+    <integer name="virtual_touchpad_speed_min_value">1</integer>
+    <integer name="virtual_touchpad_speed_max_value">10</integer>
+    <integer name="virtual_touchpad_speed_default_value">5</integer>
 
     <integer-array name="recent_emoji_shortcut_key_codes">
         <item>45</item><!-- Q -->

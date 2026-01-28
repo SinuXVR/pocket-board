@@ -137,6 +137,11 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 if (voiceBtnPref != null) {
                     voiceBtnPref.setChecked(isEnabled);
                 }
+                // Toggle virtual touchpad value
+                SwitchPreference virtualTouchpadPref = findPreference(getString(R.string.ime_virtual_touchpad_prefs_key));
+                if (virtualTouchpadPref != null) {
+                    virtualTouchpadPref.setChecked(isEnabled);
+                }
 
                 return true;
             });
