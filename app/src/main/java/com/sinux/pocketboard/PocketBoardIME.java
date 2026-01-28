@@ -307,14 +307,14 @@ public class PocketBoardIME extends InputMethodService {
         }
     }
 
-    public void moveCursor(int offset) {
+    public void moveCursor(int offset, boolean isShiftPressed) {
         InputConnection ic = getCurrentInputConnection();
         if (ic == null) return;
 
         int newPos = currentCursorPos + offset;
         if (newPos < 0) newPos = 0;
 
-        if (metaKeyManager.isShiftPressed()) {
+        if (isShiftPressed) {
             if (selectionAnchor == -1) {
                 selectionAnchor = currentCursorPos;
             }

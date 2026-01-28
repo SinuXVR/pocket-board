@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.util.Size;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -105,7 +106,8 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
                 case MotionEvent.ACTION_MOVE:
                     float diffX = ev.getX() - virtualTouchpadDragStartX;
                     if (Math.abs(diffX) > virtualTouchpadDragThreshold) {
-                        pocketBoardIME.moveCursor((int) (diffX / virtualTouchpadDragThreshold));
+                        boolean isShiftPressed = (ev.getMetaState() & KeyEvent.META_SHIFT_ON) != 0;
+                        pocketBoardIME.moveCursor((int) (diffX / virtualTouchpadDragThreshold), isShiftPressed);
                         virtualTouchpadDragStartX = ev.getX();
                     }
                     break;
