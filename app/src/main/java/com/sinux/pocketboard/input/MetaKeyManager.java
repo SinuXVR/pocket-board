@@ -199,10 +199,6 @@ public class MetaKeyManager {
         return shiftPressed || shift != MetaKeyState.DISABLED;
     }
 
-    public boolean isShiftPressed() {
-        return shiftPressed;
-    }
-
     public boolean isShiftFixed() {
         return shiftPressed || shift == MetaKeyState.FIXED;
     }

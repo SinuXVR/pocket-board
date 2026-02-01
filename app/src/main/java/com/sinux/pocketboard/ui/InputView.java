@@ -8,8 +8,6 @@ import android.util.AttributeSet;
 import android.util.Size;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InlineSuggestion;
@@ -36,7 +34,6 @@ import com.sinux.pocketboard.utils.VoiceInputUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class InputView extends RelativeLayout implements MetaKeyStateChangeListener {
 
@@ -51,7 +48,7 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
 
     private ViewGroup emojiPanelView;
     private EmojiView emojiView;
-    private ViewGroup mainInputViewWrapper;
+    private ViewGroup onscreenPanelView;
     private ViewGroup suggestionsView;
     private ViewGroup inlineSuggestionsViewWrapper;
     private ViewGroup inlineSuggestionsView;
@@ -63,12 +60,9 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
 
     private boolean inlineSuggestionsCancelled;
     private String currentInputMethodTag = "?";
-    private boolean virtualTouchpadEnabled;
-    private float virtualTouchpadDragThreshold;
-    private float virtualTouchpadDragStartX;
 
     public InputView(Context context, AttributeSet attrs) {
-        super(context, attrs, 0);
+        super(context, attrs);
         if (context instanceof ContextThemeWrapper) {
             this.pocketBoardIME = (PocketBoardIME) ((ContextThemeWrapper) context).getBaseContext();
         } else {
@@ -76,45 +70,6 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
         }
         preferencesHolder = pocketBoardIME.getPreferencesHolder();
         suggestions = new ArrayList<>(pocketBoardIME.getResources().getInteger(R.integer.suggestions_count));
-
-        virtualTouchpadEnabled = preferencesHolder.isVirtualTouchpadEnabled();
-        preferencesHolder.registerPreferenceChangeListener(
-                context.getString(R.string.ime_virtual_touchpad_prefs_key),
-                value -> virtualTouchpadEnabled = (Boolean) value
-        );
-
-        Consumer<Integer> setTouchpadDragThreshold = (value) ->
-                virtualTouchpadDragThreshold = context.getResources().getDisplayMetrics().density * (
-                        context.getResources().getInteger(R.integer.virtual_touchpad_speed_max_value) +
-                                context.getResources().getInteger(R.integer.virtual_touchpad_speed_min_value) -
-                                value
-                );
-        setTouchpadDragThreshold.accept(preferencesHolder.getVirtualTouchpadSpeed());
-        preferencesHolder.registerPreferenceChangeListener(
-                context.getString(R.string.ime_virtual_touchpad_speed_prefs_key),
-                value -> setTouchpadDragThreshold.accept((Integer) value)
-        );
-    }
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (virtualTouchpadEnabled && mainInputViewWrapper.getVisibility() == VISIBLE && ev.getY() >= mainInputViewWrapper.getY()) {
-            switch (ev.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    virtualTouchpadDragStartX = ev.getX();
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    float diffX = ev.getX() - virtualTouchpadDragStartX;
-                    if (Math.abs(diffX) > virtualTouchpadDragThreshold) {
-                        boolean isShiftPressed = (ev.getMetaState() & KeyEvent.META_SHIFT_ON) != 0;
-                        pocketBoardIME.moveCursor((int) (diffX / virtualTouchpadDragThreshold), isShiftPressed);
-                        virtualTouchpadDragStartX = ev.getX();
-                    }
-                    break;
-            }
-        }
-
-        return super.dispatchTouchEvent(ev);
     }
 
     @Override
@@ -122,7 +77,7 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
         super.onFinishInflate();
         emojiPanelView = findViewById(R.id.emojiPanel);
         emojiView = findViewById(R.id.emojiView);
-        mainInputViewWrapper = findViewById(R.id.inputViewWrapper);
+        onscreenPanelView = findViewById(R.id.onscreenPanelView);
         suggestionsView = findViewById(R.id.suggestionsView);
         inlineSuggestionsViewWrapper = findViewById(R.id.inlineSuggestionsViewWrapper);
         inlineSuggestionsView = findViewById(R.id.inlineSuggestionsView);
@@ -193,7 +148,7 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
         boolean showEmojiButton = preferencesHolder.isShowEmojiEnabled();
         boolean showMetaLayoutButton = preferencesHolder.isShowMetaLayoutEnabled();
         boolean showVoiceButton = preferencesHolder.isShowVoiceEnabled();
-        boolean showMainInputView = pocketBoardIME.isShouldShowIme();
+        boolean showOnscreenPanel = pocketBoardIME.isShouldShowIme();
 
         // Display current layout tag
         if (InputUtils.isNumericEditor(attribute)) {
@@ -204,14 +159,14 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
         }
 
         // Update controls visibility
-        if (showMainInputView) {
+        if (showOnscreenPanel) {
             emojiButton.setVisibility(showEmojiButton ? VISIBLE : GONE);
             updateSuggestionsViewVisibility(suggestionsAllowed);
             metaLayoutButton.setVisibility(showMetaLayoutButton ? VISIBLE : GONE);
             voiceButton.setVisibility(showVoiceButton ? VISIBLE : GONE);
-            mainInputViewWrapper.setVisibility(VISIBLE);
+            onscreenPanelView.setVisibility(VISIBLE);
         } else {
-            mainInputViewWrapper.setVisibility(GONE);
+            onscreenPanelView.setVisibility(GONE);
         }
 
         // Invalidate view to prevent glitches

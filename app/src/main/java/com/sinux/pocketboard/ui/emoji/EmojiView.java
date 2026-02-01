@@ -21,7 +21,7 @@ public class EmojiView extends LinearLayout {
     private TabLayout tabLayout;
 
     public EmojiView(Context context, AttributeSet attrs) {
-        super(context, attrs, 0);
+        super(context, attrs);
         if (context instanceof ContextThemeWrapper) {
             this.pocketBoardIME = (PocketBoardIME) ((ContextThemeWrapper) context).getBaseContext();
         } else {
@@ -43,6 +43,7 @@ public class EmojiView extends LinearLayout {
         if (viewPager.getChildAt(0) instanceof RecyclerView rv) {
             rv.setClipChildren(false);
             rv.setClipToPadding(false);
+            rv.setDefaultFocusHighlightEnabled(false);
         }
 
         // Create tabs
