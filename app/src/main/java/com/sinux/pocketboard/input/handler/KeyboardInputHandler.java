@@ -134,6 +134,7 @@ public class KeyboardInputHandler implements InputHandler {
                 textComposer.append(text);
                 if (appendSpace) {
                     textComposer.append(' ');
+                    lastKeyDownTime = SystemClock.uptimeMillis();
                 }
                 commitComposingText(inputConnection);
             } else {
