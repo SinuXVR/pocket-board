@@ -48,7 +48,7 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
 
     private ViewGroup emojiPanelView;
     private EmojiView emojiView;
-    private ViewGroup onscreenPanelView;
+    private OnscreenPanelView onscreenPanelView;
     private ViewGroup suggestionsView;
     private ViewGroup inlineSuggestionsViewWrapper;
     private ViewGroup inlineSuggestionsView;
@@ -168,6 +168,7 @@ public class InputView extends RelativeLayout implements MetaKeyStateChangeListe
         } else {
             onscreenPanelView.setVisibility(GONE);
         }
+        onscreenPanelView.onStartInputView(showOnscreenPanel);
 
         // Invalidate view to prevent glitches
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
