@@ -27,6 +27,7 @@ import java.util.function.Consumer;
 public class OnscreenPanelView extends LinearLayout {
 
     private final PocketBoardIME pocketBoardIME;
+    private final PreferencesHolder preferencesHolder;
 
     private boolean virtualTouchpadEnabled;
     private float virtualTouchpadDragThreshold;
@@ -43,7 +44,7 @@ public class OnscreenPanelView extends LinearLayout {
             this.pocketBoardIME = (PocketBoardIME) context;
         }
 
-        PreferencesHolder preferencesHolder = pocketBoardIME.getPreferencesHolder();
+        preferencesHolder = pocketBoardIME.getPreferencesHolder();
 
         virtualTouchpadEnabled = preferencesHolder.isVirtualTouchpadEnabled();
         preferencesHolder.registerPreferenceChangeListener(
@@ -67,7 +68,7 @@ public class OnscreenPanelView extends LinearLayout {
         );
 
         paint = new Paint();
-        shouldPlayTouchpadAnimation = virtualTouchpadEnabled;
+        shouldPlayTouchpadAnimation = virtualTouchpadEnabled && !preferencesHolder.isVirtualTouchpadAnimationShown();
     }
 
     @Override
@@ -93,6 +94,7 @@ public class OnscreenPanelView extends LinearLayout {
 
     public void onStartInputView(boolean isVisible) {
         if (isVisible && shouldPlayTouchpadAnimation) {
+            preferencesHolder.saveVirtualTouchpadAnimationShownValue(true);
             shouldPlayTouchpadAnimation = false;
             playVirtualTouchpadAnimation();
         }

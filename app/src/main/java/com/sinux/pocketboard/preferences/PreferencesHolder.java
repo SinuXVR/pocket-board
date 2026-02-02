@@ -31,6 +31,7 @@ public class PreferencesHolder implements SharedPreferences.OnSharedPreferenceCh
     private final String voiceInputShortcutKey;
     private final String virtualTouchpadKey;
     private final String virtualTouchpadSpeedKey;
+    private final String virtualTouchpadAnimationShownKey;
     private final String layoutChangeShortcutKey;
     private final String lockSymPadKey;
     private final String inlineSuggestionsKey;
@@ -60,6 +61,7 @@ public class PreferencesHolder implements SharedPreferences.OnSharedPreferenceCh
         voiceInputShortcutKey = context.getString(R.string.ime_voice_input_shortcut_prefs_key);
         virtualTouchpadKey = context.getString(R.string.ime_virtual_touchpad_prefs_key);
         virtualTouchpadSpeedKey = context.getString(R.string.ime_virtual_touchpad_speed_prefs_key);
+        virtualTouchpadAnimationShownKey = context.getString(R.string.ime_virtual_touchpad_animation_shown_prefs_key);
         layoutChangeShortcutKey = context.getString(R.string.ime_layout_change_shortcut_prefs_key);
         lockSymPadKey = context.getString(R.string.ime_lock_sympad_prefs_key);
         inlineSuggestionsKey = context.getString(R.string.ime_show_inline_suggestions_prefs_key);
@@ -116,6 +118,16 @@ public class PreferencesHolder implements SharedPreferences.OnSharedPreferenceCh
 
     public boolean isVirtualTouchpadEnabled() {
         return (boolean) prefValues.computeIfAbsent(virtualTouchpadKey, key -> getValue(key, Boolean.class, true));
+    }
+
+    public boolean isVirtualTouchpadAnimationShown() {
+        return (boolean) prefValues.computeIfAbsent(virtualTouchpadAnimationShownKey, key -> getValue(key, Boolean.class, false));
+    }
+
+    public void saveVirtualTouchpadAnimationShownValue(boolean value) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(virtualTouchpadAnimationShownKey, value);
+        editor.apply();
     }
 
     public int getVirtualTouchpadSpeed() {
