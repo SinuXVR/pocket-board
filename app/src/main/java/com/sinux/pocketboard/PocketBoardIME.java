@@ -298,12 +298,20 @@ public class PocketBoardIME extends InputMethodService {
         updateMetaState();
         suggestionsManager.update();
 
-        // Remember current cursor and selection start position
-        currentCursorPos = newSelEnd;
-        if (newSelStart == newSelEnd) {
-            selectionAnchor = -1;
+        if (selectionAnchor != -1) {
+            if (newSelStart == selectionAnchor) {
+                currentCursorPos = newSelEnd;
+            } else if (newSelEnd == selectionAnchor) {
+                currentCursorPos = newSelStart;
+            } else {
+                currentCursorPos = newSelEnd;
+                selectionAnchor = -1;
+            }
         } else {
-            selectionAnchor = newSelStart;
+            currentCursorPos = newSelEnd;
+            if (newSelStart != newSelEnd) {
+                selectionAnchor = newSelStart;
+            }
         }
     }
 
@@ -319,10 +327,15 @@ public class PocketBoardIME extends InputMethodService {
                 selectionAnchor = currentCursorPos;
             }
             // Set selection if shift is pressed
-            ic.setSelection(selectionAnchor, newPos);
+            currentCursorPos = newPos;
+            ic.setSelection(
+                    Math.min(selectionAnchor, newPos),
+                    Math.max(selectionAnchor, newPos)
+            );
         } else {
             // Otherwise just move cursor
             selectionAnchor = -1;
+            currentCursorPos = newPos;
             ic.setSelection(newPos, newPos);
         }
     }
