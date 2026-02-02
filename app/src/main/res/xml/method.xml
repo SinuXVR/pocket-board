@@ -43,7 +43,7 @@
   
     <subtype
         android:label="@string/input_subtype_es_ES"
-        android:subtypeId="0x04"
+        android:subtypeId="0x05"
         android:imeSubtypeLocale="es_ES"
         android:languageTag="es-es"
         android:imeSubtypeMode="keyboard"
