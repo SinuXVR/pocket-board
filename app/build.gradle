@@ -8,14 +8,14 @@ plugins {
 
 android {
     namespace 'com.sinux.pocketboard'
-    compileSdk 35
+    compileSdk 36
 
     defaultConfig {
         applicationId "com.sinux.pocketboard"
         minSdk 28
-        targetSdk 35
-        versionCode 7
-        versionName "1.1.5"
+        targetSdk 36
+        versionCode 8
+        versionName "1.1.6"
     }
 
     buildTypes {

@@ -8,12 +8,14 @@ which makes this QWERTY keyboard smartphone a little more "keyboard"
 # Key Features
 
 * Auto-correction and word suggestions (requires external spellchecker, e.g. [OpenBoard SpellChecker](https://github.com/SinuXVR/openboard-spellchecker))
+* User dictionaries support
 * Auto-capitalization
 * Inline autofill (Android 11+)
 * Voice input (requires Google Voice Input (`com.google.android.googlequicksearchbox`))
 * Emoji and special symbol palettes
 * D-Pad and media keys emulation
 * Incoming call accept/decline using shift/alt physical keys
+* Virtual Touchpad
 
 # Keyboard shortcuts
 
@@ -64,18 +66,15 @@ support fast forward/rewind events
 * Русский
     * Транслит
     * BB Passport
-
-# Contribution
-
-If you want to add new localization and new language keyboard layouts - feel free to make PR, any help appreciated
+* Español (España)
 
 # Known bugs
 
-* Digits duplication in Telegram login fields
+* Digits duplication in Telegram login fields on Android < 15
 
   _Workaround:_ use additional symbols palette (press `SYM` and go to the `$` tab) to enter phone and confirmation number
 
-* Inline suggestions password selection dialog don't appear
+* Inline suggestions password selection dialog don't appear on Android < 15
 
   _Workaround:_ before clicking on `Passwords` suggestion press `SYM` to open emoji panel. Then you can pick `Passwords`
   suggestion and everything should work as expected
