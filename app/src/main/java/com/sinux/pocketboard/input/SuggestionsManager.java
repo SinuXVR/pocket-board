@@ -57,6 +57,7 @@ public class SuggestionsManager implements SuggestionView.OnClickListener,
     private boolean aospSpellchecker;
     private boolean hasRecommendedSpellcheckerSuggestion;
     private CharSequence lastRecommendedSuggestion;
+    private boolean isPaused;
 
     public SuggestionsManager(PocketBoardIME pocketBoardIME, KeyboardInputHandler keyboardInputHandler) {
         this.pocketBoardIME = pocketBoardIME;
@@ -110,6 +111,10 @@ public class SuggestionsManager implements SuggestionView.OnClickListener,
     }
 
     public void update() {
+        if (isPaused) {
+            return;
+        }
+
         var composingText = keyboardInputHandler.getCurrentComposingText();
 
         if (TextUtils.isEmpty(composingText)) {
@@ -134,6 +139,10 @@ public class SuggestionsManager implements SuggestionView.OnClickListener,
     }
 
     public void update(CompletionInfo[] completions) {
+        if (isPaused) {
+            return;
+        }
+
         if (spellcheckerSuggestionsAllowed) {
             spellcheckerSuggestions.clear();
             hasRecommendedSpellcheckerSuggestion = false;
@@ -291,6 +300,16 @@ public class SuggestionsManager implements SuggestionView.OnClickListener,
         }
     }
 
+    public void pause() {
+        isPaused = true;
+        clear();
+    }
+
+    public void resume() {
+        isPaused = false;
+        update();
+    }
+
     private void showSuggestions() {
         if (inputView != null) {
             var merged = Stream.concat(dictionarySuggestions.stream(), spellcheckerSuggestions.stream())
@@ -302,6 +321,10 @@ public class SuggestionsManager implements SuggestionView.OnClickListener,
     }
 
     private void applySuggestion(CharSequence text) {
+        if (isPaused) {
+            return;
+        }
+
         if (!TextUtils.isEmpty(text)) {
             keyboardInputHandler.applySuggestion(text, pocketBoardIME.getCurrentInputConnection(), true);
         }
@@ -310,6 +333,11 @@ public class SuggestionsManager implements SuggestionView.OnClickListener,
     private boolean startSpellCheckerSession(InputMethodSubtype inputMethodSubtype) {
         Locale locale = Locale.forLanguageTag(inputMethodSubtype.getLanguageTag());
         TextServicesManager tsm = (TextServicesManager) pocketBoardIME.getSystemService(Context.TEXT_SERVICES_MANAGER_SERVICE);
+
+        if (tsm == null) {
+            return false;
+        }
+
         spellCheckerSession = tsm.newSpellCheckerSession(null, locale, this, false);
 
         if (spellCheckerSession != null) {

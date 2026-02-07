@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
 import com.google.android.material.color.MaterialColors;
 import com.sinux.pocketboard.PocketBoardIME;
 import com.sinux.pocketboard.R;
+import com.sinux.pocketboard.input.SuggestionsManager;
 import com.sinux.pocketboard.preferences.PreferencesHolder;
 
 import java.util.function.Consumer;
@@ -28,6 +29,13 @@ public class OnscreenPanelView extends LinearLayout {
 
     private final PocketBoardIME pocketBoardIME;
     private final PreferencesHolder preferencesHolder;
+    private final SuggestionsManager suggestionsManager;
+    private final Runnable resumeSuggestionsManager = new Runnable() {
+        @Override
+        public void run() {
+            suggestionsManager.resume();
+        }
+    };
 
     private boolean virtualTouchpadEnabled;
     private float virtualTouchpadDragThreshold;
@@ -45,6 +53,7 @@ public class OnscreenPanelView extends LinearLayout {
         }
 
         preferencesHolder = pocketBoardIME.getPreferencesHolder();
+        suggestionsManager = pocketBoardIME.getSuggestionsManager();
 
         virtualTouchpadEnabled = preferencesHolder.isVirtualTouchpadEnabled();
         preferencesHolder.registerPreferenceChangeListener(
@@ -76,9 +85,11 @@ public class OnscreenPanelView extends LinearLayout {
         if (virtualTouchpadEnabled) {
             switch (ev.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    removeCallbacks(resumeSuggestionsManager);
                     virtualTouchpadDragStartX = ev.getX();
                     break;
                 case MotionEvent.ACTION_MOVE:
+                    suggestionsManager.pause();
                     float diffX = ev.getX() - virtualTouchpadDragStartX;
                     if (Math.abs(diffX) > virtualTouchpadDragThreshold) {
                         boolean isShiftPressed = (ev.getMetaState() & KeyEvent.META_SHIFT_ON) != 0;
@@ -86,6 +97,9 @@ public class OnscreenPanelView extends LinearLayout {
                         virtualTouchpadDragStartX = ev.getX();
                     }
                     break;
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    postDelayed(resumeSuggestionsManager, pocketBoardIME.getResources().getInteger(R.integer.virtual_touchpad_suggestions_resume_delay_ms));
             }
         }
 

@@ -10,6 +10,7 @@
     <integer name="virtual_touchpad_speed_min_value">1</integer>
     <integer name="virtual_touchpad_speed_max_value">10</integer>
     <integer name="virtual_touchpad_speed_default_value">5</integer>
+    <integer name="virtual_touchpad_suggestions_resume_delay_ms">1000</integer>
 
     <integer-array name="recent_emoji_shortcut_key_codes">
         <item>45</item><!-- Q -->
