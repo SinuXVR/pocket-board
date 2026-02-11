@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.inputmethodservice.InputMethodService;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -55,8 +56,6 @@ public class PocketBoardIME extends InputMethodService {
 
     private boolean autoCapitalization;
     private boolean symPadJustUsed;
-    private int currentCursorPos = 0;
-    private int selectionAnchor = -1;
 
     private List<String> directInputEditors;
 
@@ -110,16 +109,16 @@ public class PocketBoardIME extends InputMethodService {
         InputMethodSubtype currentInputMethodSubtype = inputMethodManager.getCurrentInputMethodSubtype();
         suggestionsManager.onStartInput(attribute, currentInputMethodSubtype);
 
-        selectionAnchor = -1;
-        currentCursorPos = 0;
+        int cursorPosition = -1;
         InputConnection inputConnection = getCurrentInputConnection();
         if (inputConnection != null) {
             ExtractedText extractedText = inputConnection.getExtractedText(new ExtractedTextRequest(), 0);
             if (extractedText != null) {
-                currentCursorPos = Math.min(extractedText.selectionStart, extractedText.selectionEnd);
+                cursorPosition = Math.min(extractedText.selectionStart, extractedText.selectionEnd);
             }
         }
-        keyboardInputHandler.onStartInput(attribute, suggestionsManager.isSuggestionsAllowed(), currentCursorPos);
+        keyboardInputHandler.onStartInput(attribute, suggestionsManager.isSuggestionsAllowed(), cursorPosition);
+
 
         updateMetaState();
     }
@@ -297,47 +296,28 @@ public class PocketBoardIME extends InputMethodService {
         keyboardInputHandler.onUpdateSelection(getCurrentInputConnection(), newSelStart, newSelEnd, candidatesEnd);
         updateMetaState();
         suggestionsManager.update();
-
-        if (selectionAnchor != -1) {
-            if (newSelStart == selectionAnchor) {
-                currentCursorPos = newSelEnd;
-            } else if (newSelEnd == selectionAnchor) {
-                currentCursorPos = newSelStart;
-            } else {
-                currentCursorPos = newSelEnd;
-                selectionAnchor = -1;
-            }
-        } else {
-            currentCursorPos = newSelEnd;
-            if (newSelStart != newSelEnd) {
-                selectionAnchor = newSelStart;
-            }
-        }
     }
 
-    public void moveCursor(int offset, boolean isShiftPressed) {
+    public void moveCursor(int offset, int metaState) {
         InputConnection ic = getCurrentInputConnection();
-        if (ic == null) return;
+        if (ic == null || offset == 0) return;
 
-        int newPos = currentCursorPos + offset;
-        if (newPos < 0) newPos = 0;
+        long eventTime = SystemClock.uptimeMillis();
+        int repeatCount = Math.abs(offset);
+        int keyCode = (offset > 0) ? KeyEvent.KEYCODE_DPAD_RIGHT : KeyEvent.KEYCODE_DPAD_LEFT;
+        boolean isShiftPressed = (metaState & KeyEvent.META_SHIFT_ON) != 0;
 
-        if (isShiftPressed) {
-            if (selectionAnchor == -1) {
-                selectionAnchor = currentCursorPos;
-            }
-            // Set selection if shift is pressed
-            currentCursorPos = newPos;
-            ic.setSelection(
-                    Math.min(selectionAnchor, newPos),
-                    Math.max(selectionAnchor, newPos)
-            );
-        } else {
-            // Otherwise just move cursor
-            selectionAnchor = -1;
-            currentCursorPos = newPos;
-            ic.setSelection(newPos, newPos);
+        if (isShiftPressed)
+            ic.sendKeyEvent(new KeyEvent(eventTime, eventTime, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT, 0, metaState));
+
+        for (int i = 0; i < repeatCount; i++) {
+            ic.sendKeyEvent(new KeyEvent(eventTime, eventTime, KeyEvent.ACTION_DOWN, keyCode, i, metaState));
         }
+
+        ic.sendKeyEvent(new KeyEvent(eventTime, eventTime, KeyEvent.ACTION_UP, keyCode, 0, metaState));
+
+        if (isShiftPressed)
+            ic.sendKeyEvent(new KeyEvent(eventTime, eventTime, KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT, 0, 0));
     }
 
     @Override

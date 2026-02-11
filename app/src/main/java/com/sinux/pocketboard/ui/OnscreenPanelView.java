@@ -11,7 +11,6 @@ import android.graphics.Paint;
 import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.view.ContextThemeWrapper;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.widget.LinearLayout;
 
@@ -89,11 +88,10 @@ public class OnscreenPanelView extends LinearLayout {
                     virtualTouchpadDragStartX = ev.getX();
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    suggestionsManager.pause();
                     float diffX = ev.getX() - virtualTouchpadDragStartX;
                     if (Math.abs(diffX) > virtualTouchpadDragThreshold) {
-                        boolean isShiftPressed = (ev.getMetaState() & KeyEvent.META_SHIFT_ON) != 0;
-                        pocketBoardIME.moveCursor((int) (diffX / virtualTouchpadDragThreshold), isShiftPressed);
+                        suggestionsManager.pause();
+                        pocketBoardIME.moveCursor((int) (diffX / virtualTouchpadDragThreshold), ev.getMetaState());
                         virtualTouchpadDragStartX = ev.getX();
                     }
                     break;
