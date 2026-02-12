@@ -189,7 +189,9 @@ public class PocketBoardIME extends InputMethodService {
 
                 // Meta keys
                 if (metaKeyManager.handleKeyDown(keyCode, event)) {
-                    return true;
+                    return Build.VERSION.SDK_INT <= Build.VERSION_CODES.S ||
+                            (keyCode != KeyEvent.KEYCODE_SHIFT_LEFT && keyCode != KeyEvent.KEYCODE_SHIFT_RIGHT &&
+                                    keyCode != KeyEvent.KEYCODE_ALT_LEFT && keyCode != KeyEvent.KEYCODE_ALT_RIGHT);
                 }
 
                 InputConnection inputConnection = getCurrentInputConnection();
@@ -234,16 +236,7 @@ public class PocketBoardIME extends InputMethodService {
                         }
                     }
                 } else {
-                    /*
-                      This code runs when user presses a key, but there is no focused editor available to handle this input.
-                      We consume input but inform the system, because in some cases it can automatically focus on
-                      some editor and call the IME
-                     */
-                    if (event.isPrintingKey()) {
-                        inputConnection.performEditorAction(EditorInfo.IME_ACTION_NONE);
-                    } else {
-                        return false;
-                    }
+                    return false;
                 }
         }
 
@@ -263,7 +256,7 @@ public class PocketBoardIME extends InputMethodService {
             return false;
         }
 
-        if (metaKeyManager.isSymFixed()) {
+        if (metaKeyManager.isSymFixed() || symPadInputHandler.hasPressedKey(keyCode)) {
             if (symPadInputHandler.handleKeyUp(keyCode, event, inputConnection,
                     metaKeyManager.isShiftEnabled(), metaKeyManager.isAltEnabled())) {
                 return true;
@@ -282,7 +275,9 @@ public class PocketBoardIME extends InputMethodService {
                 }
             }
 
-            return true;
+            return Build.VERSION.SDK_INT <= Build.VERSION_CODES.S ||
+                    (keyCode != KeyEvent.KEYCODE_SHIFT_LEFT && keyCode != KeyEvent.KEYCODE_SHIFT_RIGHT &&
+                            keyCode != KeyEvent.KEYCODE_ALT_LEFT && keyCode != KeyEvent.KEYCODE_ALT_RIGHT);
         }
 
         return (editorInfo.inputType != InputType.TYPE_NULL || keyboardInputHandler.isInRawInputMode()) &&
@@ -306,9 +301,18 @@ public class PocketBoardIME extends InputMethodService {
         int repeatCount = Math.abs(offset);
         int keyCode = (offset > 0) ? KeyEvent.KEYCODE_DPAD_RIGHT : KeyEvent.KEYCODE_DPAD_LEFT;
         boolean isShiftPressed = (metaState & KeyEvent.META_SHIFT_ON) != 0;
+        boolean hasSelectedText = !TextUtils.isEmpty(ic.getSelectedText(0));
 
-        if (isShiftPressed)
+        if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT && !hasSelectedText && TextUtils.isEmpty(ic.getTextAfterCursor(1, 0))) {
+            return;
+        } else if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT  && !hasSelectedText && TextUtils.isEmpty(ic.getTextBeforeCursor(1, 0))) {
+            return;
+        }
+
+        // TouchMode issue workaround for android < 12L
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S && isShiftPressed) {
             ic.sendKeyEvent(new KeyEvent(eventTime, eventTime, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT, 0, metaState));
+        }
 
         for (int i = 0; i < repeatCount; i++) {
             ic.sendKeyEvent(new KeyEvent(eventTime, eventTime, KeyEvent.ACTION_DOWN, keyCode, i, metaState));
@@ -316,8 +320,10 @@ public class PocketBoardIME extends InputMethodService {
 
         ic.sendKeyEvent(new KeyEvent(eventTime, eventTime, KeyEvent.ACTION_UP, keyCode, 0, metaState));
 
-        if (isShiftPressed)
+        // TouchMode issue workaround for android < 12L
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S && isShiftPressed) {
             ic.sendKeyEvent(new KeyEvent(eventTime, eventTime, KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT, 0, 0));
+        }
     }
 
     @Override

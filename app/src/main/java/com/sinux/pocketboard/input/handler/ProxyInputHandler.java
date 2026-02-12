@@ -1,6 +1,5 @@
 package com.sinux.pocketboard.input.handler;
 
-import android.view.InputDevice;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputConnection;
@@ -28,14 +27,14 @@ public abstract class ProxyInputHandler implements InputHandler {
         if (event.getRepeatCount() == 0) {
             lastKeyDownTime = event.getEventTime();
             if (longKeyCode == 0) {
-                handleKeyPress(shortKeyCode, event, inputConnection, shiftEnabled, altEnabled);
+                handleKeyDownInternal(shortKeyCode, event, inputConnection);
                 return true;
             }
         } else if (longKeyCode != 0 && (event.getEventTime() - lastKeyDownTime > keyLongPressDuration)) {
-            handleKeyPress(longKeyCode, event, inputConnection, shiftEnabled, altEnabled);
+            handleKeyLongPressInternal(longKeyCode, event, inputConnection);
             return true;
         } else {
-            handleKeyPress(shortKeyCode, event, inputConnection, shiftEnabled, altEnabled);
+            handleKeyDownInternal(shortKeyCode, event, inputConnection);
             return true;
         }
 
@@ -51,9 +50,17 @@ public abstract class ProxyInputHandler implements InputHandler {
         }
 
         int longKeyCode = translateLongPressKeyCode(keyCode);
-        if (longKeyCode != 0 && (event.getEventTime() - lastKeyDownTime <= keyLongPressDuration)) {
-            handleKeyPress(shortKeyCode, event, inputConnection, shiftEnabled, altEnabled);
+        if (longKeyCode != 0) {
+            if ((event.getEventTime() - lastKeyDownTime <= keyLongPressDuration)) {
+                handleKeyDownInternal(shortKeyCode, event, inputConnection);
+                handleKeyUpInternal(shortKeyCode, event, inputConnection);
+            } else {
+                handleKeyUpInternal(longKeyCode, event, inputConnection);
+            }
+            return true;
         }
+
+        handleKeyUpInternal(shortKeyCode, event, inputConnection);
 
         return true;
     }
@@ -64,11 +71,11 @@ public abstract class ProxyInputHandler implements InputHandler {
         return 0;
     }
 
-    protected void handleKeyPress(int translatedKeyCode, KeyEvent originalEvent,
-                                  InputConnection inputConnection, boolean shiftEnabled, boolean altEnabled) {
-        inputConnection.sendKeyEvent(createNewKeyEvent(translatedKeyCode, originalEvent, KeyEvent.ACTION_DOWN, InputDevice.SOURCE_KEYBOARD));
-        inputConnection.sendKeyEvent(createNewKeyEvent(translatedKeyCode, originalEvent, KeyEvent.ACTION_UP, InputDevice.SOURCE_KEYBOARD));
-    }
+    protected abstract void handleKeyDownInternal(int translatedKeyCode, KeyEvent originalEvent, InputConnection inputConnection);
+
+    protected abstract void handleKeyUpInternal(int translatedKeyCode, KeyEvent originalEvent, InputConnection inputConnection);
+
+    protected abstract void handleKeyLongPressInternal(int translatedKeyCode, KeyEvent originalEvent, InputConnection inputConnection);
 
     protected KeyEvent createNewKeyEvent(int translatedKeyCode, KeyEvent originalEvent, int action, int source) {
         int shiftState = originalEvent.getMetaState() & KeyEvent.META_SHIFT_ON;
