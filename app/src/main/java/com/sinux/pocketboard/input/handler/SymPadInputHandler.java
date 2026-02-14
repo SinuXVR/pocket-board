@@ -84,11 +84,11 @@ public class SymPadInputHandler extends ProxyInputHandler {
             dispatchMediaKeyEvent(translatedKeyCode, originalEvent, KeyEvent.ACTION_UP);
         } else {
             inputConnection.sendKeyEvent(createNewKeyEvent(translatedKeyCode, originalEvent, KeyEvent.ACTION_UP, InputDevice.SOURCE_DPAD));
-            if (originalEvent.isShiftPressed() || isShiftPressed) {
+            if (isShiftPressed) {
                 isShiftPressed = false;
                 inputConnection.sendKeyEvent(createNewKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, originalEvent, KeyEvent.ACTION_UP, InputDevice.SOURCE_KEYBOARD));
             }
-            if (originalEvent.isAltPressed() || isAltPressed) {
+            if (isAltPressed) {
                 isAltPressed = false;
                 inputConnection.sendKeyEvent(createNewKeyEvent(KeyEvent.KEYCODE_ALT_LEFT, originalEvent, KeyEvent.ACTION_UP, InputDevice.SOURCE_KEYBOARD));
             }
