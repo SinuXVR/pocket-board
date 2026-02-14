@@ -2,31 +2,23 @@ package com.sinux.pocketboard.input.handler;
 
 import android.content.Context;
 import android.media.AudioManager;
-import android.os.Build;
 import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputConnection;
 
 import com.sinux.pocketboard.PocketBoardIME;
 
-import java.util.LinkedHashSet;
-
 public class SymPadInputHandler extends ProxyInputHandler {
 
     private final PocketBoardIME pocketBoardIME;
-    private final LinkedHashSet<Integer> pressedOriginalKeyCodes;
 
     private AudioManager audioManager;
-    private boolean isLegacyShiftPressed;
+    private boolean isShiftPressed;
+    private boolean isAltPressed;
 
     public SymPadInputHandler(PocketBoardIME pocketBoardIME) {
         super(pocketBoardIME);
         this.pocketBoardIME = pocketBoardIME;
-        pressedOriginalKeyCodes = new LinkedHashSet<>(4);
-    }
-
-    public boolean hasPressedKey(int originalKeyCode) {
-        return pressedOriginalKeyCodes.contains(originalKeyCode);
     }
 
     @Override
@@ -49,6 +41,12 @@ public class SymPadInputHandler extends ProxyInputHandler {
             case KeyEvent.KEYCODE_V -> KeyEvent.KEYCODE_MEDIA_PREVIOUS;
             case KeyEvent.KEYCODE_SPACE -> KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE;
             case KeyEvent.KEYCODE_B -> KeyEvent.KEYCODE_MEDIA_NEXT;
+            // T - Esc, Y - Enter
+            case KeyEvent.KEYCODE_T -> KeyEvent.KEYCODE_ESCAPE;
+            case KeyEvent.KEYCODE_Y -> KeyEvent.KEYCODE_ENTER;
+            // G - Backspace, H - Forward delete
+            case KeyEvent.KEYCODE_G -> KeyEvent.KEYCODE_DEL;
+            case KeyEvent.KEYCODE_H -> KeyEvent.KEYCODE_FORWARD_DEL;
             default -> 0;
         };
     }
@@ -65,14 +63,16 @@ public class SymPadInputHandler extends ProxyInputHandler {
 
     @Override
     protected void handleKeyDownInternal(int translatedKeyCode, KeyEvent originalEvent, InputConnection inputConnection) {
-        pressedOriginalKeyCodes.add(originalEvent.getKeyCode());
         if (isPlaybackKey(translatedKeyCode)) {
             dispatchMediaKeyEvent(translatedKeyCode, originalEvent, KeyEvent.ACTION_DOWN);
         } else {
-            // TouchMode issue workaround for android < 12L
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S && originalEvent.isShiftPressed() && !isLegacyShiftPressed) {
-                isLegacyShiftPressed = true;
+            if (originalEvent.isShiftPressed() && !isShiftPressed) {
+                isShiftPressed = true;
                 inputConnection.sendKeyEvent(createNewKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, originalEvent, KeyEvent.ACTION_DOWN, InputDevice.SOURCE_KEYBOARD));
+            }
+            if (originalEvent.isAltPressed() && !isAltPressed) {
+                isAltPressed = true;
+                inputConnection.sendKeyEvent(createNewKeyEvent(KeyEvent.KEYCODE_ALT_LEFT, originalEvent, KeyEvent.ACTION_DOWN, InputDevice.SOURCE_KEYBOARD));
             }
             inputConnection.sendKeyEvent(createNewKeyEvent(translatedKeyCode, originalEvent, KeyEvent.ACTION_DOWN, InputDevice.SOURCE_DPAD));
         }
@@ -80,22 +80,23 @@ public class SymPadInputHandler extends ProxyInputHandler {
 
     @Override
     protected void handleKeyUpInternal(int translatedKeyCode, KeyEvent originalEvent, InputConnection inputConnection) {
-        pressedOriginalKeyCodes.remove(originalEvent.getKeyCode());
         if (isPlaybackKey(translatedKeyCode)) {
             dispatchMediaKeyEvent(translatedKeyCode, originalEvent, KeyEvent.ACTION_UP);
         } else {
             inputConnection.sendKeyEvent(createNewKeyEvent(translatedKeyCode, originalEvent, KeyEvent.ACTION_UP, InputDevice.SOURCE_DPAD));
-            // TouchMode issue workaround for android < 12L
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S && (originalEvent.isShiftPressed() || isLegacyShiftPressed)) {
-                isLegacyShiftPressed = false;
+            if (originalEvent.isShiftPressed() || isShiftPressed) {
+                isShiftPressed = false;
                 inputConnection.sendKeyEvent(createNewKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, originalEvent, KeyEvent.ACTION_UP, InputDevice.SOURCE_KEYBOARD));
+            }
+            if (originalEvent.isAltPressed() || isAltPressed) {
+                isAltPressed = false;
+                inputConnection.sendKeyEvent(createNewKeyEvent(KeyEvent.KEYCODE_ALT_LEFT, originalEvent, KeyEvent.ACTION_UP, InputDevice.SOURCE_KEYBOARD));
             }
         }
     }
 
     @Override
     protected void handleKeyLongPressInternal(int translatedKeyCode, KeyEvent originalEvent, InputConnection inputConnection) {
-        pressedOriginalKeyCodes.add(originalEvent.getKeyCode());
         if (isPlaybackKey(translatedKeyCode)) {
             dispatchMediaKeyEvent(translatedKeyCode, originalEvent, KeyEvent.ACTION_DOWN);
         }

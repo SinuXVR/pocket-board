@@ -6,18 +6,27 @@ import android.view.inputmethod.InputConnection;
 
 import com.sinux.pocketboard.PocketBoardIME;
 
+import java.util.LinkedHashSet;
+
 public abstract class ProxyInputHandler implements InputHandler {
 
     private final long keyLongPressDuration;
 
     private long lastKeyDownTime;
+    private final LinkedHashSet<Integer> pressedOriginalKeyCodes;
 
     public ProxyInputHandler(PocketBoardIME pocketBoardIME) {
         keyLongPressDuration = pocketBoardIME.getPreferencesHolder().getLongKeyPressDuration();
+        pressedOriginalKeyCodes = new LinkedHashSet<>(4);
+    }
+
+    public boolean hasPressedKey(int originalKeyCode) {
+        return pressedOriginalKeyCodes.contains(originalKeyCode);
     }
 
     @Override
     public boolean handleKeyDown(int keyCode, KeyEvent event, InputConnection inputConnection, boolean shiftEnabled, boolean altEnabled) {
+        pressedOriginalKeyCodes.add(event.getKeyCode());
         int shortKeyCode = translateShortPressKeyCode(keyCode);
         if (shortKeyCode == 0) {
             return false;
@@ -44,6 +53,9 @@ public abstract class ProxyInputHandler implements InputHandler {
     @Override
     public boolean handleKeyUp(int keyCode, KeyEvent event, InputConnection inputConnection,
                                boolean shiftEnabled, boolean altEnabled) {
+        if (!pressedOriginalKeyCodes.remove(event.getKeyCode()))
+            return false;
+
         int shortKeyCode = translateShortPressKeyCode(keyCode);
         if (shortKeyCode == 0) {
             return false;
@@ -78,9 +90,9 @@ public abstract class ProxyInputHandler implements InputHandler {
     protected abstract void handleKeyLongPressInternal(int translatedKeyCode, KeyEvent originalEvent, InputConnection inputConnection);
 
     protected KeyEvent createNewKeyEvent(int translatedKeyCode, KeyEvent originalEvent, int action, int source) {
-        int shiftState = originalEvent.getMetaState() & KeyEvent.META_SHIFT_ON;
+        int metaState = originalEvent.getMetaState() & (KeyEvent.META_SHIFT_ON | KeyEvent.META_ALT_ON | KeyEvent.META_CTRL_ON);
         return new KeyEvent(originalEvent.getDownTime(), originalEvent.getEventTime(),
-                action, translatedKeyCode, originalEvent.getRepeatCount(), shiftState,
+                action, translatedKeyCode, originalEvent.getRepeatCount(), metaState,
                 KeyCharacterMap.VIRTUAL_KEYBOARD, translatedKeyCode, 0, source);
     }
 }

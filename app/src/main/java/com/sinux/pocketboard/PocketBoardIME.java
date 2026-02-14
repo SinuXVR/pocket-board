@@ -177,74 +177,12 @@ public class PocketBoardIME extends InputMethodService {
                 return false;
             case KeyEvent.KEYCODE_VOLUME_UP:
             case KeyEvent.KEYCODE_VOLUME_DOWN:
+            case KeyEvent.KEYCODE_CTRL_LEFT:
+            case KeyEvent.KEYCODE_CTRL_RIGHT:
+            case KeyEvent.KEYCODE_ENTER:
                 return false;
-            default:
-                // Voice input shortcut
-                if (preferencesHolder.isVoiceInputShortcutEnabled() &&
-                        event.isCtrlPressed() && event.isAltPressed() &&
-                        event.getRepeatCount() == 0 && isInputViewShown()) {
-                    VoiceInputUtils.launchVoiceIME(this);
-                    return true;
-                }
-
-                // Meta keys
-                if (metaKeyManager.handleKeyDown(keyCode, event)) {
-                    return Build.VERSION.SDK_INT <= Build.VERSION_CODES.S ||
-                            (keyCode != KeyEvent.KEYCODE_SHIFT_LEFT && keyCode != KeyEvent.KEYCODE_SHIFT_RIGHT &&
-                                    keyCode != KeyEvent.KEYCODE_ALT_LEFT && keyCode != KeyEvent.KEYCODE_ALT_RIGHT);
-                }
-
-                InputConnection inputConnection = getCurrentInputConnection();
-                if (inputConnection == null) {
-                    return false;
-                }
-
-                // Skip CTRL+X shortcuts
-                if (event.isCtrlPressed()) {
-                    return false;
-                }
-
-                // Emulate D-pad and some media keys
-                if (metaKeyManager.isSymFixed()) {
-                    symPadInputHandler.handleKeyDown(keyCode, event, inputConnection,
-                            metaKeyManager.isShiftEnabled(), metaKeyManager.isAltEnabled());
-                    symPadJustUsed = true;
-                    return true;
-                }
-
-                if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                    return false;
-                }
-
-                EditorInfo editorInfo = getCurrentInputEditorInfo();
-                if (editorInfo != null && directInputEditors.contains(editorInfo.packageName)) {
-                    return false;
-                }
-
-                // Handle text input in Keyboard mode
-                if (editorInfo != null && (editorInfo.inputType != InputType.TYPE_NULL || keyboardInputHandler.isInRawInputMode())) {
-                    // Handle emoji shortcuts
-                    if (inputView != null && inputView.isEmojiPanelVisible() && inputView.handleEmojiShortcut(keyCode)) {
-                        return true;
-                    }
-                    // Handle input
-                    if (keyboardInputHandler.handleKeyDown(keyCode, event, inputConnection,
-                            metaKeyManager.isShiftEnabled(), metaKeyManager.isAltEnabled())) {
-                        // Show input view if it's hidden
-                        if (!isInputViewShown()) {
-                            requestShowSelf(InputMethodManager.SHOW_FORCED);
-                        }
-                    }
-                } else {
-                    return false;
-                }
         }
 
-        return true;
-    }
-
-    @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
         InputConnection inputConnection = getCurrentInputConnection();
         EditorInfo editorInfo = getCurrentInputEditorInfo();
 
@@ -256,13 +194,78 @@ public class PocketBoardIME extends InputMethodService {
             return false;
         }
 
-        if (metaKeyManager.isSymFixed() || symPadInputHandler.hasPressedKey(keyCode)) {
-            if (symPadInputHandler.handleKeyUp(keyCode, event, inputConnection,
+        // Voice input shortcut
+        if (preferencesHolder.isVoiceInputShortcutEnabled() &&
+                event.isCtrlPressed() && event.isAltPressed() &&
+                event.getRepeatCount() == 0 && isInputViewShown()) {
+            VoiceInputUtils.launchVoiceIME(this);
+            return false;
+        }
+
+        // Meta keys
+        if (metaKeyManager.handleKeyDown(keyCode, event)) {
+            return true;
+        }
+
+        // Skip CTRL+X shortcuts
+        if (event.isCtrlPressed() && !metaKeyManager.isSymFixed()) {
+            return false;
+        }
+
+        // Emulate D-pad and some media keys
+        if (metaKeyManager.isSymFixed()) {
+            keyboardInputHandler.resetComposing(inputConnection);
+            if (symPadInputHandler.handleKeyDown(keyCode, event, inputConnection,
                     metaKeyManager.isShiftEnabled(), metaKeyManager.isAltEnabled())) {
+                symPadJustUsed = true;
                 return true;
             }
         }
 
+        // Handle text input in Keyboard mode
+        if (editorInfo.inputType != InputType.TYPE_NULL || keyboardInputHandler.isInRawInputMode()) {
+            // Handle emoji shortcuts
+            if (inputView != null && inputView.isEmojiPanelVisible() && inputView.handleEmojiShortcut(keyCode)) {
+                return true;
+            }
+            // Handle input
+            if (keyboardInputHandler.handleKeyDown(keyCode, event, inputConnection,
+                    metaKeyManager.isShiftEnabled(), metaKeyManager.isAltEnabled())) {
+                // Show input view if it's hidden
+                if (!isInputViewShown()) {
+                    requestShowSelf(InputMethodManager.SHOW_FORCED);
+                }
+            }
+        } else {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_VOLUME_UP:
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+            case KeyEvent.KEYCODE_CTRL_LEFT:
+            case KeyEvent.KEYCODE_CTRL_RIGHT:
+            case KeyEvent.KEYCODE_ENTER:
+                return false;
+        }
+
+        InputConnection inputConnection = getCurrentInputConnection();
+        EditorInfo editorInfo = getCurrentInputEditorInfo();
+
+        if (inputConnection == null || editorInfo == null) {
+            return false;
+        }
+
+        if (directInputEditors.contains(editorInfo.packageName)) {
+            return false;
+        }
+
+        // Meta keys
         if (metaKeyManager.handleKeyUp(keyCode, event)) {
             if (keyCode == KeyEvent.KEYCODE_SYM || keyCode == KeyEvent.KEYCODE_PICTSYMBOLS) {
                 if (!symPadJustUsed && !metaKeyManager.isSymFixed()) {
@@ -275,9 +278,20 @@ public class PocketBoardIME extends InputMethodService {
                 }
             }
 
-            return Build.VERSION.SDK_INT <= Build.VERSION_CODES.S ||
-                    (keyCode != KeyEvent.KEYCODE_SHIFT_LEFT && keyCode != KeyEvent.KEYCODE_SHIFT_RIGHT &&
-                            keyCode != KeyEvent.KEYCODE_ALT_LEFT && keyCode != KeyEvent.KEYCODE_ALT_RIGHT);
+            return true;
+        }
+
+        // Skip CTRL+X shortcuts
+        if (event.isCtrlPressed() && !metaKeyManager.isSymFixed()) {
+            return false;
+        }
+
+        // Emulate D-pad and some media keys
+        if (metaKeyManager.isSymFixed() || symPadInputHandler.hasPressedKey(keyCode)) {
+            if (symPadInputHandler.handleKeyUp(keyCode, event, inputConnection,
+                    metaKeyManager.isShiftEnabled(), metaKeyManager.isAltEnabled())) {
+                return true;
+            }
         }
 
         return (editorInfo.inputType != InputType.TYPE_NULL || keyboardInputHandler.isInRawInputMode()) &&
@@ -300,19 +314,21 @@ public class PocketBoardIME extends InputMethodService {
         long eventTime = SystemClock.uptimeMillis();
         int repeatCount = Math.abs(offset);
         int keyCode = (offset > 0) ? KeyEvent.KEYCODE_DPAD_RIGHT : KeyEvent.KEYCODE_DPAD_LEFT;
+        boolean isAltPressed = (metaState & KeyEvent.META_ALT_ON) != 0;
         boolean isShiftPressed = (metaState & KeyEvent.META_SHIFT_ON) != 0;
         boolean hasSelectedText = !TextUtils.isEmpty(ic.getSelectedText(0));
 
         if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT && !hasSelectedText && TextUtils.isEmpty(ic.getTextAfterCursor(1, 0))) {
             return;
-        } else if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT  && !hasSelectedText && TextUtils.isEmpty(ic.getTextBeforeCursor(1, 0))) {
+        } else if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT && !hasSelectedText && TextUtils.isEmpty(ic.getTextBeforeCursor(1, 0))) {
             return;
         }
 
-        // TouchMode issue workaround for android < 12L
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S && isShiftPressed) {
+
+        if (isAltPressed)
+            ic.sendKeyEvent(new KeyEvent(eventTime, eventTime, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ALT_LEFT, 0, metaState));
+        if (isShiftPressed)
             ic.sendKeyEvent(new KeyEvent(eventTime, eventTime, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT, 0, metaState));
-        }
 
         for (int i = 0; i < repeatCount; i++) {
             ic.sendKeyEvent(new KeyEvent(eventTime, eventTime, KeyEvent.ACTION_DOWN, keyCode, i, metaState));
@@ -320,10 +336,10 @@ public class PocketBoardIME extends InputMethodService {
 
         ic.sendKeyEvent(new KeyEvent(eventTime, eventTime, KeyEvent.ACTION_UP, keyCode, 0, metaState));
 
-        // TouchMode issue workaround for android < 12L
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S && isShiftPressed) {
+        if (isAltPressed)
+            ic.sendKeyEvent(new KeyEvent(eventTime, eventTime, KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ALT_LEFT, 0, 0));
+        if (isShiftPressed)
             ic.sendKeyEvent(new KeyEvent(eventTime, eventTime, KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT, 0, 0));
-        }
     }
 
     @Override

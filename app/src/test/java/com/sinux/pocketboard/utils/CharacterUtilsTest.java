@@ -33,6 +33,7 @@ public class CharacterUtilsTest {
     public void getLastCharacterLengthTest() {
         String str = "Running woman emoji: \uD83C\uDFC3\uD83C\uDFFB\u200D♀";
         Assert.assertEquals(6, CharacterUtils.getLastCharacterLength(str));
+        Assert.assertEquals(1, CharacterUtils.getLastCharacterLength(str + "x"));
     }
 
     @Test

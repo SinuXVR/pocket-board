@@ -459,6 +459,12 @@ public class KeyboardInputHandler implements InputHandler {
         }
     }
 
+    public void resetComposing(InputConnection inputConnection) {
+        if (composingEnabled) {
+            commitComposingText(inputConnection);
+        }
+    }
+
     public void commitEmoji(CharSequence itemValue) {
         InputConnection inputConnection = pocketBoardIME.getCurrentInputConnection();
         commitComposingText(inputConnection);

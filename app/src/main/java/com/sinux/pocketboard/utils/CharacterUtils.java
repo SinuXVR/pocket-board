@@ -1,5 +1,7 @@
 package com.sinux.pocketboard.utils;
 
+import android.text.TextUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -110,17 +112,26 @@ public class CharacterUtils {
      * Can handle ZWJ-combined emoji as well
      */
     public static int getLastCharacterLength(CharSequence str) {
+        if (TextUtils.isEmpty(str))
+            return 0;
+
+        int length = str.length();
         int result = 0;
-        int[] codePoints = str.codePoints().toArray();
+        int i = length;
         boolean afterModifier = false;
         boolean afterFlagPart = false;
 
-        for (int i = codePoints.length - 1; i >= 0; i--) {
-            int codePoint = codePoints[i];
-            if (i == codePoints.length - 1 || afterModifier || afterFlagPart || codePoint == ZWJ) {
-                result += Character.charCount(codePoint);
+        while (i > 0) {
+            int codePoint = Character.codePointBefore(str, i);
+
+            if (i == length || afterModifier || afterFlagPart || codePoint == ZWJ) {
+                int cpLength = Character.charCount(codePoint);
+                result += cpLength;
+
                 afterModifier = isEmojiModifier(codePoint);
-                afterFlagPart = ((i == codePoints.length - 1) && isCommonFlagPart(codePoint)) || isSubdivisionFlagPart(codePoint);
+                afterFlagPart = (i == length && isCommonFlagPart(codePoint)) || isSubdivisionFlagPart(codePoint);
+
+                i -= cpLength;
             } else {
                 break;
             }

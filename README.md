@@ -44,6 +44,10 @@ _Tip:_ some keys have more than one alternate (and main) value. You can iterate 
 * `Q`, `W`, `E`, `A`, `S`, `D`, `Z`, `X`, `C` or `I`, `O`, `P`, `K`, `L`, `Del`, `N`, `M`, `Ent` - 9-positional D-Pad
 * `R` or `U` - Home
 * `F` or `J` - End
+* `T` - Escape
+* `Y` - Enter
+* `G` - Backspace
+* `H` - Del (forward delete)
 * `V` - previous track (short press) or rewind (hold)
 * `SPACE` - Play/Pause
 * `B` - next track (short press) or fast forward (hold)
