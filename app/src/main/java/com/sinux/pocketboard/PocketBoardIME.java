@@ -37,7 +37,6 @@ import com.sinux.pocketboard.preferences.PreferencesHolder;
 import com.sinux.pocketboard.ui.InputView;
 import com.sinux.pocketboard.utils.InputUtils;
 import com.sinux.pocketboard.utils.ToastMessageUtils;
-import com.sinux.pocketboard.utils.VoiceInputUtils;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -177,40 +176,25 @@ public class PocketBoardIME extends InputMethodService {
                 return false;
             case KeyEvent.KEYCODE_VOLUME_UP:
             case KeyEvent.KEYCODE_VOLUME_DOWN:
-            case KeyEvent.KEYCODE_CTRL_LEFT:
-            case KeyEvent.KEYCODE_CTRL_RIGHT:
-            case KeyEvent.KEYCODE_ENTER:
                 return false;
         }
 
         InputConnection inputConnection = getCurrentInputConnection();
         EditorInfo editorInfo = getCurrentInputEditorInfo();
 
-        if (inputConnection == null || editorInfo == null) {
+        if (editorInfo != null && directInputEditors.contains(editorInfo.packageName))
             return false;
-        }
 
-        if (directInputEditors.contains(editorInfo.packageName)) {
-            return false;
-        }
-
-        // Voice input shortcut
-        if (preferencesHolder.isVoiceInputShortcutEnabled() &&
-                event.isCtrlPressed() && event.isAltPressed() &&
-                event.getRepeatCount() == 0 && isInputViewShown()) {
-            VoiceInputUtils.launchVoiceIME(this);
-            return false;
-        }
-
-        // Meta keys
-        if (metaKeyManager.handleKeyDown(keyCode, event)) {
+        // Meta keys and shortcuts
+        if (metaKeyManager.handleKeyDown(keyCode, event, inputConnection))
             return true;
-        }
 
         // Skip CTRL+X shortcuts
-        if (event.isCtrlPressed() && !metaKeyManager.isSymFixed()) {
+        if (event.isCtrlPressed() && !metaKeyManager.isSymFixed())
             return false;
-        }
+
+        if (inputConnection == null)
+            return false;
 
         // Emulate D-pad and some media keys
         if (metaKeyManager.isSymFixed()) {
@@ -222,8 +206,15 @@ public class PocketBoardIME extends InputMethodService {
             }
         }
 
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_ENTER:
+            case KeyEvent.KEYCODE_CTRL_LEFT:
+            case KeyEvent.KEYCODE_CTRL_RIGHT:
+                return false;
+        }
+
         // Handle text input in Keyboard mode
-        if (editorInfo.inputType != InputType.TYPE_NULL || keyboardInputHandler.isInRawInputMode()) {
+        if (editorInfo != null && (editorInfo.inputType != InputType.TYPE_NULL || keyboardInputHandler.isInRawInputMode())) {
             // Handle emoji shortcuts
             if (inputView != null && inputView.isEmojiPanelVisible() && inputView.handleEmojiShortcut(keyCode)) {
                 return true;
@@ -248,25 +239,17 @@ public class PocketBoardIME extends InputMethodService {
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
             case KeyEvent.KEYCODE_VOLUME_DOWN:
-            case KeyEvent.KEYCODE_CTRL_LEFT:
-            case KeyEvent.KEYCODE_CTRL_RIGHT:
-            case KeyEvent.KEYCODE_ENTER:
                 return false;
         }
 
         InputConnection inputConnection = getCurrentInputConnection();
         EditorInfo editorInfo = getCurrentInputEditorInfo();
 
-        if (inputConnection == null || editorInfo == null) {
+        if (editorInfo != null && directInputEditors.contains(editorInfo.packageName))
             return false;
-        }
-
-        if (directInputEditors.contains(editorInfo.packageName)) {
-            return false;
-        }
 
         // Meta keys
-        if (metaKeyManager.handleKeyUp(keyCode, event)) {
+        if (metaKeyManager.handleKeyUp(keyCode, event, inputConnection)) {
             if (keyCode == KeyEvent.KEYCODE_SYM || keyCode == KeyEvent.KEYCODE_PICTSYMBOLS) {
                 if (!symPadJustUsed && !metaKeyManager.isSymFixed()) {
                     // Toggle emoji panel on SYM release
@@ -282,9 +265,11 @@ public class PocketBoardIME extends InputMethodService {
         }
 
         // Skip CTRL+X shortcuts
-        if (event.isCtrlPressed() && !metaKeyManager.isSymFixed()) {
+        if (event.isCtrlPressed() && !metaKeyManager.isSymFixed())
             return false;
-        }
+
+        if (inputConnection == null)
+            return false;
 
         // Emulate D-pad and some media keys
         if (metaKeyManager.isSymFixed() || symPadInputHandler.hasPressedKey(keyCode)) {
@@ -294,7 +279,14 @@ public class PocketBoardIME extends InputMethodService {
             }
         }
 
-        return (editorInfo.inputType != InputType.TYPE_NULL || keyboardInputHandler.isInRawInputMode()) &&
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_ENTER:
+            case KeyEvent.KEYCODE_CTRL_LEFT:
+            case KeyEvent.KEYCODE_CTRL_RIGHT:
+                return false;
+        }
+
+        return editorInfo != null && (editorInfo.inputType != InputType.TYPE_NULL || keyboardInputHandler.isInRawInputMode()) &&
                 keyboardInputHandler.handleKeyUp(keyCode, event, inputConnection,
                         metaKeyManager.isShiftEnabled(), metaKeyManager.isAltEnabled());
     }
@@ -326,20 +318,20 @@ public class PocketBoardIME extends InputMethodService {
 
 
         if (isAltPressed)
-            ic.sendKeyEvent(new KeyEvent(eventTime, eventTime, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ALT_LEFT, 0, metaState));
+            ic.sendKeyEvent(InputUtils.createKeyEvent(eventTime, KeyEvent.KEYCODE_ALT_LEFT, KeyEvent.ACTION_DOWN, 0, metaState));
         if (isShiftPressed)
-            ic.sendKeyEvent(new KeyEvent(eventTime, eventTime, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT, 0, metaState));
+            ic.sendKeyEvent(InputUtils.createKeyEvent(eventTime, KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.ACTION_DOWN, 0, metaState));
 
         for (int i = 0; i < repeatCount; i++) {
-            ic.sendKeyEvent(new KeyEvent(eventTime, eventTime, KeyEvent.ACTION_DOWN, keyCode, i, metaState));
+            ic.sendKeyEvent(InputUtils.createKeyEvent(eventTime, keyCode, KeyEvent.ACTION_DOWN, i, metaState));
         }
 
-        ic.sendKeyEvent(new KeyEvent(eventTime, eventTime, KeyEvent.ACTION_UP, keyCode, 0, metaState));
+        ic.sendKeyEvent(InputUtils.createKeyEvent(eventTime, keyCode, KeyEvent.ACTION_UP, 0, metaState));
 
         if (isAltPressed)
-            ic.sendKeyEvent(new KeyEvent(eventTime, eventTime, KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ALT_LEFT, 0, 0));
+            ic.sendKeyEvent(InputUtils.createKeyEvent(eventTime, KeyEvent.KEYCODE_ALT_LEFT, KeyEvent.ACTION_UP, 0, 0));
         if (isShiftPressed)
-            ic.sendKeyEvent(new KeyEvent(eventTime, eventTime, KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT, 0, 0));
+            ic.sendKeyEvent(InputUtils.createKeyEvent(eventTime, KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.ACTION_UP, 0, 0));
     }
 
     @Override

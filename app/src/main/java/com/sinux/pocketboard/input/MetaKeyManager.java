@@ -3,17 +3,20 @@ package com.sinux.pocketboard.input;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.telecom.TelecomManager;
-import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
+import android.view.inputmethod.InputConnection;
+
+import androidx.annotation.Nullable;
 
 import com.sinux.pocketboard.PocketBoardIME;
 import com.sinux.pocketboard.R;
 import com.sinux.pocketboard.preferences.PreferencesHolder;
+import com.sinux.pocketboard.utils.InputUtils;
+import com.sinux.pocketboard.utils.VoiceInputUtils;
 
-import java.util.function.Consumer;
+import java.util.LinkedHashSet;
 
 public class MetaKeyManager {
 
@@ -22,6 +25,7 @@ public class MetaKeyManager {
     private final long keyLongPressDuration;
     private final int sympadFixEventRepeatCount;
     private final CallStateListener callStateListener;
+    private final LinkedHashSet<Integer> shortcutKeysUsed;
 
     private MetaKeyState sym;
     private boolean symPressed;
@@ -33,7 +37,6 @@ public class MetaKeyManager {
     private long altPressTime;
     private long lastAltUpTime;
     private boolean altPressed;
-    private boolean multipleKeyJustPressed;
 
     private MetaKeyStateChangeListener metaKeyStateChangeListener;
 
@@ -62,6 +65,8 @@ public class MetaKeyManager {
                 }
         );
 
+        shortcutKeysUsed = new LinkedHashSet<>(3);
+
         reset();
     }
 
@@ -72,104 +77,200 @@ public class MetaKeyManager {
         }
     }
 
-    public boolean handleKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_SYM:
-            case KeyEvent.KEYCODE_PICTSYMBOLS:
-                setSymPressed(true);
-                if (event.getRepeatCount() == 0 && sym == MetaKeyState.FIXED) {
-                    pocketBoardIME.hideStatusIcon();
-                    sym = MetaKeyState.ENABLED;
-                } else if (event.getRepeatCount() == sympadFixEventRepeatCount && preferencesHolder.isLockSymPadEnabled()) {
-                    sym = MetaKeyState.FIXED;
-                    pocketBoardIME.showStatusIcon(R.drawable.ic_sym_pad_icon);
-                }
-                break;
-            case KeyEvent.KEYCODE_SHIFT_LEFT:
-            case KeyEvent.KEYCODE_SHIFT_RIGHT:
-                if (event.getRepeatCount() == 0) {
-                    if (handleShiftOnCalling()) {
-                        return true;
-                    }
-                    setShiftPressed(true);
-                    shiftPressTime = event.getEventTime();
-                    if (altPressed) {
-                        multipleKeyJustPressed = true;
-                        // Switch to next input subtype on ALT + SHIFT
-                        pocketBoardIME.switchToNextInputMethod(true);
-                    }
-                }
-                break;
-            case KeyEvent.KEYCODE_ALT_LEFT:
-            case KeyEvent.KEYCODE_ALT_RIGHT:
-                if (handleAltOnCalling()) {
-                    return true;
-                }
-                setAltPressed(true);
-                if (event.getRepeatCount() == 0) {
-                    setAltPressed(true);
-                    altPressTime = event.getEventTime();
-                    if (shiftPressed) {
-                        multipleKeyJustPressed = true;
-                        // Switch to next input subtype on ALT + SHIFT
-                        pocketBoardIME.switchToNextInputMethod(true);
-                    }
-                }
-                break;
-            default:
-                return false;
+    public boolean handleKeyDown(int keyCode, KeyEvent event, @Nullable InputConnection inputConnection) {
+        return switch (keyCode) {
+            case KeyEvent.KEYCODE_SYM, KeyEvent.KEYCODE_PICTSYMBOLS -> {
+                handleSymDown(event);
+                yield true;
+            }
+            case KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
+                handleShiftDown(event);
+                yield true;
+            }
+            case KeyEvent.KEYCODE_ALT_LEFT, KeyEvent.KEYCODE_ALT_RIGHT -> {
+                handleAltDown(event);
+                yield true;
+            }
+            case KeyEvent.KEYCODE_CTRL_LEFT, KeyEvent.KEYCODE_CTRL_RIGHT -> {
+                handleCtrlDown(event);
+                yield false;
+            }
+            // Translate Shift+Backspace to Ctrl+Backspace
+            case KeyEvent.KEYCODE_DEL -> handleShiftShortcutDown(event, KeyEvent.KEYCODE_DEL, KeyEvent.KEYCODE_CTRL_LEFT, KeyEvent.META_CTRL_ON, inputConnection);
+            // Pass Shift+Enter
+            case KeyEvent.KEYCODE_ENTER -> handleShiftShortcutDown(event, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.META_SHIFT_ON, inputConnection);
+            default -> false;
+        };
+    }
+
+    private void handleSymDown(KeyEvent event) {
+        setSymPressed(true);
+
+        if (event.getRepeatCount() == 0 && sym == MetaKeyState.FIXED) {
+            sym = MetaKeyState.ENABLED;
+        } else if (event.getRepeatCount() == sympadFixEventRepeatCount && preferencesHolder.isLockSymPadEnabled()) {
+            sym = MetaKeyState.FIXED;
+            pocketBoardIME.showStatusIcon(R.drawable.ic_sym_pad_icon);
         }
+    }
+
+    private void handleShiftDown(KeyEvent event) {
+        if (event.getRepeatCount() != 0)
+            return;
+
+        if (handleShiftOnCalling())
+            return;
+
+        if (event.isCtrlPressed()) {
+            shortcutKeysUsed.add(KeyEvent.KEYCODE_SHIFT_LEFT);
+            return;
+        }
+
+        setShiftPressed(true);
+        shiftPressTime = event.getEventTime();
+
+        // Switch to next input subtype on ALT + SHIFT
+        if (event.isAltPressed()) {
+            shortcutKeysUsed.add(KeyEvent.KEYCODE_SHIFT_LEFT);
+            shortcutKeysUsed.add(KeyEvent.KEYCODE_ALT_LEFT);
+            pocketBoardIME.switchToNextInputMethod(true);
+        }
+    }
+
+    private void handleAltDown(KeyEvent event) {
+        if (event.getRepeatCount() != 0)
+            return;
+
+        if (handleAltOnCalling())
+            return;
+
+        if (event.isCtrlPressed()) {
+            shortcutKeysUsed.add(KeyEvent.KEYCODE_ALT_LEFT);
+            launchVoiceIME();
+            return;
+        }
+
+        setAltPressed(true);
+        altPressTime = event.getEventTime();
+
+        // Switch to next input subtype on ALT + SHIFT
+        if (event.isShiftPressed()) {
+            shortcutKeysUsed.add(KeyEvent.KEYCODE_SHIFT_LEFT);
+            shortcutKeysUsed.add(KeyEvent.KEYCODE_ALT_LEFT);
+            pocketBoardIME.switchToNextInputMethod(true);
+        }
+    }
+
+    private void handleCtrlDown(KeyEvent event) {
+        if (event.getRepeatCount() != 0)
+            return;
+
+        if (event.isAltPressed()) {
+            shortcutKeysUsed.add(KeyEvent.KEYCODE_ALT_LEFT);
+            launchVoiceIME();
+        }
+    }
+
+    private boolean handleShiftShortcutDown(KeyEvent event, int targetKeyCode, int metaKeyCode, int metaState, InputConnection inputConnection) {
+        if (!event.isShiftPressed() || isSymFixed() || inputConnection == null)
+            return false;
+
+        if (event.getRepeatCount() == 0) {
+            shortcutKeysUsed.add(targetKeyCode);
+            inputConnection.sendKeyEvent(InputUtils.translateKeyEvent(event, metaKeyCode, KeyEvent.ACTION_DOWN, metaState));
+        }
+
+        inputConnection.sendKeyEvent(InputUtils.translateKeyEvent(event, targetKeyCode, KeyEvent.ACTION_DOWN, metaState));
 
         return true;
     }
 
-    public boolean handleKeyUp(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_SYM:
-            case KeyEvent.KEYCODE_PICTSYMBOLS:
-                setSymPressed(false);
-                if (sym != MetaKeyState.FIXED) {
-                    sym = MetaKeyState.DISABLED;
-                }
-                break;
-            case KeyEvent.KEYCODE_SHIFT_LEFT:
-            case KeyEvent.KEYCODE_SHIFT_RIGHT:
-                setShiftPressed(false);
-                if (!multipleKeyJustPressed && (event.getEventTime() - shiftPressTime < keyLongPressDuration)) {
-                    if (event.getEventTime() - lastShiftUpTime < keyLongPressDuration) {
-                        fixShift();
-                    } else {
-                        toggleShiftNextState();
-                    }
-                }
-                multipleKeyJustPressed = altPressed;
-                lastShiftUpTime = event.getEventTime();
-                break;
-            case KeyEvent.KEYCODE_ALT_LEFT:
-            case KeyEvent.KEYCODE_ALT_RIGHT:
-                setAltPressed(false);
-                if (!multipleKeyJustPressed && (event.getEventTime() - altPressTime < keyLongPressDuration)) {
-                    if (event.getEventTime() - lastAltUpTime < keyLongPressDuration) {
-                        fixAlt();
-                    } else {
-                        toggleAltNextState();
-                    }
-                }
-                multipleKeyJustPressed = shiftPressed;
-                lastAltUpTime = event.getEventTime();
-                break;
-            default:
-                return false;
+    private void launchVoiceIME() {
+        if (preferencesHolder.isVoiceInputShortcutEnabled() && pocketBoardIME.isInputViewShown()) {
+            VoiceInputUtils.launchVoiceIME(pocketBoardIME);
+        }
+    }
+
+    public boolean handleKeyUp(int keyCode, KeyEvent event, @Nullable InputConnection inputConnection) {
+        return switch (keyCode) {
+            case KeyEvent.KEYCODE_SYM, KeyEvent.KEYCODE_PICTSYMBOLS -> {
+                handleSymUp();
+                yield true;
+            }
+            case KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
+                handleShiftUp(event);
+                yield true;
+            }
+            case KeyEvent.KEYCODE_ALT_LEFT, KeyEvent.KEYCODE_ALT_RIGHT -> {
+                handleAltUp(event);
+                yield true;
+            }
+            case KeyEvent.KEYCODE_DEL -> handleShiftShortcutKeyUp(event, KeyEvent.KEYCODE_DEL, KeyEvent.KEYCODE_CTRL_LEFT, KeyEvent.META_CTRL_ON, inputConnection);
+            case KeyEvent.KEYCODE_ENTER -> handleShiftShortcutKeyUp(event, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.META_SHIFT_ON, inputConnection);
+            default -> false;
+        };
+    }
+
+    private void handleSymUp() {
+        setSymPressed(false);
+
+        if (sym != MetaKeyState.FIXED) {
+            pocketBoardIME.hideStatusIcon();
+            sym = MetaKeyState.DISABLED;
+        }
+    }
+
+    private void handleShiftUp(KeyEvent event) {
+        boolean shortcutUsed = shortcutKeysUsed.remove(KeyEvent.KEYCODE_SHIFT_LEFT);
+
+        setShiftPressed(false);
+
+        if (!shortcutUsed && (event.getEventTime() - shiftPressTime < keyLongPressDuration)) {
+            if (event.getEventTime() - lastShiftUpTime < keyLongPressDuration) {
+                fixShift();
+            } else {
+                toggleShiftNextState();
+            }
         }
 
-        return true;
+        lastShiftUpTime = event.getEventTime();
+    }
+
+    private void handleAltUp(KeyEvent event) {
+        boolean shortcutUsed = shortcutKeysUsed.remove(KeyEvent.KEYCODE_ALT_LEFT);
+
+        setAltPressed(false);
+
+        if (!shortcutUsed && (event.getEventTime() - altPressTime < keyLongPressDuration)) {
+            if (event.getEventTime() - lastAltUpTime < keyLongPressDuration) {
+                fixAlt();
+            } else {
+                toggleAltNextState();
+            }
+        }
+
+        lastAltUpTime = event.getEventTime();
+    }
+
+    private boolean handleShiftShortcutKeyUp(KeyEvent event, int targetKeyCode, int metaKeyCode, int metaState, InputConnection inputConnection) {
+        if (inputConnection == null || isSymFixed()) {
+            return false;
+        }
+
+        if (shortcutKeysUsed.remove(targetKeyCode)) {
+            inputConnection.sendKeyEvent(InputUtils.translateKeyEvent(event, targetKeyCode, KeyEvent.ACTION_UP, metaState));
+            inputConnection.sendKeyEvent(InputUtils.translateKeyEvent(event, metaKeyCode, KeyEvent.ACTION_UP, 0));
+            return true;
+        }
+
+        return false;
     }
 
     public boolean isSymFixed() {
         return symPressed || sym == MetaKeyState.FIXED;
     }
 
-    public void setSymPressed(boolean symPressed) {
+    private void setSymPressed(boolean symPressed) {
         this.symPressed = symPressed;
         notifyMetaKeyStateChangeListener();
     }
@@ -186,11 +287,11 @@ public class MetaKeyManager {
         }
     }
 
-    public void fixShift() {
+    private void fixShift() {
         setShiftState(MetaKeyState.FIXED);
     }
 
-    public void setShiftPressed(boolean shiftPressed) {
+    private void setShiftPressed(boolean shiftPressed) {
         this.shiftPressed = shiftPressed;
         notifyMetaKeyStateChangeListener();
     }
@@ -203,7 +304,7 @@ public class MetaKeyManager {
         return shiftPressed || shift == MetaKeyState.FIXED;
     }
 
-    public void toggleShiftNextState() {
+    private void toggleShiftNextState() {
         setShiftState(shift.next());
     }
 
@@ -213,11 +314,11 @@ public class MetaKeyManager {
         }
     }
 
-    public void fixAlt() {
+    private void fixAlt() {
         setAltState(MetaKeyState.FIXED);
     }
 
-    public void setAltPressed(boolean altPressed) {
+    private void setAltPressed(boolean altPressed) {
         this.altPressed = altPressed;
         notifyMetaKeyStateChangeListener();
     }
@@ -230,7 +331,7 @@ public class MetaKeyManager {
         return altPressed || alt == MetaKeyState.FIXED;
     }
 
-    public void toggleAltNextState() {
+    private void toggleAltNextState() {
         setAltState(alt.next());
     }
 

@@ -1,6 +1,5 @@
 package com.sinux.pocketboard.input.handler;
 
-import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputConnection;
 
@@ -88,11 +87,4 @@ public abstract class ProxyInputHandler implements InputHandler {
     protected abstract void handleKeyUpInternal(int translatedKeyCode, KeyEvent originalEvent, InputConnection inputConnection);
 
     protected abstract void handleKeyLongPressInternal(int translatedKeyCode, KeyEvent originalEvent, InputConnection inputConnection);
-
-    protected KeyEvent createNewKeyEvent(int translatedKeyCode, KeyEvent originalEvent, int action, int source) {
-        int metaState = originalEvent.getMetaState() & (KeyEvent.META_SHIFT_ON | KeyEvent.META_ALT_ON | KeyEvent.META_CTRL_ON);
-        return new KeyEvent(originalEvent.getDownTime(), originalEvent.getEventTime(),
-                action, translatedKeyCode, originalEvent.getRepeatCount(), metaState,
-                KeyCharacterMap.VIRTUAL_KEYBOARD, translatedKeyCode, 0, source);
-    }
 }

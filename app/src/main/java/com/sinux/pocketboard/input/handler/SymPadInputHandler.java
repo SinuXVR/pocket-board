@@ -2,11 +2,11 @@ package com.sinux.pocketboard.input.handler;
 
 import android.content.Context;
 import android.media.AudioManager;
-import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputConnection;
 
 import com.sinux.pocketboard.PocketBoardIME;
+import com.sinux.pocketboard.utils.InputUtils;
 
 public class SymPadInputHandler extends ProxyInputHandler {
 
@@ -66,15 +66,16 @@ public class SymPadInputHandler extends ProxyInputHandler {
         if (isPlaybackKey(translatedKeyCode)) {
             dispatchMediaKeyEvent(translatedKeyCode, originalEvent, KeyEvent.ACTION_DOWN);
         } else {
+            int metaState = originalEvent.getMetaState() & (KeyEvent.META_SHIFT_ON | KeyEvent.META_ALT_ON | KeyEvent.META_CTRL_ON);
             if (originalEvent.isShiftPressed() && !isShiftPressed) {
                 isShiftPressed = true;
-                inputConnection.sendKeyEvent(createNewKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, originalEvent, KeyEvent.ACTION_DOWN, InputDevice.SOURCE_KEYBOARD));
+                inputConnection.sendKeyEvent(InputUtils.translateKeyEvent(originalEvent, KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.ACTION_DOWN, metaState));
             }
             if (originalEvent.isAltPressed() && !isAltPressed) {
                 isAltPressed = true;
-                inputConnection.sendKeyEvent(createNewKeyEvent(KeyEvent.KEYCODE_ALT_LEFT, originalEvent, KeyEvent.ACTION_DOWN, InputDevice.SOURCE_KEYBOARD));
+                inputConnection.sendKeyEvent(InputUtils.translateKeyEvent(originalEvent, KeyEvent.KEYCODE_ALT_LEFT, KeyEvent.ACTION_DOWN, metaState));
             }
-            inputConnection.sendKeyEvent(createNewKeyEvent(translatedKeyCode, originalEvent, KeyEvent.ACTION_DOWN, InputDevice.SOURCE_DPAD));
+            inputConnection.sendKeyEvent(InputUtils.translateKeyEvent(originalEvent, translatedKeyCode, KeyEvent.ACTION_DOWN, metaState));
         }
     }
 
@@ -83,14 +84,15 @@ public class SymPadInputHandler extends ProxyInputHandler {
         if (isPlaybackKey(translatedKeyCode)) {
             dispatchMediaKeyEvent(translatedKeyCode, originalEvent, KeyEvent.ACTION_UP);
         } else {
-            inputConnection.sendKeyEvent(createNewKeyEvent(translatedKeyCode, originalEvent, KeyEvent.ACTION_UP, InputDevice.SOURCE_DPAD));
+            int metaState = originalEvent.getMetaState() & (KeyEvent.META_SHIFT_ON | KeyEvent.META_ALT_ON | KeyEvent.META_CTRL_ON);
+            inputConnection.sendKeyEvent(InputUtils.translateKeyEvent(originalEvent, translatedKeyCode, KeyEvent.ACTION_UP, metaState));
             if (isShiftPressed) {
                 isShiftPressed = false;
-                inputConnection.sendKeyEvent(createNewKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, originalEvent, KeyEvent.ACTION_UP, InputDevice.SOURCE_KEYBOARD));
+                inputConnection.sendKeyEvent(InputUtils.translateKeyEvent(originalEvent, KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.ACTION_UP, metaState));
             }
             if (isAltPressed) {
                 isAltPressed = false;
-                inputConnection.sendKeyEvent(createNewKeyEvent(KeyEvent.KEYCODE_ALT_LEFT, originalEvent, KeyEvent.ACTION_UP, InputDevice.SOURCE_KEYBOARD));
+                inputConnection.sendKeyEvent(InputUtils.translateKeyEvent(originalEvent, KeyEvent.KEYCODE_ALT_LEFT, KeyEvent.ACTION_UP, metaState));
             }
         }
     }
@@ -105,7 +107,7 @@ public class SymPadInputHandler extends ProxyInputHandler {
     private void dispatchMediaKeyEvent(int translatedKeyCode, KeyEvent originalEvent, int action) {
         AudioManager audioManager = getAudioManager();
         if (audioManager != null) {
-            audioManager.dispatchMediaKeyEvent(createNewKeyEvent(translatedKeyCode, originalEvent, action, InputDevice.SOURCE_KEYBOARD));
+            audioManager.dispatchMediaKeyEvent(InputUtils.translateKeyEvent(originalEvent, translatedKeyCode, action, 0));
         }
     }
 
