@@ -19,6 +19,16 @@ public final class KeyMapping {
         hasAdditionalAltValues = hasAltValues && keyMappingAltValues.length > 1;
     }
 
+    public KeyMappingValue[] getValues() {
+        return keyMappingValues.clone();
+    }
+
+    public KeyMappingValue[] getAltValues() {
+        return keyMappingAltValues == null
+                ? new KeyMappingValue[0]
+                : keyMappingAltValues.clone();
+    }
+
     public int getValue(boolean shiftEnabled, boolean altEnabled, byte keyIndex) {
         if (shiftEnabled) {
             if (altEnabled) {

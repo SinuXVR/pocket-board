@@ -1,84 +1,95 @@
 # PocketBoard IME
 
-Tiny but powerful IME designed for [Unihertz Titan Pocket](https://www.kickstarter.com/projects/jellyphone/titan-pocket-the-smallest-qwerty-android-11-smartphone)
-which makes this QWERTY keyboard smartphone a little more "keyboard"
+Небольшая, но функциональная клавиатура для смартфонов Unihertz с физической QWERTY-клавиатурой. Помогает использовать аппаратную клавиатуру по максимуму.
 
-![Preview](img/screen.png)
+> Поддержка профилей Titan 2 elite, клавиши Fn и редактор раскладок добавлены в ветке `titan2-elite-keymapper`. Это пока не часть официального релиза Pocket Board.
 
-# Key Features
 
-* Auto-correction and word suggestions (requires external spellchecker, e.g. [OpenBoard SpellChecker](https://github.com/SinuXVR/openboard-spellchecker))
-* User dictionaries support
-* Auto-capitalization
-* Inline autofill (Android 11+)
-* Voice input (requires Google Voice Input (`com.google.android.googlequicksearchbox`))
-* Emoji and special symbol palettes
-* D-Pad and media keys emulation
-* Incoming call accept/decline using shift/alt physical keys
-* Virtual Touchpad
+## Возможности
 
-# Keyboard shortcuts
+- Автокоррекция и подсказки слов — требуется установленная внешняя проверка орфографии, например OpenBoard SpellChecker.
+- Поддержка пользовательских словарей.
+- Автоматическая заглавная буква в начале предложения.
+- Подсказки автозаполнения прямо в строке — Android 11 и новее.
+- Голосовой ввод — требуется Google Voice Input (`com.google.android.googlequicksearchbox`).
+- Панели emoji и специальных символов.
+- Эмуляция клавиш D-Pad и управления медиаплеером.
+- Виртуальный тачпад.
+- Сочетания клавиш.
+- Управление входящим вызовом клавишами Shift и Alt — отключено по умолчанию.
+- В ветке Titan 2: клавиша Fn может использоваться вместо Alt.
+- В ветке Titan 2: отдельные профили английской и русской раскладок, а также GUI-редактор символов клавиш.
 
-* `SHIFT` (short press) - toggle SHIFT state or accept incoming call (disabled by default)
-* `SHIFT` + `KEY` - print KEY in upper case
-* `ALT` (short press) - toggle ALT state or decline incoming call (disabled by default)
-* `ALT` + `KEY` - print KEY alternate value
-* `ALT` + `SHIFT` or `SPACE` (hold) - switch to the next keyboard layout (input method)
-* `CTRL` + `ALT` - launch voice input
-* `CTRL` + `KEY` - some default CTRL shortcuts (e.g. `CTRL` + `V`)
-* `SYM` (short press) - toggle emoji panel visibility
-* `SYM` + `KEY` - run `SymPad` action
-* `SYM` (hold) - enable and lock `SymPad` mode
+## Сочетания клавиш
 
-_Tip:_ to enable incoming call accept/decline feature go to the PocketBoard settings, turn on `Phone control`
-and grant the required permission
+- **Короткое нажатие Shift** — включить или переключить режим Shift; при включённом управлении вызовами также можно принять входящий вызов.
+- **Shift + клавиша** — ввести символ в верхнем регистре.
+- **Короткое нажатие Alt** — включить или переключить альтернативный слой; при включённом управлении вызовами также можно отклонить вызов.
+- **Alt + клавиша** — ввести альтернативный символ клавиши.
+- **Fn + клавиша** — использовать альтернативный слой на устройствах с поддержкой Fn в этой ветке.
+- **Alt + Shift** или **удержание пробела** — перейти к следующей раскладке Pocket Board.
+- **Ctrl + Alt** — запустить голосовой ввод.
+- **Ctrl + клавиша** — выполнить стандартное сочетание Android, например Ctrl + V.
+- **Короткое нажатие SYM** — показать или скрыть панель emoji.
+- **SYM + клавиша** — выполнить действие SymPad.
+- **Удержание SYM** — включить и зафиксировать режим SymPad.
 
-_Tip:_ to print an alternate key value, you can simply hold down that key
+Чтобы включить управление вызовами, откройте настройки Pocket Board, включите **Phone control** и предоставьте запрошенные разрешения.
 
-_Tip:_ some keys have more than one alternate (and main) value. You can iterate over these values by quickly pressing the key
+### Дополнительный ввод символов
 
-## SymPad actions
+- Альтернативный символ можно ввести, удерживая клавишу.
+- Если у клавиши задано несколько основных или альтернативных значений, быстро нажимайте её повторно, чтобы переключаться между символами.
 
-`SymPad` is a keyboard mode that simulates additional hardware key events:
+## Действия SymPad
 
-* `Q`, `W`, `E`, `A`, `S`, `D`, `Z`, `X`, `C` or `I`, `O`, `P`, `K`, `L`, `Del`, `N`, `M`, `Ent` - 9-positional D-Pad
-* `R` or `U` - Home
-* `F` or `J` - End
-* `T` - Escape
-* `Y` - Enter
-* `G` - Backspace
-* `H` - Del (forward delete)
-* `V` - previous track (short press) or rewind (hold)
-* `SPACE` - Play/Pause
-* `B` - next track (short press) or fast forward (hold)
+SymPad — режим клавиатуры, эмулирующий дополнительные аппаратные нажатия:
 
-![SymPadLayout](img/sympad.png)
+- **Q, W, E, A, S, D, Z, X, C** или **I, O, P, K, L, Del, N, M, Ent** — восьмипозиционный D-Pad.
+- **R** или **U** — Home.
+- **F** или **J** — End.
+- **T** — Escape.
+- **Y** — Enter.
+- **G** — Backspace.
+- **H** — Delete вперёд.
+- **V** — предыдущий трек при коротком нажатии или перемотка назад при удержании.
+- **Пробел** — Play/Pause.
+- **B** — следующий трек при коротком нажатии или перемотка вперёд при удержании.
 
-_Tip:_ to lock keyboard in `SymPad` mode you need to hold down the `SYM` key for about 2-3 seconds. When `SymPad` mode
-lock is active, the `<S>` icon is displayed in the status bar. To back to normal mode just press `SYM` again.
+Чтобы зафиксировать клавиатуру в режиме SymPad, удерживайте SYM примерно 2–3 секунды. При активной фиксации в строке состояния отображается значок `<S>`. Чтобы вернуться в обычный режим, нажмите SYM ещё раз.
 
-_Tip:_ you can use `D-Pad`, `Home` and `End` keys simulation to move cursor in text fields, scroll through pages in the
-browser, etc. Using `D-Pad` and `SHIFT` you can also select text in a text editor
+Симуляция D-Pad, Home и End помогает перемещать курсор в текстовых полях и браузере. В текстовом редакторе сочетание D-Pad с Shift позволяет выделять текст.
 
-_Notice:_ some modern applications don't support `D-Pad` events and many music/video player applications do not
-support fast forward/rewind events
+Некоторые современные приложения не поддерживают события D-Pad. Многие музыкальные и видеоплееры также не обрабатывают перемотку.
 
-# Supported languages and layouts
+## Поддерживаемые языки и раскладки
 
-* English
-    * US (QWERTY)
-* Русский
-    * Транслит
-    * BB Passport
-* Español (España)
+- **Английский**
+  - US (QWERTY)
+- **Русский**
+  - Транслит
+  - BB Passport
+- **Испанский**
+  - Испания
 
-# Known bugs
+В ветке `titan2-elite-keymapper` добавлены отдельные профили Titan 2 для **English (US)** и **Русский (BB Passport)**.
 
-* Digits duplication in Telegram login fields on Android < 15
+## Редактор раскладок
 
-  _Workaround:_ use additional symbols palette (press `SYM` and go to the `$` tab) to enter phone and confirmation number
+В ветке Titan 2 elite редактор позволяет выбрать профиль и клавишу, а затем изменить:
 
-* Inline suggestions password selection dialog don't appear on Android < 15
+- основной символ и символ при Shift;
+- дополнительные символы для быстрого повторного нажатия;
+- символы Alt/Fn и Shift+Alt/Fn.
 
-  _Workaround:_ before clicking on `Passwords` suggestion press `SYM` to open emoji panel. Then you can pick `Passwords`
-  suggestion and everything should work as expected
+Пользовательские изменения сохраняются отдельно от встроенных XML-раскладок и могут быть сброшены.
+
+## Известные проблемы
+
+- Дублирование цифр в полях входа Telegram на Android ниже версии 15.
+
+  **Обходной путь:** используйте панель дополнительных символов: нажмите SYM и откройте вкладку `$`, чтобы ввести номер телефона или код подтверждения.
+
+- На Android ниже версии 15 может не появляться диалог выбора пароля для встроенных подсказок.
+
+  **Обходной путь:** перед нажатием на подсказку пароля нажмите SYM, чтобы открыть панель emoji. После этого можно выбрать подсказку пароля.

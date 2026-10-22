@@ -174,4 +174,24 @@
         <item>com.mill.clock.config</item>
     </string-array>
 
+
+    <string name="keyboard_editor_title">Keyboard layout editor</string>
+    <string name="keyboard_editor_profile">Layout profile</string>
+    <string name="keyboard_editor_profile_en">English (US) — Titan 2</string>
+    <string name="keyboard_editor_profile_ru">Russian (BB Passport) — Titan 2</string>
+    <string name="keyboard_editor_key">Physical key</string>
+    <string name="keyboard_editor_values">Main and quick-repeat values</string>
+    <string name="keyboard_editor_shift_values">Shift values, same order</string>
+    <string name="keyboard_editor_alt_values">Alt/Fn values</string>
+    <string name="keyboard_editor_alt_shift_values">Shift+Alt/Fn values, same order</string>
+    <string name="keyboard_editor_lines_hint">Enter one character per line</string>
+    <string name="keyboard_editor_save">Save key</string>
+    <string name="keyboard_editor_reset_profile">Reset profile overrides</string>
+    <string name="keyboard_editor_reset_confirm">Remove all custom edits for this profile?</string>
+    <string name="keyboard_editor_saved">Saved. Reopen the text field to apply the change.</string>
+    <string name="keyboard_editor_reset_done">Custom profile edits removed.</string>
+    <string name="keyboard_editor_invalid_values">Enter one character per line. Shift lines must match the value lines.</string>
+    <string name="keyboard_editor_load_error">Could not load this keyboard profile.</string>
+    <string name="keyboard_editor_entry">Keyboard layout editor</string>
+
 </resources>

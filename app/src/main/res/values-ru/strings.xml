@@ -77,4 +77,24 @@
     <string name="voice_button_description">Запустить голосовой ввод</string>
     <string name="add_to_recent_emoji_button_text">Добавить в Недавние</string>
 
+
+    <string name="keyboard_editor_title">Редактор раскладки клавиатуры</string>
+    <string name="keyboard_editor_profile">Профиль раскладки</string>
+    <string name="keyboard_editor_profile_en">Английская (US) — Titan 2</string>
+    <string name="keyboard_editor_profile_ru">Русская (BB Passport) — Titan 2</string>
+    <string name="keyboard_editor_key">Физическая клавиша</string>
+    <string name="keyboard_editor_values">Основные символы и быстрые повторы</string>
+    <string name="keyboard_editor_shift_values">Символы с Shift, в том же порядке</string>
+    <string name="keyboard_editor_alt_values">Символы Alt/Fn</string>
+    <string name="keyboard_editor_alt_shift_values">Символы Shift+Alt/Fn, в том же порядке</string>
+    <string name="keyboard_editor_lines_hint">Вводите по одному символу на строку</string>
+    <string name="keyboard_editor_save">Сохранить клавишу</string>
+    <string name="keyboard_editor_reset_profile">Сбросить изменения профиля</string>
+    <string name="keyboard_editor_reset_confirm">Удалить все пользовательские изменения этого профиля?</string>
+    <string name="keyboard_editor_saved">Сохранено. Чтобы применить изменение, заново откройте поле ввода.</string>
+    <string name="keyboard_editor_reset_done">Пользовательские изменения профиля удалены.</string>
+    <string name="keyboard_editor_invalid_values">Введите по одному символу на строку. Число строк Shift должно совпадать.</string>
+    <string name="keyboard_editor_load_error">Не удалось загрузить профиль клавиатуры.</string>
+    <string name="keyboard_editor_entry">Редактор раскладки клавиатуры</string>
+
 </resources>

@@ -77,7 +77,15 @@ public class MetaKeyManager {
         }
     }
 
+    // Unihertz Titan 2 Elite reports Fn as keyCode 403 / scanCode 251.
+    private static final int TITAN_2_ELITE_FN_KEYCODE = 403;
+    private static final int TITAN_2_ELITE_FN_SCANCODE = 251;
+
     public boolean handleKeyDown(int keyCode, KeyEvent event, @Nullable InputConnection inputConnection) {
+        if (keyCode == TITAN_2_ELITE_FN_KEYCODE && event.getScanCode() == TITAN_2_ELITE_FN_SCANCODE) {
+            handleAltDown(event);
+            return true;
+        }
         return switch (keyCode) {
             case KeyEvent.KEYCODE_SYM, KeyEvent.KEYCODE_PICTSYMBOLS -> {
                 handleSymDown(event);
@@ -192,6 +200,10 @@ public class MetaKeyManager {
     }
 
     public boolean handleKeyUp(int keyCode, KeyEvent event, @Nullable InputConnection inputConnection) {
+        if (keyCode == TITAN_2_ELITE_FN_KEYCODE && event.getScanCode() == TITAN_2_ELITE_FN_SCANCODE) {
+            handleAltUp(event);
+            return true;
+        }
         return switch (keyCode) {
             case KeyEvent.KEYCODE_SYM, KeyEvent.KEYCODE_PICTSYMBOLS -> {
                 handleSymUp();

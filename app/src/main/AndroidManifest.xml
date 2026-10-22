@@ -36,6 +36,11 @@
         </activity>
 
         <activity
+            android:name=".preferences.KeyboardMappingEditorActivity"
+            android:label="@string/keyboard_editor_title"
+            android:exported="false" />
+
+        <activity
             android:name=".preferences.SympadEditorActivity"
             android:label="@string/ime_sympad_mapping_editor"
             android:exported="true" />

@@ -14,6 +14,10 @@ public final class KeyboardMapping {
         this.keyMappings = Collections.unmodifiableMap(keyMappings);
     }
 
+    public Map<Integer, KeyMapping> getKeyMappings() {
+        return keyMappings;
+    }
+
     public KeyMapping getKeyMapping(int keyCode) {
         return keyMappings.get(keyCode);
     }

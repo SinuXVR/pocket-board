@@ -2,6 +2,7 @@ package com.sinux.pocketboard.preferences;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,11 +35,25 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         inputMethodInfo = InputUtils.getInputMethodInfo(context, inputMethodManager);
 
         subtypesPreference = initInputSubtypesPref(context, inputMethodInfo);
+        initKeyboardMappingEditor();
         initToastNotificationPref(context);
         initPhoneControlPref(context);
         initShowPanelPref();
 
         updateInputSubtypesPrefSummary();
+    }
+
+    private void initKeyboardMappingEditor() {
+        Preference editorPreference = findPreference("keyboard_mapping_editor");
+        if (editorPreference != null) {
+            editorPreference.setOnPreferenceClickListener(preference -> {
+                startActivity(new Intent(
+                        requireContext(),
+                        KeyboardMappingEditorActivity.class
+                ));
+                return true;
+            });
+        }
     }
 
     private Preference initInputSubtypesPref(Context context, InputMethodInfo inputMethodInfo) {

@@ -11,6 +11,10 @@
         android:title="@string/ime_subtypes"/>
 
     <Preference
+        android:key="keyboard_mapping_editor"
+        android:title="@string/keyboard_editor_entry" />
+
+    <Preference
         app:key="@string/ime_sympad_prefs_key"
         app:title="@string/ime_sympad_prefs"
         app:fragment="com.sinux.pocketboard.preferences.SympadPreferencesFragment" />
